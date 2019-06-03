@@ -335,7 +335,7 @@ data:
           enabled: false
       artifacts:
         gcs:
-          enabled: false
+          enabled: true
           accounts: []
         github:
           enabled: false
