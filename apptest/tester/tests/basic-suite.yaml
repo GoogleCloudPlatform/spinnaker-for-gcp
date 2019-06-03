@@ -1,0 +1,17 @@
+actions:
+- name: Clouddriver is up and healthy
+  bashTest:
+    script: curl -k "http://{{ .Env.CLOUDDRIVER_ADDR }}:7002/health" | jq -r .status
+    expect:
+      stdout:
+        equals: 'UP'
+      exitCode:
+        equals: 0
+- name: Gate returns credentials and they include default account
+  bashTest:
+    script: curl -k "http://{{ .Env.GATE_ADDR }}:8084/credentials" | jq [.[].name]
+    expect:
+      stdout:
+        contains: '"spinnaker-install-account"'
+      exitCode:
+        equals: 0

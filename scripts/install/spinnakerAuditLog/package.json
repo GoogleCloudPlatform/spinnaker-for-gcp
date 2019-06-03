@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@google-cloud/logging": "4.1.1",
+    "moment-timezone": "^0.5.11"
+  }
+}

@@ -1,0 +1,417 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: halyard
+
+---
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: spinnaker
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: spinnaker-admin
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- kind: ServiceAccount
+  name: default
+  namespace: halyard
+- kind: ServiceAccount
+  name: default
+  namespace: spinnaker
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: halyard-pv-claim
+  namespace: halyard
+  labels:
+    app: halyard-storage-claim
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: standard
+
+---
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: spin-halyard
+  namespace: halyard
+  labels:
+    app: spin
+    stack: halyard
+spec:
+  serviceName: spin-halyard
+  replicas: 1
+  selector:
+    matchLabels:
+      app: spin
+      stack: halyard
+  template:
+    metadata:
+      labels:
+        app: spin
+        stack: halyard
+    spec:
+      securityContext:
+        runAsGroup: 1000
+        fsGroup: 1000
+      containers:
+      - name: halyard-daemon
+        image: gcr.io/spinnaker-marketplace/halyard:$HALYARD_VERSION
+        imagePullPolicy: Always
+        command:
+        - /bin/sh
+        args:
+        - -c
+        # We persist the files on a PersistentVolume. To have sane defaults,
+        # we initialise those files from a ConfigMap if they don't already exist.
+        - "test -f /home/spinnaker/.hal/config || cp -R /home/spinnaker/staging/.hal/. /home/spinnaker/.hal/ && /opt/halyard/bin/halyard"
+        readinessProbe:
+          exec:
+            command:
+            - wget
+            - -q
+            - --spider
+            - http://localhost:8064/health
+        ports:
+        - containerPort: 8064
+        volumeMounts:
+        - name: persistentconfig
+          mountPath: /home/spinnaker/.hal
+        - name: halconfig
+          mountPath: /home/spinnaker/staging/.hal/config
+          subPath: config
+        - name: halconfig
+          mountPath: /home/spinnaker/staging/.hal/default/service-settings/deck.yml
+          subPath: deck.yml
+        - name: halconfig
+          mountPath: /home/spinnaker/staging/.hal/default/service-settings/gate.yml
+          subPath: gate.yml
+        - name: halconfig
+          mountPath: /home/spinnaker/staging/.hal/default/service-settings/fiat.yml
+          subPath: fiat.yml
+        - name: halconfig
+          mountPath: /home/spinnaker/staging/.hal/default/service-settings/redis.yml
+          subPath: redis.yml
+        - name: halconfig
+          mountPath: /home/spinnaker/staging/.hal/default/profiles/clouddriver-local.yml
+          subPath: clouddriver-local.yml
+        - name: halconfig
+          mountPath: /home/spinnaker/staging/.hal/default/profiles/echo-local.yml
+          subPath: echo-local.yml
+        - name: halconfig
+          mountPath: /home/spinnaker/staging/.hal/default/profiles/front50-local.yml
+          subPath: front50-local.yml
+        - name: halconfig
+          mountPath: /home/spinnaker/staging/.hal/default/profiles/gate-local.yml
+          subPath: gate-local.yml
+        - name: halconfig
+          mountPath: /home/spinnaker/staging/.hal/default/profiles/igor-local.yml
+          subPath: igor-local.yml
+      volumes:
+      - name: halconfig
+        configMap:
+          name: halconfig
+      - name: persistentconfig
+        persistentVolumeClaim:
+          claimName: halyard-pv-claim
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: spin-halyard
+  namespace: halyard
+spec:
+  ports:
+    - port: 8064
+      targetPort: 8064
+      protocol: TCP
+  selector:
+    app: spin
+    stack: halyard
+
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: halconfig
+  namespace: halyard
+data:
+  deck.yml: |
+    host: 0.0.0.0
+    env:
+      API_HOST: http://spin-gate.spinnaker:8084
+  fiat.yml: |
+    enabled: false
+    skipLifeCycleManagement: true
+  gate.yml: |
+    host: 0.0.0.0
+  clouddriver-local.yml: |
+    kubernetes.v2.managedBySuffix: gke-marketplace
+  echo-local.yml: |
+    rest:
+      enabled: true
+      endpoints:
+        - wrap: true
+          flatten: false
+          url: https://us-central1-$PROJECT_ID.cloudfunctions.net/$CLOUD_FUNCTION_NAME
+          username: $AUDIT_LOG_UNAME
+          password: $AUDIT_LOG_PW
+          eventName: spinnaker_events
+  front50-local.yml: |
+    spinnaker.s3.versioning: false
+  gate-local.yml: |
+    redis.configuration.secure: true
+  igor-local.yml: |
+    locking:
+      enabled: true
+  redis.yml: |
+    overrideBaseUrl: redis://$REDIS_INSTANCE_HOST:6379
+    skipLifeCycleManagement: true
+  config: |
+    currentDeployment: default
+    deploymentConfigurations:
+    - name: default
+      version: $SPINNAKER_VERSION
+      providers:
+        appengine:
+          enabled: false
+          accounts: []
+        aws:
+          enabled: false
+          accounts: []
+          defaultKeyPairTemplate: '{{name}}-keypair'
+          defaultRegions:
+          - name: us-west-2
+          defaults:
+            iamRole: BaseIAMRole
+        azure:
+          enabled: false
+          accounts: []
+          bakeryDefaults:
+            templateFile: azure-linux.json
+            baseImages: []
+        dcos:
+          enabled: false
+          accounts: []
+          clusters: []
+        dockerRegistry:
+          enabled: false
+          accounts: []
+        google:
+          enabled: false
+          accounts: []
+          bakeryDefaults:
+            templateFile: gce.json
+            baseImages: []
+            zone: us-central1-f
+            network: default
+            useInternalIp: false
+        kubernetes:
+          enabled: true
+          accounts:
+          - name: spinnaker-install-account
+            requiredGroupMembership: []
+            providerVersion: V2
+            dockerRegistries: []
+            configureImagePullSecrets: true
+            serviceAccount: true
+            namespaces: []
+            omitNamespaces: []
+            kinds: []
+            omitKinds: []
+            customResources: []
+            oauthScopes: []
+            oAuthScopes: []
+          primaryAccount: spinnaker-install-account
+        oraclebmcs:
+          enabled: false
+          accounts: []
+      deploymentEnvironment:
+        size: SMALL
+        type: Distributed
+        accountName: spinnaker-install-account
+        updateVersions: true
+        consul:
+          enabled: false
+        vault:
+          enabled: false
+        customSizing: {}
+        gitConfig:
+          upstreamUser: spinnaker
+      persistentStorage:
+        persistentStoreType: gcs
+        azs: {}
+        gcs:
+          project: $PROJECT_ID
+          bucket: $BUCKET_NAME
+          rootFolder: front50
+        redis: {}
+        s3: {}
+        oraclebmcs: {}
+      features:
+        auth: false
+        fiat: false
+        chaos: false
+        entityTags: false
+        jobs: false
+        artifacts: true
+      metricStores:
+        datadog:
+          enabled: false
+        prometheus:
+          enabled: false
+          add_source_metalabels: true
+        stackdriver:
+          enabled: false
+        period: 30
+        enabled: false
+      notifications:
+        slack:
+          enabled: false
+      timezone: $TIMEZONE
+      ci:
+        jenkins:
+          enabled: false
+          masters: []
+        travis:
+          enabled: false
+          masters: []
+        gcb:
+          enabled: true
+          accounts:
+          - name: gcb-account
+            permissions: {}
+            project: $PROJECT_ID
+            subscriptionName: $GCB_PUBSUB_SUBSCRIPTION
+      security:
+        apiSecurity:
+          ssl:
+            enabled: false
+          overrideBaseUrl: /gate
+        uiSecurity:
+          ssl:
+            enabled: false
+        authn:
+          oauth2:
+            enabled: false
+            client: {}
+            resource: {}
+            userInfoMapping: {}
+          saml:
+            enabled: false
+          ldap:
+            enabled: false
+          x509:
+            enabled: false
+          enabled: false
+        authz:
+          groupMembership:
+            service: EXTERNAL
+            google:
+              roleProviderType: GOOGLE
+            github:
+              roleProviderType: GITHUB
+            file:
+              roleProviderType: FILE
+          enabled: false
+      artifacts:
+        gcs:
+          enabled: false
+          accounts: []
+        github:
+          enabled: false
+          accounts: []
+        http:
+          enabled: false
+          accounts: []
+      pubsub:
+        enabled: true
+        google:
+          enabled: true
+          pubsubType: GOOGLE
+          subscriptions:
+          - name: gcr-pub-sub
+            project: $PROJECT_ID
+            subscriptionName: $GCR_PUBSUB_SUBSCRIPTION
+            ackDeadlineSeconds: 10
+            messageFormat: GCR
+      canary:
+        enabled: true
+        serviceIntegrations:
+        - name: google
+          enabled: true
+          accounts:
+          - name: my-google-account
+            project: $PROJECT_ID
+            bucket: $BUCKET_NAME
+            rootFolder: kayenta
+            supportedTypes:
+            - METRICS_STORE
+            - CONFIGURATION_STORE
+            - OBJECT_STORE
+          gcsEnabled: true
+          stackdriverEnabled: true
+        - name: prometheus
+          enabled: false
+          accounts: []
+        - name: datadog
+          enabled: false
+          accounts: []
+        - name: signalfx
+          enabled: false
+          accounts: []
+        - name: aws
+          enabled: false
+          accounts: []
+          s3Enabled: false
+        reduxLoggerEnabled: true
+        defaultJudge: NetflixACAJudge-v1.0
+        stagesEnabled: true
+        templatesEnabled: true
+        showAllConfigsEnabled: true
+---
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: hal-deploy-apply
+  namespace: halyard
+  labels:
+    app: job
+    stack: hal-deploy
+spec:
+  template:
+    metadata:
+      labels:
+        app: job
+        stack: hal-deploy
+    spec:
+      restartPolicy: OnFailure
+      containers:
+      - name: hal-deploy-apply
+        # todo use a custom image
+        image: gcr.io/spinnaker-marketplace/halyard:$HALYARD_VERSION
+        command:
+        - /bin/sh
+        args:
+        - -c
+        - "hal deploy apply --daemon-endpoint http://spin-halyard.halyard:8064"

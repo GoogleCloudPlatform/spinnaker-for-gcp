@@ -1,0 +1,14 @@
+{
+  "policy": {
+    "etag": $IAP_IAM_POLICY_ETAG,
+    "bindings": [
+      {
+        "role": "roles/iap.httpsResourceAccessor",
+        "members": [
+          "serviceAccount:$SERVICE_ACCOUNT_NAME@$PROJECT_ID.iam.gserviceaccount.com",
+          "user:$IAP_USER"
+        ]
+      }
+    ]
+  }
+}

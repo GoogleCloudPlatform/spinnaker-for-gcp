@@ -1,0 +1,12 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: deck-ingress
+  namespace: spinnaker
+  annotations:
+    ingress.gcp.kubernetes.io/pre-shared-cert: $MANAGED_CERT
+    kubernetes.io/ingress.global-static-ip-name: $STATIC_IP_NAME
+spec:
+  backend:
+    serviceName: spin-deck
+    servicePort: 9000

@@ -1,0 +1,13 @@
+# Would expect this to be deleted once these tests are properly integrated with GCP Marketplace Verification Pipeline.
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: spinnaker-test-job
+spec:
+  template:
+    spec:
+      containers:
+      - name: spinnaker-tester-container
+        image: gcr.io/$PROJECT_ID/spinnaker-c2d-tests
+      restartPolicy: Never

@@ -1,0 +1,11 @@
+swagger: "2.0"
+info: 
+  title: Test Marketplace Spinnaker - $PROJECT_ID
+  version: 1.0.0
+host: $DOMAIN_NAME
+x-google-endpoints:
+  - name: $DOMAIN_NAME
+    target: $IP_ADDR
+x-google-allow: all
+basePath: /
+paths: {}

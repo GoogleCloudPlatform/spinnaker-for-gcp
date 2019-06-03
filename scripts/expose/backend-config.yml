@@ -1,0 +1,10 @@
+apiVersion: cloud.google.com/v1beta1
+kind: BackendConfig
+metadata:
+  name: config-default
+  namespace: spinnaker
+spec:
+  iap:
+    enabled: true
+    oauthclientCredentials:
+      secretName: $SECRET_NAME
