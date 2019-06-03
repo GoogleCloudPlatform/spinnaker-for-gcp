@@ -17,19 +17,19 @@ project**.
 You can skip this step if you are the original installer/operator, as they will have already been installed.
 
 ```bash
-~/click-to-deploy/k8s/spinnaker/scripts/cli/install_hal.sh && ~/click-to-deploy/k8s/spinnaker/scripts/cli/install_spin.sh && source ~/.bashrc
+~/spinnaker-for-gcp/scripts/cli/install_hal.sh && ~/spinnaker-for-gcp/scripts/cli/install_spin.sh && source ~/.bashrc
 ```
 
 ### Ensure you are connected to the correct Kubernetes context
 
 ```bash
-PROJECT_ID={{project-id}} ~/click-to-deploy/k8s/spinnaker/scripts/manage/check_cluster_config.sh
+PROJECT_ID={{project-id}} ~/spinnaker-for-gcp/scripts/manage/check_cluster_config.sh
 ```
 
 ### Pull all config from Spinnaker deployment into cloud shell
 
 ```bash
-~/click-to-deploy/k8s/spinnaker/scripts/manage/pull_config.sh
+~/spinnaker-for-gcp/scripts/manage/pull_config.sh
 ```
 
 ### Update the console
@@ -39,5 +39,5 @@ PROJECT_ID={{project-id}} ~/click-to-deploy/k8s/spinnaker/scripts/manage/check_c
 This will include details on connecting to Spinnaker.
 
 ```bash
-~/click-to-deploy/k8s/spinnaker/scripts/manage/update_console.sh
+~/spinnaker-for-gcp/scripts/manage/update_console.sh
 ```
