@@ -84,8 +84,7 @@ bold "Configuring Spinnaker security settings..."
 cat expose/configure_hal_security.sh | envsubst | bash
 
 ~/spinnaker-for-gcp/scripts/manage/update_landing_page.sh
-~/spinnaker-for-gcp/scripts/manage/push_config.sh
-~/spinnaker-for-gcp/scripts/manage/apply_config.sh
+~/spinnaker-for-gcp/scripts/manage/push_and_apply.sh
 
 # # What about CORS?
 

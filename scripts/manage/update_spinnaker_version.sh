@@ -9,6 +9,5 @@ source ~/spinnaker-for-gcp/scripts/install/properties
 bold "Updating Spinnaker to version $SPINNAKER_VERSION..."
 
 ~/hal/hal config version edit --version $SPINNAKER_VERSION
-~/spinnaker-for-gcp/scripts/manage/push_config.sh
-~/spinnaker-for-gcp/scripts/manage/apply_config.sh
+~/spinnaker-for-gcp/scripts/manage/push_and_apply.sh
 ~/spinnaker-for-gcp/scripts/manage/update_landing_page.sh

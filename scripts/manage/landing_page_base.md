@@ -50,8 +50,8 @@ hal config
 ```
 
 As with provisioning Spinnaker, don't use `hal deploy connect` when managing
-Spinnaker. Also, don't use `hal deploy apply`. Instead, use the `push_config.sh`
-and `apply_config.sh` commands shown below.
+Spinnaker. Also, don't use `hal deploy apply`. Instead, use the `push_and_apply.sh`
+command shown below.
 
 ### Notes on Halyard commands that reference local files
 
@@ -65,22 +65,13 @@ Change the `default` path segment if you are using a different name for your dep
 The same requirement applies for any Google JSON key file specified via the
 `--json-path` argument to various commands.
 
-### Push updated config to Spinnaker deployment
+### Push and apply updated config to Spinnaker deployment
 
 If you change any of the configuration, paste and run this command to push
-those changes to your Spinnaker deployment.
+and apply those changes to your Spinnaker deployment.
 
 ```bash
-~/spinnaker-for-gcp/scripts/manage/push_config.sh
-```
-
-### Apply updated config to Spinnaker deployment
-
-After you push configuration changes, you need to paste and run the following
-command to apply them to your Spinnaker deployment.
-
-```bash
-~/spinnaker-for-gcp/scripts/manage/apply_config.sh
+~/spinnaker-for-gcp/scripts/manage/push_and_apply.sh
 ```
 
 ## Included command-line tools
