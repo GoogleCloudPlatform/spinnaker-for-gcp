@@ -1,0 +1,9 @@
+
++------------------------------------------------------------------------------------------+
+|                                                                                          |
+| To reopen the ongoing management instructions in the right-hand pane at any time, enter: |
+|                                                                                          |
+| ~/spinnaker-for-gcp/scripts/manage/update_console.sh                                     |
+|                                                                                          |
++------------------------------------------------------------------------------------------+
+
