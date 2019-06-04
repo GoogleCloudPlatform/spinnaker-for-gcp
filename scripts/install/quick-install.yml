@@ -235,7 +235,9 @@ data:
             configureImagePullSecrets: true
             serviceAccount: true
             namespaces: []
-            omitNamespaces: []
+            omitNamespaces:
+            - kube-public
+            - kube-system
             kinds: []
             omitKinds: []
             customResources: []
