@@ -91,7 +91,7 @@ export GKE_CLUSTER=${GKE_CLUSTER:-\$DEPLOYMENT_NAME}
 export ZONE=$ZONE
 export REGION=$REGION
 
-export SPINNAKER_VERSION=1.14.0
+export SPINNAKER_VERSION=1.14.3
 export HALYARD_VERSION=1.20.2
 
 # See TZ column in https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
