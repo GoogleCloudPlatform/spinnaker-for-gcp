@@ -120,5 +120,3 @@ kubectl create secret generic spinnaker-deployment -n halyard \
 
 popd
 rm -rf $TEMP_DIR
-
-# TODO(duftler): Add 'hal deploy apply' option.
