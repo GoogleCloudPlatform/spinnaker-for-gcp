@@ -172,5 +172,7 @@ To add additional operators, grant them the `Owner` role on GCP Project {{projec
 
 Once they have been added to the project, they can locate Spinnaker by navigating to the newly-registered [Kubernetes Application](https://console.developers.google.com/kubernetes/application/$ZONE/$DEPLOYMENT_NAME/spinnaker/$DEPLOYMENT_NAME?project={{project-id}}).
 
+Note that if you have secured Spinnaker via IAP, granting someone the `Owner` role does not implicitly grant them access as a user. For configuring user access, please continue on to the *Configure User Access (IAP)* section.
+
 The application's *Next Steps* section contains the relevant links and operator instructions.
 
