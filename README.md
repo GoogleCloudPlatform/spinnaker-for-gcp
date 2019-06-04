@@ -58,7 +58,7 @@ Alternatively, the management environment allows you to expose Spinnaker via the
 Use the management environment, based on [Cloud Shell](https://cloud.google.com/shell/),
 to perform the installation.
 
-[![Install Spinnaker](https://gstatic.com/cloudssh/images/open-btn.png)](https://console.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/spinnaker-for-gcp.git&cloudshell_working_dir=scripts/install&cloudshell_tutorial=provision-spinnaker.md)
+[![Install Spinnaker](https://gstatic.com/cloudssh/images/open-btn.png)](https://console.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/spinnaker-for-gcp.git&cloudshell_working_dir=scripts/install&cloudshell_tutorial=provision-spinnaker.md&cloudshell_print=instructions.txt)
 
 ### Prerequisites
 

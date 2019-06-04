@@ -1,0 +1,9 @@
+
++---------------------------------------------------------------------------------------+
+|                                                                                       |
+| To reopen the installation instructions in the right-hand pane at any time, enter:    |
+|                                                                                       |
+| cloudshell launch-tutorial ~/spinnaker-for-gcp/scripts/install/provision-spinnaker.md |
+|                                                                                       |
++---------------------------------------------------------------------------------------+
+
