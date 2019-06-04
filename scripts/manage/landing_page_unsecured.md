@@ -23,6 +23,8 @@ View the who, what, when and where of your Spinnaker installation
 If you would like to connect to Spinnaker without relying on port forwarding, we can
 expose it via a secure domain behind the [Identity-Aware Proxy](https://cloud.google.com/iap/).
 
+Note that this phase could take 30-60 minutes and Spinnaker will be inaccessible during this time.
+
 ```bash
 ~/spinnaker-for-gcp/scripts/expose/configure_endpoint.sh
 ```
