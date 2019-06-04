@@ -57,7 +57,7 @@ done
 
 cp ~/.hal/config .hal
 
-REWRITABLE_KEYS=(kubeconfigFile jsonPath)
+REWRITABLE_KEYS=(kubeconfigFile jsonPath jsonKey)
 for k in "${REWRITABLE_KEYS[@]}"; do
   grep $k .hal/config &> /dev/null
   FOUND_TOKEN=$?
