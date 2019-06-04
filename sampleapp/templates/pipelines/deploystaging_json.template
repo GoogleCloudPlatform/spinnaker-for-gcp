@@ -1,0 +1,190 @@
+{
+  "application": "sampleapp",
+  "description": "On new image updates, Blue/Green deploy new image to staging environment and validate.",
+  "expectedArtifacts": [
+    {
+      "defaultArtifact": {
+        "id": "10d73961-c485-423f-9ade-e98e08affd46",
+        "name": "gs://$BUCKET_NAME/sample-app-manifests/staging/replicaset.yaml",
+        "reference": "gs://$BUCKET_NAME/sample-app-manifests/staging/replicaset.yaml",
+        "type": "gcs/object"
+      },
+      "displayName": "Staging Replicaset",
+      "id": "04429e2c-b48c-48e7-ac9b-6fdc4e3d7f59",
+      "matchArtifact": {
+        "id": "f52080c9-c9ce-4406-a869-e04af6c01389",
+        "name": "gs://$BUCKET_NAME/sample-app-manifests/staging/replicaset.yaml",
+        "type": "gcs/object"
+      },
+      "useDefaultArtifact": true,
+      "usePriorArtifact": false
+    },
+    {
+      "defaultArtifact": {
+        "id": "8cca0146-a59b-4209-ab3a-0efb95ecddc5",
+        "name": "gs://$BUCKET_NAME/sample-app-manifests/staging/validation-job.yaml",
+        "reference": "gs://$BUCKET_NAME/sample-app-manifests/staging/validation-job.yaml",
+        "type": "gcs/object"
+      },
+      "displayName": "Staging Validation Job",
+      "id": "db1824da-ed2f-4952-8a71-38a8826ba73f",
+      "matchArtifact": {
+        "id": "bb5adbdd-33b3-4298-9fda-dae51c29727c",
+        "name": "gs://$BUCKET_NAME/sample-app-manifests/staging/validation-job.yaml",
+        "type": "gcs/object"
+      },
+      "useDefaultArtifact": true,
+      "usePriorArtifact": false
+    },
+    {
+      "defaultArtifact": {
+        "customKind": true,
+        "id": "bb5c3b12-6328-4451-95d4-ff140d175154"
+      },
+      "displayName": "Sampleapp Image",
+      "id": "4f4d38de-80c3-4bc1-a807-c565bc4024ee",
+      "matchArtifact": {
+        "id": "9aa4d777-1d4e-44f9-8f62-baa33a6a8040",
+        "name": "gcr.io/$PROJECT_ID/spinnaker-marketplace-sampleapp",
+        "type": "docker/image"
+      },
+      "useDefaultArtifact": false,
+      "usePriorArtifact": false
+    }
+  ],
+  "keepWaitingPipelines": false,
+  "limitConcurrent": true,
+  "name": "Deploy to Staging",
+  "parameterConfig": [],
+  "stages": [
+    {
+      "account": "spinnaker-install-account",
+      "cloudProvider": "kubernetes",
+      "expectedArtifacts": [],
+      "manifestArtifactAccount": "gcs-install-account",
+      "manifestArtifactId": "04429e2c-b48c-48e7-ac9b-6fdc4e3d7f59",
+      "manifests": [],
+      "moniker": {
+        "app": "sampleapp"
+      },
+      "name": "Deploy to Staging",
+      "refId": "1",
+      "relationships": {
+        "loadBalancers": [],
+        "securityGroups": []
+      },
+      "requiredArtifactIds": [
+        "4f4d38de-80c3-4bc1-a807-c565bc4024ee"
+      ],
+      "requisiteStageRefIds": [],
+      "skipExpressionEvaluation": false,
+      "source": "artifact",
+      "trafficManagement": {
+        "enabled": true,
+        "options": {
+          "enableTraffic": true,
+          "namespace": "sampleapp-staging",
+          "services": [
+            "service sampleapp-service"
+          ],
+          "strategy": "redblack"
+        }
+      },
+      "type": "deployManifest"
+    },
+    {
+      "account": "spinnaker-install-account",
+      "app": "sampleapp",
+      "cloudProvider": "kubernetes",
+      "completeOtherBranchesThenFail": false,
+      "continuePipeline": true,
+      "failPipeline": false,
+      "isNew": true,
+      "location": "sampleapp-staging",
+      "manifestName": "job validate-deployment",
+      "mode": "static",
+      "name": "Clean up Validation Job",
+      "options": {
+        "cascading": true,
+        "gracePeriodSeconds": null
+      },
+      "refId": "2",
+      "requisiteStageRefIds": [
+        "1"
+      ],
+      "type": "deleteManifest"
+    },
+    {
+      "account": "spinnaker-install-account",
+      "cloudProvider": "kubernetes",
+      "isNew": true,
+      "manifest": null,
+      "manifestArtifactAccount": "gcs-install-account",
+      "manifestArtifactId": "db1824da-ed2f-4952-8a71-38a8826ba73f",
+      "manifests": null,
+      "moniker": {
+        "app": "sampleapp"
+      },
+      "name": "Validate Staging",
+      "refId": "3",
+      "relationships": {
+        "loadBalancers": [],
+        "securityGroups": []
+      },
+      "requisiteStageRefIds": [
+        "2"
+      ],
+      "skipExpressionEvaluation": false,
+      "source": "artifact",
+      "trafficManagement": {
+        "enabled": false,
+        "options": {
+          "enableTraffic": false,
+          "namespace": null,
+          "services": [],
+          "strategy": null
+        }
+      },
+      "type": "deployManifest",
+      "versioned": null
+    },
+    {
+      "account": "spinnaker-install-account",
+      "app": "sampleapp",
+      "cloudProvider": "kubernetes",
+      "cluster": "replicaSet sampleapp",
+      "criteria": "second_newest",
+      "failPipeline": false,
+      "isNew": true,
+      "kind": "replicaSet",
+      "kinds": null,
+      "labelSelectors": null,
+      "location": "sampleapp-staging",
+      "manifestName": null,
+      "mode": "dynamic",
+      "name": "Delete Old Replicaset",
+      "options": {
+        "cascading": true,
+        "gracePeriodSeconds": null
+      },
+      "refId": "4",
+      "requisiteStageRefIds": [
+        "3"
+      ],
+      "type": "deleteManifest"
+    }
+  ],
+  "triggers": [
+    {
+      "attributeConstraints": {},
+      "enabled": true,
+      "expectedArtifactIds": [],
+      "payloadConstraints": {
+        "action": "INSERT"
+      },
+      "pubsubSystem": "google",
+      "subscriptionName": "gcr-pub-sub",
+      "type": "pubsub"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: sampleapp-prod
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: sampleapp-service
+  namespace: sampleapp-prod
+spec:
+  ports:
+  - protocol: TCP
+    port: 80
+  selector:
+    app: sampleapp
+  type: LoadBalancer
+  loadBalancerIP: ""

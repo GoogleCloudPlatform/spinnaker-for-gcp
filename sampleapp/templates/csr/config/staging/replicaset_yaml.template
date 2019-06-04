@@ -1,0 +1,23 @@
+---
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  annotations:
+    traffic.spinnaker.io/load-balancers: '["service sampleapp-service"]'
+  labels:
+    tier: frontend
+  name: sampleapp
+  namespace: sampleapp-staging
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      tier: frontend
+  template:
+    metadata:
+      labels:
+        tier: frontend
+    spec:
+      containers:
+        - image: gcr.io/$PROJECT_ID/spinnaker-marketplace-sampleapp
+          name: sampleapp

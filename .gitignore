@@ -1,4 +1,7 @@
 InstallHalyard.sh
+sampleapp/templates/pipelines/deployprod.json
+sampleapp/templates/pipelines/deploystaging.json
+sampleapp/trigger
 scripts/expose/*_expanded.*
 scripts/install/properties
 scripts/install/properties.*
