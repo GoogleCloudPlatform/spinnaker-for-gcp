@@ -18,6 +18,11 @@
 View the who, what, when and where of your Spinnaker installation
 [here](https://console.developers.google.com/logs/viewer?project={{project-id}}&resource=cloud_function&logName=projects%2F{{project-id}}%2Flogs%2F$CLOUD_FUNCTION_NAME&minLogLevel=200).
 
+### View Spinnaker Container Logs
+
+View the logging output of the individual components of your Spinnaker installation
+[here](https://console.developers.google.com/logs/viewer?project={{project-id}}&resource=k8s_container%2Fcluster_name%2F$GKE_CLUSTER%2Fnamespace_name%2Fspinnaker).
+
 ### Expose Spinnaker
 
 If you would like to connect to Spinnaker without relying on port forwarding, we can
