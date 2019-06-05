@@ -338,7 +338,8 @@ data:
       artifacts:
         gcs:
           enabled: true
-          accounts: []
+          accounts:
+          - name: gcs-install-account
         github:
           enabled: false
           accounts: []
