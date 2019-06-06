@@ -86,6 +86,10 @@ else
 export PROJECT_ID=$PROJECT_ID
 export DEPLOYMENT_NAME=${DEPLOYMENT_NAME:-$NEW_DEPLOYMENT_NAME}
 
+# The specified network must exist, and it must not be a legacy network.
+# More info on legacy networks can be found here: https://cloud.google.com/vpc/docs/legacy
+export NETWORK=default
+
 # If cluster does not exist, it will be created.
 export GKE_CLUSTER=${GKE_CLUSTER:-\$DEPLOYMENT_NAME}
 export ZONE=$ZONE
