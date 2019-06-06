@@ -12,6 +12,21 @@ source ~/spinnaker-for-gcp/scripts/install/properties
 
 ~/spinnaker-for-gcp/scripts/manage/check_project_mismatch.sh
 
+NETWORK_SUBNET_MODE=$(gcloud compute networks list --project $PROJECT_ID \
+  --filter "name=$NETWORK" \
+  --format "value(x_gcloud_subnet_mode)")
+
+if [ -z "$NETWORK_SUBNET_MODE" ]; then
+  bold "Network $NETWORK was not found in project $PROJECT_ID."
+  exit 1
+elif [ "$NETWORK_SUBNET_MODE" = "LEGACY" ]; then
+  PROPERTIES_FILE="$HOME/spinnaker-for-gcp/scripts/install/properties"
+  bold "Network $NETWORK is a legacy network. This installation requires a" \
+       "non-legacy network. Please specify a non-legacy network in" \
+       "$PROPERTIES_FILE and re-run this script."
+  exit 1
+fi
+
 REQUIRED_APIS="cloudbuild.googleapis.com cloudfunctions.googleapis.com container.googleapis.com endpoints.googleapis.com iap.googleapis.com monitoring.googleapis.com redis.googleapis.com sourcerepo.googleapis.com"
 NUM_REQUIRED_APIS=$(wc -w <<< "$REQUIRED_APIS")
 NUM_ENABLED_APIS=$(gcloud services list --project $PROJECT_ID \
@@ -73,7 +88,8 @@ if [ -z "$REDIS_INSTANCE_HOST" ]; then
   bold "Creating redis instance $REDIS_INSTANCE..."
 
   gcloud redis instances create $REDIS_INSTANCE --project $PROJECT_ID \
-    --region=$REGION --zone=$ZONE --redis-config=notify-keyspace-events=gxE
+    --region=$REGION --zone=$ZONE --network=$NETWORK \
+    --redis-config=notify-keyspace-events=gxE
 
   export REDIS_INSTANCE_HOST=$(gcloud redis instances list \
     --project $PROJECT_ID --region $REGION \
@@ -105,7 +121,7 @@ if [ -z "$CLUSTER_EXISTS" ]; then
   # TODO: Move some of these config settings to properties file.
   # TODO: Should this be regional instead?
   gcloud beta container clusters create $GKE_CLUSTER --project $PROJECT_ID \
-    --zone $ZONE --username "admin" --cluster-version "1.11.8" \
+    --zone $ZONE --network $NETWORK --username "admin" --cluster-version "1.12.7" \
     --machine-type "n1-highmem-4" --image-type "COS" --disk-type "pd-standard" \
     --disk-size "100" --service-account $SA_EMAIL --num-nodes "3" \
     --enable-stackdriver-kubernetes --enable-autoupgrade --enable-autorepair \
