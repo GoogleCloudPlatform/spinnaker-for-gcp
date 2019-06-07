@@ -33,3 +33,11 @@ Note that this phase could take 30-60 minutes. **Spinnaker will be inaccessible 
 ```bash
 ~/spinnaker-for-gcp/scripts/expose/configure_endpoint.sh
 ```
+
+## Delete Spinnaker
+
+### Generate a script to delete all the resources that were provisioned as part of your Spinnaker installation
+
+```bash
+~/spinnaker-for-gcp/scripts/manage/generate_deletion_script.sh
+```
