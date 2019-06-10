@@ -12,21 +12,6 @@ source ~/spinnaker-for-gcp/scripts/install/properties
 
 ~/spinnaker-for-gcp/scripts/manage/check_project_mismatch.sh
 
-NETWORK_SUBNET_MODE=$(gcloud compute networks list --project $PROJECT_ID \
-  --filter "name=$NETWORK" \
-  --format "value(x_gcloud_subnet_mode)")
-
-if [ -z "$NETWORK_SUBNET_MODE" ]; then
-  bold "Network $NETWORK was not found in project $PROJECT_ID."
-  exit 1
-elif [ "$NETWORK_SUBNET_MODE" = "LEGACY" ]; then
-  PROPERTIES_FILE="$HOME/spinnaker-for-gcp/scripts/install/properties"
-  bold "Network $NETWORK is a legacy network. This installation requires a" \
-       "non-legacy network. Please specify a non-legacy network in" \
-       "$PROPERTIES_FILE and re-run this script."
-  exit 1
-fi
-
 REQUIRED_APIS="cloudbuild.googleapis.com cloudfunctions.googleapis.com container.googleapis.com endpoints.googleapis.com iap.googleapis.com monitoring.googleapis.com redis.googleapis.com sourcerepo.googleapis.com"
 NUM_REQUIRED_APIS=$(wc -w <<< "$REQUIRED_APIS")
 NUM_ENABLED_APIS=$(gcloud services list --project $PROJECT_ID \
@@ -40,6 +25,21 @@ if [ $NUM_ENABLED_APIS != $NUM_REQUIRED_APIS ]; then
   bold "Once the required APIs are enabled, the remaining components will be installed and configured. The entire installation may take 10 minutes or more."
 
   gcloud services --project $PROJECT_ID enable $REQUIRED_APIS
+fi
+
+NETWORK_SUBNET_MODE=$(gcloud compute networks list --project $PROJECT_ID \
+  --filter "name=$NETWORK" \
+  --format "value(x_gcloud_subnet_mode)")
+
+if [ -z "$NETWORK_SUBNET_MODE" ]; then
+  bold "Network $NETWORK was not found in project $PROJECT_ID."
+  exit 1
+elif [ "$NETWORK_SUBNET_MODE" = "LEGACY" ]; then
+  PROPERTIES_FILE="$HOME/spinnaker-for-gcp/scripts/install/properties"
+  bold "Network $NETWORK is a legacy network. This installation requires a" \
+       "non-legacy network. Please specify a non-legacy network in" \
+       "$PROPERTIES_FILE and re-run this script."
+  exit 1
 fi
 
 SA_EMAIL=$(gcloud iam service-accounts --project $PROJECT_ID list \
