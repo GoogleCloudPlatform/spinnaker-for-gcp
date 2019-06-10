@@ -106,6 +106,13 @@ If you want to upgrade to the latest version, use:
 
 ## Scripts for Common Commands
 
+Remember that any configuration changes you make locally (e.g. adding
+accounts) must be pushed and applied to your deployment to take effect:
+
+```bash
+~/spinnaker-for-gcp/scripts/manage/push_and_apply.sh
+```
+
 ### Add Spinnaker account for GKE
 
 Before you run this command, make sure you've configured the context you intend
