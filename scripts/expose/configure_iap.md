@@ -4,13 +4,13 @@
 
 Go to the [OAuth consent screen](https://console.developers.google.com/apis/credentials/consent?project=$PROJECT_ID).
 
-Enter an *Application name* (e.g. My Spinnaker), enter your *Email address*, and add **$TOP_PRIVATE_DOMAIN** as an *Authorized domain*.
+Enter an *Application name* (e.g. My Spinnaker) and your *Email address*, and click *Save*.
 
 ### Create OAuth credentials
 
 Go to the [Credentials page](https://console.developers.google.com/apis/credentials/oauthclient?project=$PROJECT_ID) and create an *OAuth client ID*.
 
-Use *Application type: Web application*, and add **https://$DOMAIN_NAME/_gcp_gatekeeper/authenticate** as an *Authorized redirect URI*.
+Select *Application type: Web application* and click *Create*.
 
 Ensure that you note the generated *Client ID* and *Client secret* for your new credentials, as you will need to provide them to the script in the next step.
 
@@ -21,6 +21,8 @@ Ensure that you note the generated *Client ID* and *Client secret* for your new 
 ```
 
 This phase could take 30-60 minutes. **Spinnaker will be inaccessible during this time.**
+
+There will be one final IAP configuration step described in the terminal.
 
 ## Conclusion
 
