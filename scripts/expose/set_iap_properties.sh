@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 
 if [ -z $CLIENT_ID ]; then
-  export CLIENT_ID=$(kubectl get secret -n spinnaker $SECRET_NAME -o json | jq -r .data.client_id | base64 -d)
+  SECRET_JSON=$(kubectl get secret -n spinnaker $SECRET_NAME -o json)
+
+  export CLIENT_ID=$(echo $SECRET_JSON | jq -r .data.client_id | base64 -d)
+  export CLIENT_SECRET=$(echo $SECRET_JSON | jq -r .data.client_secret | base64 -d)
 fi
 
 export PROJECT_NUMBER=$(gcloud projects describe $PROJECT_ID --format="value(projectNumber)")

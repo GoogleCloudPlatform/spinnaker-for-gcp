@@ -86,6 +86,10 @@ cat expose/configure_hal_security.sh | envsubst | bash
 ~/spinnaker-for-gcp/scripts/manage/update_landing_page.sh
 ~/spinnaker-for-gcp/scripts/manage/push_and_apply.sh
 
+bold "ACTION REQUIRED:"
+bold "  - Navigate to: https://console.developers.google.com/apis/credentials/oauthclient/$CLIENT_ID?project=$PROJECT_ID"
+bold "  - Add https://iap.googleapis.com/v1/oauth/clientIds/$CLIENT_ID:handleRedirect to your Web client ID as an Authorized redirect URI."
+
 # # What about CORS?
 
 # # Wait for services to come online again (steal logic from setup.sh):
