@@ -167,6 +167,12 @@ Next, apply this change to the Statefulset managing the Halyard daemon:
 ~/spinnaker-for-gcp/scripts/manage/update_halyard_daemon.sh
 ```
 
+### Upgrade Management Console
+
+```bash
+~/spinnaker-for-gcp/scripts/manage/update_management_console.sh
+```
+
 ### Connect to Redis
 
 ```bash
