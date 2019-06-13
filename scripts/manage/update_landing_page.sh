@@ -5,7 +5,7 @@ bold() {
 }
 
 if [ ! -f "$HOME/spinnaker-for-gcp/scripts/install/properties" ]; then
-  bold "No properties file was found. Resetting the Management Console."
+  bold "No properties file was found. Resetting the Management Environment."
   git checkout -- ~/spinnaker-for-gcp/scripts/manage/landing_page_expanded.md
   exit 0
 fi

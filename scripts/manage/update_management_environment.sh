@@ -12,7 +12,7 @@ git checkout -- landing_page_expanded.md
 GIT_STASH_COUNT_BEFORE=$(git stash list | wc -l)
 
 bold "Stashing local changes..."
-git stash
+git stash save "Stashed by update_management_environment.sh"
 
 GIT_STASH_COUNT_AFTER=$(git stash list | wc -l)
 
