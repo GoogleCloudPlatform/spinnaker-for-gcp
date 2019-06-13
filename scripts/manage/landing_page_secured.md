@@ -24,7 +24,9 @@ View the logging output of the individual components of your Spinnaker installat
 
 ## Delete Spinnaker
 
-### Generate a script to delete all the resources that were provisioned as part of your Spinnaker installation
+### Generate a cleanup script
+
+This command generates a script that deletes all the resources that were provisioned as part of your Spinnaker installation.
 
 ```bash
 ~/spinnaker-for-gcp/scripts/manage/generate_deletion_script.sh
