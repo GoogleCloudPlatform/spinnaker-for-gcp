@@ -4,6 +4,12 @@ bold() {
   echo ". $(tput bold)" "$*" "$(tput sgr0)";
 }
 
+if [ ! -f "$HOME/spinnaker-for-gcp/scripts/install/properties" ]; then
+  bold "No properties file was found. Resetting the Management Environment."
+  git checkout -- ~/spinnaker-for-gcp/scripts/manage/landing_page_expanded.md
+  exit 0
+fi
+
 source ~/spinnaker-for-gcp/scripts/install/properties
 
 # Query for static ip address as a signal that the Spinnaker installation is exposed via a secured endpoint.

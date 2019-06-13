@@ -34,7 +34,8 @@ deployment into your Cloud Shell.
 
 **This is a required step if you've just pulled config from a different Spinnaker deployment.**
 
-This will include details on how to connect to Spinnaker.
+This command will refresh the contents of the right-hand pane and will include details on how
+to connect to Spinnaker.
 
 ```bash
 ~/spinnaker-for-gcp/scripts/manage/update_console.sh
@@ -164,6 +165,14 @@ Next, apply this change to the Statefulset managing the Halyard daemon:
 
 ```bash
 ~/spinnaker-for-gcp/scripts/manage/update_halyard_daemon.sh
+```
+
+### Upgrade Management Environment
+
+Update the commands and documentation in your Management Environment to the latest available version.
+
+```bash
+~/spinnaker-for-gcp/scripts/manage/update_management_environment.sh
 ```
 
 ### Connect to Redis

@@ -38,7 +38,8 @@ deployment into your Cloud Shell.
 
 **This is a required step if you've just pulled config from a different Spinnaker deployment.**
 
-This will include details on how to connect to Spinnaker.
+This command will refresh the contents of the right-hand pane and will include details on how
+to connect to Spinnaker.
 
 ```bash
 ~/spinnaker-for-gcp/scripts/manage/update_console.sh
