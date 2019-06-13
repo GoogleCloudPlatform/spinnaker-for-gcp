@@ -2,7 +2,7 @@
 
 ## Select GCP project
 
-Select the project in which you'll install Spinnaker, then click **Next**, below.
+Select the project in which you'll install Spinnaker, then click **Start**, below.
 
 <walkthrough-project-billing-setup>
 </walkthrough-project-billing-setup>
