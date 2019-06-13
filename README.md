@@ -22,8 +22,6 @@ management environment and workflow for ongoing administration of Spinnaker.
 
 ## Architecture
 
-### TODO: Create architecture diagram
-
 ![Architecture diagram](resources/spinnaker-k8s-app-architecture.png)
 
 Spinnaker is composed of a number of individual
