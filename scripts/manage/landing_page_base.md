@@ -30,11 +30,11 @@ deployment into your Cloud Shell.
 ~/spinnaker-for-gcp/scripts/manage/pull_config.sh
 ```
 
-### Update the console
+### Update this console
 
-**This is a required step if you've just pulled config from a different Spinnaker deployment.**
+**This is required if you've just pulled config from a different Spinnaker deployment.**
 
-This command will refresh the contents of the right-hand pane and will include details on how
+This command refreshes the contents of the right-hand pane, including details on how
 to connect to Spinnaker.
 
 ```bash
