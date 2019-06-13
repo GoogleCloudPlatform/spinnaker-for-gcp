@@ -236,8 +236,10 @@ data:
             serviceAccount: true
             namespaces: []
             omitNamespaces:
+            - halyard
             - kube-public
             - kube-system
+            - spinnaker
             kinds: []
             omitKinds: []
             customResources: []
