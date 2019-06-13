@@ -4,8 +4,7 @@ Use this section to manage your Spinnaker deployment going forward.
 
 ## Select GCP project
 
-Select the project in which your Spinnaker is installed, then click **Confirm
-project**.
+Select the project in which your Spinnaker is installed, then click **Start**.
 
 <walkthrough-project-billing-setup>
 </walkthrough-project-billing-setup>
@@ -26,7 +25,10 @@ You can skip this step if you are the original installer/operator, as they will 
 PROJECT_ID={{project-id}} ~/spinnaker-for-gcp/scripts/manage/check_cluster_config.sh
 ```
 
-### Pull all config from Spinnaker deployment into cloud shell
+### Pull Spinnaker config
+
+Paste and run this command to pull the configuration from your Spinnaker
+deployment into your Cloud Shell.
 
 ```bash
 ~/spinnaker-for-gcp/scripts/manage/pull_config.sh
@@ -34,9 +36,9 @@ PROJECT_ID={{project-id}} ~/spinnaker-for-gcp/scripts/manage/check_cluster_confi
 
 ### Update the console
 
-#### (This is a required step if you've just pulled config from a different Spinnaker deployment.)
+**This is a required step if you've just pulled config from a different Spinnaker deployment.**
 
-This will include details on connecting to Spinnaker.
+This will include details on how to connect to Spinnaker.
 
 ```bash
 ~/spinnaker-for-gcp/scripts/manage/update_console.sh
