@@ -51,7 +51,7 @@ Alternatively, the management environment allows you to expose Spinnaker via the
 
 # Installation
 
-## Quick install via the management console
+## Quick install via the management environment
 
 Use the management environment, based on [Cloud Shell](https://cloud.google.com/shell/),
 to perform the installation.

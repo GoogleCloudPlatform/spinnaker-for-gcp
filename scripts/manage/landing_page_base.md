@@ -11,7 +11,7 @@ Select the project in which your Spinnaker is installed, then click **Start**.
 
 ## Manage Spinnaker via Halyard from Cloud Shell
 
-This management console lets you run [Halyard
+This management environment lets you run [Halyard
 commands](https://www.spinnaker.io/reference/halyard/) to configure and manage
 your Spinnaker installation.
 
@@ -169,7 +169,7 @@ Next, apply this change to the Statefulset managing the Halyard daemon:
 
 ### Upgrade Management Environment
 
-Update the commands and documentation in your Management Environment to the latest available version.
+Update the commands and documentation in your management environment to the latest available version.
 
 ```bash
 ~/spinnaker-for-gcp/scripts/manage/update_management_environment.sh
