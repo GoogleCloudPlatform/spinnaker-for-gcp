@@ -86,6 +86,9 @@ else
 export PROJECT_ID=$PROJECT_ID
 export DEPLOYMENT_NAME=${DEPLOYMENT_NAME:-$NEW_DEPLOYMENT_NAME}
 
+export SPINNAKER_VERSION=1.14.5
+export HALYARD_VERSION=1.20.2
+
 # The specified network must exist, and it must not be a legacy network.
 # More info on legacy networks can be found here: https://cloud.google.com/vpc/docs/legacy
 export NETWORK=default
@@ -95,8 +98,12 @@ export GKE_CLUSTER=${GKE_CLUSTER:-\$DEPLOYMENT_NAME}
 export ZONE=$ZONE
 export REGION=$REGION
 
-export SPINNAKER_VERSION=1.14.5
-export HALYARD_VERSION=1.20.2
+# These are only considered if a new GKE cluster is being created.
+export GKE_CLUSTER_VERSION=1.12.7
+export GKE_MACHINE_TYPE=n1-highmem-4
+export GKE_DISK_TYPE=pd-standard
+export GKE_DISK_SIZE=100
+export GKE_NUM_NODES=3
 
 # See TZ column in https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 export TIMEZONE=$(cat /etc/timezone)
