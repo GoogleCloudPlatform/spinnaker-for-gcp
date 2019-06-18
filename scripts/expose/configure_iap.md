@@ -20,9 +20,9 @@ Ensure that you note the generated *Client ID* and *Client secret* for your new 
 ~/spinnaker-for-gcp/scripts/expose/configure_iap.sh
 ```
 
-This phase could take 30-60 minutes. **Spinnaker will be inaccessible during this time.**
-
 There will be one final IAP configuration step described in the terminal.
+
+This phase could take 30-60 minutes. **Spinnaker will be inaccessible during this time.**
 
 ## Conclusion
 
