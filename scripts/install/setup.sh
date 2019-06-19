@@ -182,6 +182,17 @@ else
   bold "Using existing pubsub subscription $GCB_PUBSUB_SUBSCRIPTION for GCB..."
 fi
 
+NOTIFICATION_PUBSUB_TOPIC_NAME=projects/$PROJECT_ID/topics/$PUBSUB_NOTIFICATION_TOPIC
+EXISTING_NOTIFICATION_PUBSUB_TOPIC_NAME=$(gcloud pubsub topics list --project $PROJECT_ID \
+  --filter="name=$NOTIFICATION_PUBSUB_TOPIC_NAME" --format="value(name)")
+
+if [ -z "$EXISTING_NOTIFICATION_PUBSUB_TOPIC_NAME" ]; then
+  bold "Creating pubsub topic $NOTIFICATION_PUBSUB_TOPIC_NAME for notifications..."
+  gcloud pubsub topics create --project $PROJECT_ID $NOTIFICATION_PUBSUB_TOPIC_NAME
+else
+  bold "Using existing pubsub topic $EXISTING_NOTIFICATION_PUBSUB_TOPIC_NAME for notifications..."
+fi
+
 EXISTING_HAL_DEPLOY_APPLY_JOB_NAME=$(kubectl get job -n halyard \
   --field-selector metadata.name=="hal-deploy-apply" \
   -o json | jq -r .items[0].metadata.name)
