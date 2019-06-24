@@ -86,7 +86,7 @@ else
 export PROJECT_ID=$PROJECT_ID
 export DEPLOYMENT_NAME=${DEPLOYMENT_NAME:-$NEW_DEPLOYMENT_NAME}
 
-export SPINNAKER_VERSION=1.14.5
+export SPINNAKER_VERSION=1.14.7
 export HALYARD_VERSION=1.20.2
 
 # The specified network must exist, and it must not be a legacy network.
