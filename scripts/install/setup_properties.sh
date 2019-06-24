@@ -127,6 +127,9 @@ export CLOUD_FUNCTION_NAME="\${DEPLOYMENT_NAME//-}AuditLog"
 export GCR_PUBSUB_SUBSCRIPTION=\$DEPLOYMENT_NAME-gcr-pubsub-subscription
 export GCB_PUBSUB_SUBSCRIPTION=\$DEPLOYMENT_NAME-gcb-pubsub-subscription
 
+export PUBSUB_NOTIFICATION_PUBLISHER=\$DEPLOYMENT_NAME-publisher
+export PUBSUB_NOTIFICATION_TOPIC=\$DEPLOYMENT_NAME-notifications-topic
+
 # The properties following this line are only relevant if you intend to expose your new Spinnaker instance.
 export STATIC_IP_NAME=\$DEPLOYMENT_NAME-external-ip
 export MANAGED_CERT=\$DEPLOYMENT_NAME-managed-cert

@@ -359,6 +359,11 @@ data:
             subscriptionName: $GCR_PUBSUB_SUBSCRIPTION
             ackDeadlineSeconds: 10
             messageFormat: GCR
+          publishers:
+          - name: $PUBSUB_NOTIFICATION_PUBLISHER
+            project: $PROJECT_ID
+            topicName: $PUBSUB_NOTIFICATION_TOPIC
+            content: NOTIFICATIONS
       canary:
         enabled: true
         serviceIntegrations:
