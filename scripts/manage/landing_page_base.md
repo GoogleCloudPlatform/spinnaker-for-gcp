@@ -141,10 +141,9 @@ clusters](https://www.spinnaker.io/setup/install/providers/kubernetes-v2/gke/).
 
 First, modify `SPINNAKER_VERSION` in your `properties` file to reflect the desired version of Spinnaker:
 
-<walkthrough-editor-open-file
-    filePath="spinnaker-for-gcp/scripts/install/properties"
-    text="Open properties file">
-</walkthrough-editor-open-file>
+```bash
+cloudshell edit ~/spinnaker-for-gcp/scripts/install/properties
+```
 
 Next, use Halyard to apply the changes:
 
@@ -156,10 +155,9 @@ Next, use Halyard to apply the changes:
 
 First, modify `HALYARD_VERSION` in your `properties` file to reflect the desired version of Halyard:
 
-<walkthrough-editor-open-file
-    filePath="spinnaker-for-gcp/scripts/install/properties"
-    text="Open properties file">
-</walkthrough-editor-open-file>
+```bash
+cloudshell edit ~/spinnaker-for-gcp/scripts/install/properties
+```
 
 Next, apply this change to the Statefulset managing the Halyard daemon:
 
