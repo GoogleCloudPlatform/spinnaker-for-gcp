@@ -20,13 +20,12 @@ then press **Enter** to run it from the Shell.
 PROJECT_ID={{project-id}} ~/spinnaker-for-gcp/scripts/install/setup_properties.sh
 ```
 
-After that script finishes, you can click the link below to open the properties file for your Spinnaker
+After that script finishes, you can use the command below to open the properties file for your Spinnaker
 installation. This is optional.
 
-<walkthrough-editor-open-file
-    filePath="spinnaker-for-gcp/scripts/install/properties"
-    text="Open properties file">
-</walkthrough-editor-open-file>
+```bash
+cloudshell edit ~/spinnaker-for-gcp/scripts/install/properties
+```
 
 **Proceed with caution**. If you edit this file, the installation might not work
 as expected.
