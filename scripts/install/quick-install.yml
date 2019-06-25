@@ -165,7 +165,7 @@ data:
   gate.yml: |
     host: 0.0.0.0
   clouddriver-local.yml: |
-    kubernetes.v2.managedBySuffix: gke-marketplace
+    kubernetes.v2.managedBySuffix: for-gcp
   echo-local.yml: |
     rest:
       enabled: true
