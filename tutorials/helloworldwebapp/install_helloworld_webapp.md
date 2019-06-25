@@ -10,6 +10,10 @@ Try out Spinnaker using the sample application provided with your Spinnaker inst
 
 To proceed, make sure the Spinnaker instance is reachable with port-forwarding or is exposed publicly.
 
+Select the project containing your Spinnaker instance, then click **Start**, below.
+
+<walkthrough-project-billing-setup/>
+
 ## Create application and pipelines
 
 Run this command to create the required resources:
