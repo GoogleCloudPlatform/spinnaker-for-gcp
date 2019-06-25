@@ -37,7 +37,7 @@ This repository contains a few other items:
 
   This builds the image and copies the Kubernetes configs to the Spinnaker GCS bucket.
 
-A [Cloud Build trigger](https://console.developers.google.com/cloud-build/triggers?project={{project-id}}) 
+* A [Cloud Build trigger](https://console.developers.google.com/cloud-build/triggers?project={{project-id}}) 
 
   This executes the Cloud Build config when any source code or manifest files are changed under
   src/** or config/** in the repository.
