@@ -46,9 +46,10 @@ else
       SERVICE_ACCOUNT_NAME=$(echo $EXISTING_SA_EMAIL | cut -d @ -f 1)
     fi
   fi
-
+  NETWORK="default"
   ZONE=${ZONE:-us-west1-b}
   REGION=$(echo $ZONE | cut -d - -f 1,2)
+  SUBNET=$(gcloud compute networks subnets list --network=default --filter="region:( us-west2 )" | cut -d " " -f 1 |sed -n 2p)
 
   # Check if Redis api is enabled.
   if [ $(gcloud services list --project $PROJECT_ID \
@@ -88,13 +89,13 @@ export DEPLOYMENT_NAME=${DEPLOYMENT_NAME:-$NEW_DEPLOYMENT_NAME}
 
 # The specified network must exist, and it must not be a legacy network.
 # More info on legacy networks can be found here: https://cloud.google.com/vpc/docs/legacy
-export NETWORK=default
+export NETWORK=$NETWORK
 
 # If cluster does not exist, it will be created.
 export GKE_CLUSTER=${GKE_CLUSTER:-\$DEPLOYMENT_NAME}
 export ZONE=$ZONE
 export REGION=$REGION
-
+export SUBNET=$SUBNET
 export SPINNAKER_VERSION=1.14.5
 export HALYARD_VERSION=1.20.2
 
