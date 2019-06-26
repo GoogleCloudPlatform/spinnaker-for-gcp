@@ -7,7 +7,7 @@ metadata:
   labels:
     tier: frontend
   name: helloworldwebapp
-  namespace: helloworldwebapp-prod
+  namespace: helloworldwebapp-staging
 spec:
   replicas: 3
   selector:
@@ -19,5 +19,5 @@ spec:
         tier: frontend
     spec:
       containers:
-        - image: gcr.io/$PROJECT_ID/spinnaker-marketplace-helloworldwebapp
+        - image: gcr.io/$PROJECT_ID/spinnaker-for-gcp-helloworldwebapp
           name: helloworldwebapp
