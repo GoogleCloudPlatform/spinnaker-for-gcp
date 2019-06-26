@@ -121,7 +121,7 @@ if [ -z "$CLUSTER_EXISTS" ]; then
   # TODO: Move some of these config settings to properties file.
   # TODO: Should this be regional instead?
   gcloud beta container clusters create $GKE_CLUSTER --project $PROJECT_ID \
-    --zone $ZONE --network $NETWORK --username "admin" --cluster-version $GKE_CLUSTER_VERSION \
+    --zone $ZONE --network $NETWORK --username "admin" --subnetwork $SUBNET --cluster-version $GKE_CLUSTER_VERSION \
     --machine-type $GKE_MACHINE_TYPE --image-type "COS" --disk-type $GKE_DISK_TYPE \
     --disk-size $GKE_DISK_SIZE --service-account $SA_EMAIL --num-nodes $GKE_NUM_NODES \
     --enable-stackdriver-kubernetes --enable-autoupgrade --enable-autorepair \
