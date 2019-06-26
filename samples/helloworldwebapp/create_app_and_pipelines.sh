@@ -10,6 +10,20 @@ source ~/spinnaker-for-gcp/scripts/install/properties
 
 pushd ~/spinnaker-for-gcp/samples/helloworldwebapp
 
+if ! ~/spin app list &> /dev/null ; then
+  bold "Spinnaker instance is not reachable via the Spin CLI. Please make sure the Spinnaker \
+instance is reachable with port-forwarding or is exposed publicly.
+
+To port-forward the Spinnaker UI, run this command:
+~/spinnaker-for-gcp/scripts/manage/connect_unsecured.sh
+
+If you would instead like to expose the service with a domain behind Identity-Aware Proxy, \
+run this command:
+~/spinnaker-for-gcp/scripts/expose/configure_endpoint.sh
+"
+  exit 1
+fi
+
 if [ ! -d ~/$PROJECT_ID/spinnaker-for-gcp-helloworldwebapp ]; then
   bold 'Creating GCR repo "spinnaker-for-gcp-helloworldwebapp" in Spinnaker project...'
   gcloud source repos create spinnaker-for-gcp-helloworldwebapp
