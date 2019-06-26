@@ -6,10 +6,6 @@ releasing software changes with high velocity and confidence.
 If you would like to learn more about Spinnaker, please visit the
 [Spinnaker website](https://spinnaker.io/).
 
-## About Google Click to Deploy
-
-Popular open stacks on Kubernetes packaged by Google.
-
 ## About Spinnaker for Google Cloud Platform
 
 This solution installs a single instance of Spinnaker onto a GKE cluster in a
