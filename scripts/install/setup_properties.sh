@@ -87,6 +87,9 @@ else
 export PROJECT_ID=$PROJECT_ID
 export DEPLOYMENT_NAME=${DEPLOYMENT_NAME:-$NEW_DEPLOYMENT_NAME}
 
+export SPINNAKER_VERSION=1.14.7
+export HALYARD_VERSION=1.20.2
+
 # The specified network must exist, and it must not be a legacy network.
 # More info on legacy networks can be found here: https://cloud.google.com/vpc/docs/legacy
 export NETWORK=$NETWORK
@@ -98,7 +101,12 @@ export REGION=$REGION
 export SUBNET=$SUBNET
 export SPINNAKER_VERSION=1.14.5
 export HALYARD_VERSION=1.20.2
-
+# These are only considered if a new GKE cluster is being created.
+export GKE_CLUSTER_VERSION=1.12.7
+export GKE_MACHINE_TYPE=n1-highmem-4
+export GKE_DISK_TYPE=pd-standard
+export GKE_DISK_SIZE=100
+export GKE_NUM_NODES=3
 # See TZ column in https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 export TIMEZONE=$(cat /etc/timezone)
 
@@ -120,6 +128,9 @@ export CLOUD_FUNCTION_NAME="\${DEPLOYMENT_NAME//-}AuditLog"
 
 export GCR_PUBSUB_SUBSCRIPTION=\$DEPLOYMENT_NAME-gcr-pubsub-subscription
 export GCB_PUBSUB_SUBSCRIPTION=\$DEPLOYMENT_NAME-gcb-pubsub-subscription
+
+export PUBSUB_NOTIFICATION_PUBLISHER=\$DEPLOYMENT_NAME-publisher
+export PUBSUB_NOTIFICATION_TOPIC=\$DEPLOYMENT_NAME-notifications-topic
 
 # The properties following this line are only relevant if you intend to expose your new Spinnaker instance.
 export STATIC_IP_NAME=\$DEPLOYMENT_NAME-external-ip

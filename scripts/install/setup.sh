@@ -121,9 +121,9 @@ if [ -z "$CLUSTER_EXISTS" ]; then
   # TODO: Move some of these config settings to properties file.
   # TODO: Should this be regional instead?
   gcloud beta container clusters create $GKE_CLUSTER --project $PROJECT_ID \
-    --zone $ZONE --network $NETWORK --username "admin" --cluster-version "1.12.7" \
-    --machine-type "n1-highmem-4" --image-type "COS" --disk-type "pd-standard" \
-    --disk-size "100" --service-account $SA_EMAIL --num-nodes "3" \
+    --zone $ZONE --network $NETWORK --username "admin" --cluster-version $GKE_CLUSTER_VERSION \
+    --machine-type $GKE_MACHINE_TYPE --image-type "COS" --disk-type $GKE_DISK_TYPE \
+    --disk-size $GKE_DISK_SIZE --service-account $SA_EMAIL --num-nodes $GKE_NUM_NODES \
     --enable-stackdriver-kubernetes --enable-autoupgrade --enable-autorepair \
     --enable-ip-alias --addons HorizontalPodAutoscaling,HttpLoadBalancing
 else
@@ -180,6 +180,17 @@ if [ -z "$EXISTING_GCB_PUBSUB_SUBSCRIPTION_NAME" ]; then
     --topic=projects/$PROJECT_ID/topics/cloud-builds
 else
   bold "Using existing pubsub subscription $GCB_PUBSUB_SUBSCRIPTION for GCB..."
+fi
+
+NOTIFICATION_PUBSUB_TOPIC_NAME=projects/$PROJECT_ID/topics/$PUBSUB_NOTIFICATION_TOPIC
+EXISTING_NOTIFICATION_PUBSUB_TOPIC_NAME=$(gcloud pubsub topics list --project $PROJECT_ID \
+  --filter="name=$NOTIFICATION_PUBSUB_TOPIC_NAME" --format="value(name)")
+
+if [ -z "$EXISTING_NOTIFICATION_PUBSUB_TOPIC_NAME" ]; then
+  bold "Creating pubsub topic $NOTIFICATION_PUBSUB_TOPIC_NAME for notifications..."
+  gcloud pubsub topics create --project $PROJECT_ID $NOTIFICATION_PUBSUB_TOPIC_NAME
+else
+  bold "Using existing pubsub topic $EXISTING_NOTIFICATION_PUBSUB_TOPIC_NAME for notifications..."
 fi
 
 EXISTING_HAL_DEPLOY_APPLY_JOB_NAME=$(kubectl get job -n halyard \
