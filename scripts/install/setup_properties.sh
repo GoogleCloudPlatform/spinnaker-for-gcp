@@ -49,7 +49,7 @@ else
   NETWORK="default"
   ZONE=${ZONE:-us-west1-b}
   REGION=$(echo $ZONE | cut -d - -f 1,2)
-  SUBNET=$(gcloud compute networks subnets list --network=default --filter="region:( us-west2 )" | cut -d " " -f 1 |sed -n 2p)
+  SUBNET=$(gcloud compute networks subnets list --network=default --filter="region:( $REGION )" | cut -d " " -f 1 |sed -n 2p)
 
   # Check if Redis api is enabled.
   if [ $(gcloud services list --project $PROJECT_ID \
