@@ -102,6 +102,7 @@ export REGION=$REGION
 export SUBNET=$SUBNET
 export SPINNAKER_VERSION=1.14.5
 export HALYARD_VERSION=1.20.2
+
 # These are only considered if a new GKE cluster is being created.
 export GKE_CLUSTER_VERSION=1.12.7
 export GKE_MACHINE_TYPE=n1-highmem-4
