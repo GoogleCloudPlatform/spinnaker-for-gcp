@@ -46,10 +46,11 @@ else
       SERVICE_ACCOUNT_NAME=$(echo $EXISTING_SA_EMAIL | cut -d @ -f 1)
     fi
   fi
+  # Setting the default network & subnet for Build
   NETWORK="default"
+  SUBNET="default"
   ZONE=${ZONE:-us-west1-b}
   REGION=$(echo $ZONE | cut -d - -f 1,2)
-  SUBNET=$(gcloud compute networks subnets list --network=default --filter="region:( $REGION )" | cut -d " " -f 1 |sed -n 2p)
 
   # Check if Redis api is enabled.
   if [ $(gcloud services list --project $PROJECT_ID \
@@ -107,6 +108,7 @@ export GKE_MACHINE_TYPE=n1-highmem-4
 export GKE_DISK_TYPE=pd-standard
 export GKE_DISK_SIZE=100
 export GKE_NUM_NODES=3
+
 # See TZ column in https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 export TIMEZONE=$(cat /etc/timezone)
 
