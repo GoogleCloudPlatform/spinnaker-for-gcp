@@ -42,6 +42,18 @@ elif [ "$NETWORK_SUBNET_MODE" = "LEGACY" ]; then
   exit 1
 fi
 
+# Verify that the Subnet exists in the network
+SUBNET_CHECK=$(gcloud compute networks subnets list --network=$NETWORK --filter "region: ($REGION) AND name: ($SUBNET)" --format "value(name)")
+
+if [ -z "$SUBNET_CHECK" ]; then
+  bold "Subnet $SUBNET was not found in $NETWORK" \
+       "in project $PROJECT_ID.Please specify a new subnet in" \
+       "$PROPERTIES_FILE and re-run this script. You can verify" \
+       "what subnetworks exist in this network by running" \
+       "gcloud compute networks subnets list --project $PROJECT_ID --network=$NETWORK --filter \"region: ($REGION)\""
+  exit 1
+fi
+
 SA_EMAIL=$(gcloud iam service-accounts --project $PROJECT_ID list \
   --filter="displayName:$SERVICE_ACCOUNT_NAME" \
   --format='value(email)')
