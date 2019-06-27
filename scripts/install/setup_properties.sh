@@ -46,7 +46,7 @@ else
       SERVICE_ACCOUNT_NAME=$(echo $EXISTING_SA_EMAIL | cut -d @ -f 1)
     fi
   fi
-  # Setting the default network & subnet for Build
+
   NETWORK="default"
   SUBNET="default"
   ZONE=${ZONE:-us-west1-b}
