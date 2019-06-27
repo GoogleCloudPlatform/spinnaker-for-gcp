@@ -17,19 +17,19 @@ case $yn in
   * ) exit;;
 esac
 
-bold "Deleting CSR repository..."
+bold "Deleting Cloud Source Repository..."
 
-gcloud source repos delete spinnaker-marketplace-helloworldwebapp
-rm -rf ~/$PROJECT_ID/spinnaker-marketplace-helloworldwebapp
+gcloud source repos delete spinnaker-for-gcp-helloworldwebapp
+rm -rf ~/$PROJECT_ID/spinnaker-for-gcp-helloworldwebapp
 
 bold "Deleting helloworldwebapp-prod and helloworldwebapp-staging Kubernetes resources..."
 
-kubectl delete -f tutorials/helloworldwebapp/templates/csr/config/staging/service.yaml
-kubectl delete -f tutorials/helloworldwebapp/templates/csr/config/prod/service.yaml
+kubectl delete -f samples/helloworldwebapp/templates/repo/config/staging/service.yaml
+kubectl delete -f samples/helloworldwebapp/templates/repo/config/prod/service.yaml
 
 bold "Deleting Cloud Build trigger..."
 
-for trigger in $(gcloud alpha builds triggers list --filter triggerTemplate.repoName=spinnaker-marketplace-helloworldwebapp --format 'get(id)'); do
+for trigger in $(gcloud alpha builds triggers list --filter triggerTemplate.repoName=spinnaker-for-gcp-helloworldwebapp --format 'get(id)'); do
   gcloud alpha builds triggers delete -q $trigger
 done
 
@@ -39,8 +39,8 @@ gsutil -m rm -r gs://$BUCKET_NAME/helloworldwebapp-manifests
 
 bold "Deleting GCR images..."
 
-for digest in $(gcloud container images list-tags gcr.io/${PROJECT_ID}/spinnaker-marketplace-helloworldwebapp --format='get(digest)'); do
-  gcloud container images delete -q --force-delete-tags "gcr.io/${PROJECT_ID}/spinnaker-marketplace-helloworldwebapp@${digest}"
+for digest in $(gcloud container images list-tags gcr.io/${PROJECT_ID}/spinnaker-for-gcp-helloworldwebapp --format='get(digest)'); do
+  gcloud container images delete -q --force-delete-tags "gcr.io/${PROJECT_ID}/spinnaker-for-gcp-helloworldwebapp@${digest}"
 done
 
 bold "Deleting Spinnaker helloworldwebapp application and pipelines..."

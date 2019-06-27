@@ -19,12 +19,12 @@ Select the project containing your Spinnaker instance, then click **Start**, bel
 Run this command to create the required resources:
 
 ```bash
-~/spinnaker-for-gcp/tutorials/helloworldwebapp/create_app_and_pipelines.sh
+~/spinnaker-for-gcp/samples/helloworldwebapp/create_app_and_pipelines.sh
 ```
 
 ### Resources created:
 
-The source code is hosted in a repository in [Cloud Source Repository](https://source.cloud.google.com/{{project-id}}/spinnaker-marketplace-helloworldwebapp)
+The source code is hosted in a repository in [Cloud Source Repository](https://source.cloud.google.com/{{project-id}}/spinnaker-for-gcp-helloworldwebapp)
 in the same project as your Spinnaker cluster.
 
 This repository contains a few other items:
@@ -33,7 +33,7 @@ This repository contains a few other items:
 
   These are used to deploy the application and validate the service.
 
-* A [Cloud Build config](https://source.cloud.google.com/{{project-id}}/spinnaker-marketplace-helloworldwebapp/+/master:cloudbuild.yaml)
+* A [Cloud Build config](https://source.cloud.google.com/{{project-id}}/spinnaker-for-gcp-helloworldwebapp/+/master:cloudbuild.yaml)
 
   This builds the image and copies the Kubernetes configs to the Spinnaker GCS bucket.
 
@@ -42,7 +42,7 @@ This repository contains a few other items:
   This executes the Cloud Build config when any source code or manifest files are changed under
   src/** or config/** in the repository.
 
-Cloud Build creates an [image](https://gcr.io/{{project-id}}/spinnaker-marketplace-helloworldwebapp)
+Cloud Build creates an [image](https://gcr.io/{{project-id}}/spinnaker-for-gcp-helloworldwebapp)
 from source and tags that image with the short commit hash.
 
 The script also creates two Kubernetes namespaces...
@@ -70,18 +70,18 @@ You can navigate to your Spinnaker UI to see these pipelines.
 
 ## Start a new build
 
-To build and deploy an image, just change some [source code](https://source.cloud.google.com/{{project-id}}/spinnaker-marketplace-helloworldwebapp/+/master:src/main.go)
-or [manifest files](https://source.cloud.google.com/{{project-id}}/spinnaker-marketplace-helloworldwebapp/+/master:config/) and push the change to the master branch. 
+To build and deploy an image, just change some [source code](https://source.cloud.google.com/{{project-id}}/spinnaker-for-gcp-helloworldwebapp/+/master:src/main.go)
+or [manifest files](https://source.cloud.google.com/{{project-id}}/spinnaker-for-gcp-helloworldwebapp/+/master:config/) and push the change to the master branch. 
 
 The repository is already cloned to your home directory. Make some changes to the source code...
 
 ```bash
-cloudshell edit ~/{{project-id}}/spinnaker-marketplace-helloworldwebapp/src/main.go
+cloudshell edit ~/{{project-id}}/spinnaker-for-gcp-helloworldwebapp/src/main.go
 ```
 
 ...and commit the changes:
 ```bash
-cd ~/{{project-id}}/spinnaker-marketplace-helloworldwebapp
+cd ~/{{project-id}}/spinnaker-for-gcp-helloworldwebapp
 
 git commit -am "Cool new features"
 git push
@@ -103,5 +103,5 @@ for each service to see a "Hello World" page!
 Run this command to delete all the resources created above:
 
 ```bash
-~/spinnaker-for-gcp/tutorials/helloworldwebapp/cleanup_app_and_pipelines.sh && cd ~/spinnaker-for-gcp
+~/spinnaker-for-gcp/samples/helloworldwebapp/cleanup_app_and_pipelines.sh && cd ~/spinnaker-for-gcp
 ```

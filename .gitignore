@@ -1,4 +1,6 @@
 InstallHalyard.sh
+samples/helloworldwebapp/templates/pipelines/deployprod.json
+samples/helloworldwebapp/templates/pipelines/deploystaging.json
 scripts/expose/*_expanded.*
 scripts/install/properties
 scripts/install/properties.*
@@ -7,5 +9,3 @@ scripts/install/spinnakerAuditLog/config.json
 scripts/install/spinnakerAuditLog/index.js
 scripts/manage/*_expanded.*
 scripts/manage/delete-all_*.*
-tutorials/helloworldwebapp/templates/pipelines/deployprod.json
-tutorials/helloworldwebapp/templates/pipelines/deploystaging.json
