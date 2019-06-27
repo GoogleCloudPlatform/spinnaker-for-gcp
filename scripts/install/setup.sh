@@ -47,7 +47,7 @@ SUBNET_CHECK=$(gcloud compute networks subnets list --network=$NETWORK --filter 
 
 if [ -z "$SUBNET_CHECK" ]; then
   bold "Subnet $SUBNET was not found in $NETWORK" \
-       "in project $PROJECT_ID.Please specify a new subnet in" \
+       "in project $PROJECT_ID. Please specify a new subnet in" \
        "$PROPERTIES_FILE and re-run this script. You can verify" \
        "what subnetworks exist in this network by running" \
        "gcloud compute networks subnets list --project $PROJECT_ID --network=$NETWORK --filter \"region: ($REGION)\""
