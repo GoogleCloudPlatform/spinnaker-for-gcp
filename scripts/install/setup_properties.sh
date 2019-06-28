@@ -47,6 +47,8 @@ else
     fi
   fi
 
+  NETWORK="default"
+  SUBNET="default"
   ZONE=${ZONE:-us-west1-b}
   REGION=$(echo $ZONE | cut -d - -f 1,2)
 
@@ -91,12 +93,15 @@ export HALYARD_VERSION=1.20.2
 
 # The specified network must exist, and it must not be a legacy network.
 # More info on legacy networks can be found here: https://cloud.google.com/vpc/docs/legacy
-export NETWORK=default
+export NETWORK=$NETWORK
+export SUBNET=$SUBNET
 
 # If cluster does not exist, it will be created.
 export GKE_CLUSTER=${GKE_CLUSTER:-\$DEPLOYMENT_NAME}
 export ZONE=$ZONE
 export REGION=$REGION
+
+
 
 # These are only considered if a new GKE cluster is being created.
 export GKE_CLUSTER_VERSION=1.12.7
