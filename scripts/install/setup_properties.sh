@@ -101,8 +101,6 @@ export GKE_CLUSTER=${GKE_CLUSTER:-\$DEPLOYMENT_NAME}
 export ZONE=$ZONE
 export REGION=$REGION
 
-
-
 # These are only considered if a new GKE cluster is being created.
 export GKE_CLUSTER_VERSION=1.12.7
 export GKE_MACHINE_TYPE=n1-highmem-4

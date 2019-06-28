@@ -42,15 +42,16 @@ elif [ "$NETWORK_SUBNET_MODE" = "LEGACY" ]; then
   exit 1
 fi
 
-# Verify that the Subnet exists in the network
+# Verify that the subnet exists in the network.
 SUBNET_CHECK=$(gcloud compute networks subnets list --network=$NETWORK --filter "region: ($REGION) AND name: ($SUBNET)" --format "value(name)")
 
 if [ -z "$SUBNET_CHECK" ]; then
-  bold "Subnet $SUBNET was not found in $NETWORK" \
-       "in project $PROJECT_ID. Please specify a new subnet in" \
+  PROPERTIES_FILE="$HOME/spinnaker-for-gcp/scripts/install/properties"
+  bold "Subnet $SUBNET was not found in network $NETWORK" \
+       "in project $PROJECT_ID. Please specify an existing subnet in" \
        "$PROPERTIES_FILE and re-run this script. You can verify" \
-       "what subnetworks exist in this network by running" \
-       "gcloud compute networks subnets list --project $PROJECT_ID --network=$NETWORK --filter \"region: ($REGION)\""
+       "what subnetworks exist in this network by running:"
+  bold "  gcloud compute networks subnets list --project $PROJECT_ID --network=$NETWORK --filter \"region: ($REGION)\""
   exit 1
 fi
 
