@@ -9,3 +9,4 @@ scripts/install/spinnakerAuditLog/config.json
 scripts/install/spinnakerAuditLog/index.js
 scripts/manage/*_expanded.*
 scripts/manage/delete-all_*.*
+.idea
