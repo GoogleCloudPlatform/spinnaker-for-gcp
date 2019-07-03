@@ -41,6 +41,12 @@ GKE_REQUIRED_ROLES=(container.admin)
 EXISTING_ROLES=$(gcloud projects get-iam-policy --filter bindings.members:$SA_EMAIL $MANAGED_PROJECT_ID \
   --flatten bindings[].members --format="value(bindings.role)")
 
+if [ "$?" != "0" ]; then
+    bold "$USER does not have permission to query IAM policy on project $MANAGED_PROJECT_ID." \
+         "Please grant the necessary permissions and re-run this command."
+    exit 1
+fi
+
 for r in "${GKE_REQUIRED_ROLES[@]}"; do
   if [ -z "$(echo $EXISTING_ROLES | grep $r)" ]; then
     bold "Assigning role $r in project $MANAGED_PROJECT_ID to service account $SA_EMAIL..."
@@ -48,6 +54,12 @@ for r in "${GKE_REQUIRED_ROLES[@]}"; do
       --member serviceAccount:$SA_EMAIL \
       --role roles/$r \
       --format=none
+
+    if [ "$?" != "0" ]; then
+      bold "$USER does not have permission to assign role $r on project $MANAGED_PROJECT_ID." \
+           "Please grant the necessary permissions and re-run this command."
+      exit 1
+    fi
   fi
 done
 
