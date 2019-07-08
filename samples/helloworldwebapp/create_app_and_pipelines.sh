@@ -51,6 +51,8 @@ git push
 popd
 
 bold "Configuring Kubernetes services for prod and staging..."
+kubectl apply -f templates/repo/config/staging/namespace.yaml
+kubectl apply -f templates/repo/config/prod/namespace.yaml
 kubectl apply -f templates/repo/config/staging/service.yaml
 kubectl apply -f templates/repo/config/prod/service.yaml
 

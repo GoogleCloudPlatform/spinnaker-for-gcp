@@ -29,7 +29,7 @@ in the same project as your Spinnaker cluster.
 
 This repository contains a few other items:
 
-* Kubernetes ReplicaSet, Service, and Job manifests
+* Kubernetes configs for the application
 
   These are used to deploy the application and validate the service.
 
@@ -49,7 +49,7 @@ The script also creates two Kubernetes namespaces...
 * **helloworldwebapp-staging**
 * **helloworldwebapp-prod**
 
-...and the **helloworldwebapp-service** service in each of those namespaces, in the [Spinnaker cluster](https://console.developers.google.com/kubernetes/discovery?project={{project-id}}).
+...and the **helloworldwebapp-service** service in each of those namespaces, in the [Spinnaker Kubernetes cluster](https://console.developers.google.com/kubernetes/discovery?project={{project-id}}).
 
 These services expose the Go application for staging and prod environments.
 

@@ -21,23 +21,6 @@
     },
     {
       "defaultArtifact": {
-        "id": "efe92e26-bd43-4b71-994f-e4b4f3e33680",
-        "name": "gs://$BUCKET_NAME/helloworldwebapp-manifests/prod/validation-job.yaml",
-        "reference": "gs://$BUCKET_NAME/helloworldwebapp-manifests/prod/validation-job.yaml",
-        "type": "gcs/object"
-      },
-      "displayName": "Validation Job",
-      "id": "b20bed71-ca6a-4783-9b9c-b2c08d8d93f7",
-      "matchArtifact": {
-        "id": "def474c8-2b26-4714-b9d8-2f2dcef0b054",
-        "name": "gs://$BUCKET_NAME/helloworldwebapp-manifests/prod/validation-job.yaml",
-        "type": "gcs/object"
-      },
-      "useDefaultArtifact": true,
-      "usePriorArtifact": false
-    },
-    {
-      "defaultArtifact": {
         "customKind": true,
         "id": "bb5c3b12-6328-4451-95d4-ff140d175154"
       },
@@ -67,7 +50,7 @@
       "moniker": {
         "app": "helloworldwebapp"
       },
-      "name": "Red/Black Deploy to Production",
+      "name": "Blue/Green Deploy to Production",
       "refId": "1",
       "relationships": {
         "loadBalancers": [],
@@ -120,16 +103,46 @@
       },
       "refId": "4",
       "requisiteStageRefIds": [
-        "1"
+        "5"
       ],
       "type": "deleteManifest"
     },
     {
       "account": "spinnaker-install-account",
       "cloudProvider": "kubernetes",
+      "completeOtherBranchesThenFail": false,
+      "continuePipeline": true,
+      "failPipeline": false,
       "manifestArtifactAccount": "gcs-install-account",
-      "manifestArtifactId": "b20bed71-ca6a-4783-9b9c-b2c08d8d93f7",
-      "manifests": [],
+      "manifests": [
+        {
+          "apiVersion": "batch/v1",
+          "kind": "Job",
+          "metadata": {
+            "name": "validate-deployment",
+            "namespace": "helloworldwebapp-prod"
+          },
+          "spec": {
+            "backoffLimit": 0,
+            "template": {
+              "spec": {
+                "containers": [
+                  {
+                    "command": [
+                      "/bin/sh",
+                      "-c",
+                      "curl --max-time 120 helloworldwebapp-service"
+                    ],
+                    "image": "appropriate/curl:latest",
+                    "name": "validate-deployment"
+                  }
+                ],
+                "restartPolicy": "Never"
+              }
+            }
+          }
+        }
+      ],
       "moniker": {
         "app": "helloworldwebapp"
       },
@@ -140,10 +153,10 @@
         "securityGroups": []
       },
       "requisiteStageRefIds": [
-        "4"
+        "1"
       ],
       "skipExpressionEvaluation": false,
-      "source": "artifact",
+      "source": "text",
       "trafficManagement": {
         "enabled": false,
         "options": {
@@ -152,6 +165,23 @@
         }
       },
       "type": "deployManifest"
+    },
+    {
+      "name": "Check Validation status",
+      "preconditions": [
+        {
+          "context": {
+            "expression": "${ #stage(\"Validate New Prod\")['status'].toString() == 'SUCCEEDED'}"
+          },
+          "failPipeline": true,
+          "type": "expression"
+        }
+      ],
+      "refId": "6",
+      "requisiteStageRefIds": [
+        "4"
+      ],
+      "type": "checkPreconditions"
     }
   ],
   "triggers": [
