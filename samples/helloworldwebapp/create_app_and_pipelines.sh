@@ -58,9 +58,9 @@ if [ -z $(gcloud alpha builds triggers list --filter triggerTemplate.repoName=sp
   bold "Creating Cloud Build build trigger for helloworld app..."
   gcloud alpha builds triggers create cloud-source-repositories \
     --repo spinnaker-for-gcp-helloworldwebapp \
-    --branch_pattern master \
-    --build_config cloudbuild.yaml \
-    --included_files "src/**,config/**"
+    --branch-pattern master \
+    --build-config cloudbuild.yaml \
+    --included-files "src/**,config/**"
 fi
 
 bold "Creating helloworldwebapp Spinnaker application..."
