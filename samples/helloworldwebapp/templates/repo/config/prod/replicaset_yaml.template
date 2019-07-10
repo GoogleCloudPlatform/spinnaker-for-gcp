@@ -5,18 +5,18 @@ metadata:
   annotations:
     traffic.spinnaker.io/load-balancers: '["service helloworldwebapp-service"]'
   labels:
-    tier: frontend
+    app: helloworldwebapp
   name: helloworldwebapp-frontend
   namespace: helloworldwebapp-prod
 spec:
   replicas: 3
   selector:
     matchLabels:
-      tier: frontend
+      app: helloworldwebapp
   template:
     metadata:
       labels:
-        tier: frontend
+        app: helloworldwebapp
     spec:
       containers:
         - image: gcr.io/$PROJECT_ID/spinnaker-for-gcp-helloworldwebapp # will be modified on deployment to point at a digest of an image
