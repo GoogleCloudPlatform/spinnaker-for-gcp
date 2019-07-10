@@ -21,23 +21,6 @@
     },
     {
       "defaultArtifact": {
-        "id": "8cca0146-a59b-4209-ab3a-0efb95ecddc5",
-        "name": "gs://$BUCKET_NAME/helloworldwebapp-manifests/staging/validation-job.yaml",
-        "reference": "gs://$BUCKET_NAME/helloworldwebapp-manifests/staging/validation-job.yaml",
-        "type": "gcs/object"
-      },
-      "displayName": "Staging Validation Job",
-      "id": "db1824da-ed2f-4952-8a71-38a8826ba73f",
-      "matchArtifact": {
-        "id": "bb5adbdd-33b3-4298-9fda-dae51c29727c",
-        "name": "gs://$BUCKET_NAME/helloworldwebapp-manifests/staging/validation-job.yaml",
-        "type": "gcs/object"
-      },
-      "useDefaultArtifact": true,
-      "usePriorArtifact": false
-    },
-    {
-      "defaultArtifact": {
         "customKind": true,
         "id": "bb5c3b12-6328-4451-95d4-ff140d175154"
       },
@@ -99,89 +82,125 @@
       "completeOtherBranchesThenFail": false,
       "continuePipeline": true,
       "failPipeline": false,
-      "isNew": true,
       "location": "helloworldwebapp-staging",
       "manifestName": "job validate-deployment",
       "mode": "static",
       "name": "Clean up Validation Job",
       "options": {
-        "cascading": true,
-        "gracePeriodSeconds": null
+        "cascading": true
       },
       "refId": "2",
       "requisiteStageRefIds": [
-        "1"
+        "5"
       ],
       "type": "deleteManifest"
-    },
-    {
-      "account": "spinnaker-install-account",
-      "cloudProvider": "kubernetes",
-      "isNew": true,
-      "manifest": null,
-      "manifestArtifactAccount": "gcs-install-account",
-      "manifestArtifactId": "db1824da-ed2f-4952-8a71-38a8826ba73f",
-      "manifests": null,
-      "moniker": {
-        "app": "helloworldwebapp"
-      },
-      "name": "Validate Staging",
-      "refId": "3",
-      "relationships": {
-        "loadBalancers": [],
-        "securityGroups": []
-      },
-      "requisiteStageRefIds": [
-        "2"
-      ],
-      "skipExpressionEvaluation": false,
-      "source": "artifact",
-      "trafficManagement": {
-        "enabled": false,
-        "options": {
-          "enableTraffic": false,
-          "namespace": null,
-          "services": [],
-          "strategy": null
-        }
-      },
-      "type": "deployManifest",
-      "versioned": null
     },
     {
       "account": "spinnaker-install-account",
       "app": "helloworldwebapp",
       "cloudProvider": "kubernetes",
-      "cluster": "replicaSet helloworldwebapp",
+      "cluster": "replicaSet helloworldwebapp-frontend",
       "criteria": "second_newest",
       "failPipeline": false,
-      "isNew": true,
       "kind": "replicaSet",
-      "kinds": null,
-      "labelSelectors": null,
       "location": "helloworldwebapp-staging",
-      "manifestName": null,
       "mode": "dynamic",
       "name": "Delete Old Replicaset",
       "options": {
-        "cascading": true,
-        "gracePeriodSeconds": null
+        "cascading": true
       },
       "refId": "4",
       "requisiteStageRefIds": [
-        "3"
+        "6"
       ],
       "type": "deleteManifest"
+    },
+    {
+      "account": "spinnaker-install-account",
+      "cloudProvider": "kubernetes",
+      "completeOtherBranchesThenFail": false,
+      "continuePipeline": true,
+      "failPipeline": false,
+      "manifestArtifactAccount": "gcs-install-account",
+      "manifests": [
+        {
+          "apiVersion": "batch/v1",
+          "kind": "Job",
+          "metadata": {
+            "name": "validate-deployment",
+            "namespace": "helloworldwebapp-staging"
+          },
+          "spec": {
+            "backoffLimit": 0,
+            "template": {
+              "spec": {
+                "containers": [
+                  {
+                    "command": [
+                      "/bin/sh",
+                      "-c",
+                      "curl --max-time 120 helloworldwebapp-service"
+                    ],
+                    "image": "appropriate/curl:latest",
+                    "name": "validate-deployment"
+                  }
+                ],
+                "restartPolicy": "Never"
+              }
+            }
+          }
+        }
+      ],
+      "moniker": {
+        "app": "helloworldwebapp"
+      },
+      "name": "Validate Staging",
+      "refId": "5",
+      "relationships": {
+        "loadBalancers": [],
+        "securityGroups": []
+      },
+      "requisiteStageRefIds": [
+        "1"
+      ],
+      "skipExpressionEvaluation": false,
+      "source": "text",
+      "trafficManagement": {
+        "enabled": false,
+        "options": {
+          "enableTraffic": false,
+          "services": []
+        }
+      },
+      "type": "deployManifest"
+    },
+    {
+      "comments": "Fails the pipeline if the validation failed.",
+      "name": "Check Validation status",
+      "preconditions": [
+        {
+          "context": {
+            "expression": "${ #stage(\"Validate Staging\")['status'].toString() == 'SUCCEEDED'}"
+          },
+          "failPipeline": true,
+          "type": "expression"
+        }
+      ],
+      "refId": "6",
+      "requisiteStageRefIds": [
+        "2"
+      ],
+      "type": "checkPreconditions"
     }
   ],
   "triggers": [
     {
       "attributeConstraints": {},
       "enabled": true,
-      "expectedArtifactIds": [],
-      "payloadConstraints": {
-        "action": "INSERT"
-      },
+      "expectedArtifactIds": [
+        "4f4d38de-80c3-4bc1-a807-c565bc4024ee"
+      ],
+      "payloadConstraints": {},
       "pubsubSystem": "google",
       "subscriptionName": "gcr-pub-sub",
       "type": "pubsub"
