@@ -9,6 +9,6 @@ spec:
   - protocol: TCP
     port: 80
   selector:
-    frontedBy: helloworldwebapp-staging # will be applied to backends by Spinnaker
+    frontedBy: helloworldwebapp-prod # will be applied to backends by Spinnaker
   type: LoadBalancer
   loadBalancerIP: ""
