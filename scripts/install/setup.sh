@@ -8,7 +8,9 @@ err() {
   echo "$*" >&2;
 }
 
-source ~/spinnaker-for-gcp/scripts/install/properties
+PROPERTIES_FILE="$HOME/spinnaker-for-gcp/scripts/install/properties"
+
+source "$PROPERTIES_FILE"
 
 ~/spinnaker-for-gcp/scripts/manage/check_project_mismatch.sh
 
@@ -27,6 +29,27 @@ if [ $NUM_ENABLED_APIS != $NUM_REQUIRED_APIS ]; then
   gcloud services --project $PROJECT_ID enable $REQUIRED_APIS
 fi
 
+bold "Checking for existing cluster $GKE_CLUSTER..."
+
+CLUSTER_EXISTS=$(gcloud beta container clusters list --project $PROJECT_ID \
+  --filter="name=$GKE_CLUSTER" \
+  --format="value(name)")
+
+if [ -n "CLUSTER_EXISTS" ]; then
+  bold "Retrieving credentials for GKE cluster $GKE_CLUSTER..."
+  gcloud container clusters get-credentials $GKE_CLUSTER --zone $ZONE --project $PROJECT_ID
+
+  bold "Checking for Spinnaker application in cluster $GKE_CLUSTER..."
+  SPINNAKER_APPLICATION_LIST_JSON=$(kubectl get applications -n spinnaker -l app.kubernetes.io/name=spinnaker --output json)
+  SPINNAKER_APPLICATION_COUNT=$(echo $SPINNAKER_APPLICATION_LIST_JSON | jq '.items | length')
+
+  if [ -n "$SPINNAKER_APPLICATION_COUNT" ] && [ "$SPINNAKER_APPLICATION_COUNT" != "0" ]; then
+    bold "The GKE cluster $GKE_CLUSTER already contains an installed Spinnaker application." \
+         "Please choose another cluster."
+    exit 1
+  fi
+fi
+
 NETWORK_SUBNET_MODE=$(gcloud compute networks list --project $PROJECT_ID \
   --filter "name=$NETWORK" \
   --format "value(x_gcloud_subnet_mode)")
@@ -35,7 +58,6 @@ if [ -z "$NETWORK_SUBNET_MODE" ]; then
   bold "Network $NETWORK was not found in project $PROJECT_ID."
   exit 1
 elif [ "$NETWORK_SUBNET_MODE" = "LEGACY" ]; then
-  PROPERTIES_FILE="$HOME/spinnaker-for-gcp/scripts/install/properties"
   bold "Network $NETWORK is a legacy network. This installation requires a" \
        "non-legacy network. Please specify a non-legacy network in" \
        "$PROPERTIES_FILE and re-run this script."
@@ -46,7 +68,6 @@ fi
 SUBNET_CHECK=$(gcloud compute networks subnets list --network=$NETWORK --filter "region: ($REGION) AND name: ($SUBNET)" --format "value(name)")
 
 if [ -z "$SUBNET_CHECK" ]; then
-  PROPERTIES_FILE="$HOME/spinnaker-for-gcp/scripts/install/properties"
   bold "Subnet $SUBNET was not found in network $NETWORK" \
        "in project $PROJECT_ID. Please specify an existing subnet in" \
        "$PROPERTIES_FILE and re-run this script. You can verify" \
@@ -124,10 +145,6 @@ else
   bold "Using existing bucket $BUCKET_URI..."
 fi
 
-CLUSTER_EXISTS=$(gcloud beta container clusters list --project $PROJECT_ID \
-  --filter="name=$GKE_CLUSTER" \
-  --format="value(name)")
-
 if [ -z "$CLUSTER_EXISTS" ]; then
   bold "Creating GKE cluster $GKE_CLUSTER..."
 
@@ -139,13 +156,14 @@ if [ -z "$CLUSTER_EXISTS" ]; then
     --disk-size $GKE_DISK_SIZE --service-account $SA_EMAIL --num-nodes $GKE_NUM_NODES \
     --enable-stackdriver-kubernetes --enable-autoupgrade --enable-autorepair \
     --enable-ip-alias --addons HorizontalPodAutoscaling,HttpLoadBalancing
+
+  # If the cluster already exists, we already retrieved credentials way up at the top of the script.
+  bold "Retrieving credentials for GKE cluster $GKE_CLUSTER..."
+  gcloud container clusters get-credentials $GKE_CLUSTER --zone $ZONE --project $PROJECT_ID
 else
   bold "Using existing GKE cluster $GKE_CLUSTER..."
 fi
 
-bold "Retrieving credentials for GKE cluster $GKE_CLUSTER..."
-
-gcloud container clusters get-credentials $GKE_CLUSTER --zone $ZONE --project $PROJECT_ID
 
 GCR_PUBSUB_TOPIC_NAME=projects/$PROJECT_ID/topics/gcr
 EXISTING_GCR_PUBSUB_TOPIC_NAME=$(gcloud pubsub topics list --project $PROJECT_ID \
