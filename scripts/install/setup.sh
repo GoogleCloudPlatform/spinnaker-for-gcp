@@ -29,7 +29,7 @@ if [ $NUM_ENABLED_APIS != $NUM_REQUIRED_APIS ]; then
   gcloud services --project $PROJECT_ID enable $REQUIRED_APIS
 fi
 
-bold "Checking for exisiting cluster $GKE_CLUSTER"
+bold "Checking for existing cluster $GKE_CLUSTER..."
 
 CLUSTER_EXISTS=$(gcloud beta container clusters list --project $PROJECT_ID \
   --filter="name=$GKE_CLUSTER" \
@@ -39,7 +39,7 @@ if [ -n "CLUSTER_EXISTS" ]; then
   bold "Retrieving credentials for GKE cluster $GKE_CLUSTER..."
   gcloud container clusters get-credentials $GKE_CLUSTER --zone $ZONE --project $PROJECT_ID
 
-  bold "Checking for Spinnaker application in cluster $GKE_CLUSTER"
+  bold "Checking for Spinnaker application in cluster $GKE_CLUSTER..."
   SPINNAKER_APPLICATION_LIST_JSON=$(kubectl get applications -n spinnaker -l app.kubernetes.io/name=spinnaker --output json)
   SPINNAKER_APPLICATION_COUNT=$(echo $SPINNAKER_APPLICATION_LIST_JSON | jq '.items | length')
 
@@ -156,13 +156,14 @@ if [ -z "$CLUSTER_EXISTS" ]; then
     --disk-size $GKE_DISK_SIZE --service-account $SA_EMAIL --num-nodes $GKE_NUM_NODES \
     --enable-stackdriver-kubernetes --enable-autoupgrade --enable-autorepair \
     --enable-ip-alias --addons HorizontalPodAutoscaling,HttpLoadBalancing
+
+  # If the cluster already exists, we already retrieved credentials way up at the top of the script.
+  bold "Retrieving credentials for GKE cluster $GKE_CLUSTER..."
+  gcloud container clusters get-credentials $GKE_CLUSTER --zone $ZONE --project $PROJECT_ID
 else
   bold "Using existing GKE cluster $GKE_CLUSTER..."
 fi
 
-bold "Retrieving credentials for GKE cluster $GKE_CLUSTER..."
-
-gcloud container clusters get-credentials $GKE_CLUSTER --zone $ZONE --project $PROJECT_ID
 
 GCR_PUBSUB_TOPIC_NAME=projects/$PROJECT_ID/topics/gcr
 EXISTING_GCR_PUBSUB_TOPIC_NAME=$(gcloud pubsub topics list --project $PROJECT_ID \
