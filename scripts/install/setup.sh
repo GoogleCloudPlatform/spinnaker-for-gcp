@@ -35,7 +35,7 @@ CLUSTER_EXISTS=$(gcloud beta container clusters list --project $PROJECT_ID \
   --filter="name=$GKE_CLUSTER" \
   --format="value(name)")
 
-if [ -n "CLUSTER_EXISTS" ]; then
+if [ -n "$CLUSTER_EXISTS" ]; then
   bold "Retrieving credentials for GKE cluster $GKE_CLUSTER..."
   gcloud container clusters get-credentials $GKE_CLUSTER --zone $ZONE --project $PROJECT_ID
 
