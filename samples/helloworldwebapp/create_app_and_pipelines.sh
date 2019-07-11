@@ -50,12 +50,6 @@ git push
 
 popd
 
-bold "Configuring Kubernetes services for prod and staging..."
-kubectl apply -f templates/repo/config/staging/namespace.yaml
-kubectl apply -f templates/repo/config/prod/namespace.yaml
-kubectl apply -f templates/repo/config/staging/service.yaml
-kubectl apply -f templates/repo/config/prod/service.yaml
-
 if [ -z $(gcloud alpha builds triggers list --filter triggerTemplate.repoName=spinnaker-for-gcp-helloworldwebapp --format 'get(id)') ]; then
   bold "Creating Cloud Build build trigger for helloworld app..."
   gcloud alpha builds triggers create cloud-source-repositories \

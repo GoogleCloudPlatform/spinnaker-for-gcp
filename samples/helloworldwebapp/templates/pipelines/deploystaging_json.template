@@ -32,6 +32,40 @@
         "type": "docker/image"
       },
       "useDefaultArtifact": false,
+      "usePriorArtifact": true
+    },
+    {
+      "defaultArtifact": {
+        "id": "6fd321f3-064c-4033-8100-02839b12a4c5",
+        "name": "gs://$BUCKET_NAME/helloworldwebapp-manifests/staging/namespace.yaml",
+        "reference": "gs://$BUCKET_NAME/helloworldwebapp-manifests/staging/namespace.yaml",
+        "type": "gcs/object"
+      },
+      "displayName": "Staging Namespace",
+      "id": "097c2e8e-295f-4020-85d9-18ed18f6133b",
+      "matchArtifact": {
+        "id": "4be2cb5b-bfee-43cc-a2e8-c544777f3436",
+        "name": "gs://$BUCKET_NAME/helloworldwebapp-manifests/staging/namespace.yaml",
+        "type": "gcs/object"
+      },
+      "useDefaultArtifact": true,
+      "usePriorArtifact": false
+    },
+    {
+      "defaultArtifact": {
+        "id": "54857967-9f23-4772-b4ce-54562cc77031",
+        "name": "gs://$BUCKET_NAME/helloworldwebapp-manifests/staging/service.yaml",
+        "reference": "gs://$BUCKET_NAME/helloworldwebapp-manifests/staging/service.yaml",
+        "type": "gcs/object"
+      },
+      "displayName": "Staging Service",
+      "id": "24f64da7-9eac-46df-8b0d-f7092b6a03e4",
+      "matchArtifact": {
+        "id": "09755b68-001a-4d61-bb17-985546618e5f",
+        "name": "gs://$BUCKET_NAME/helloworldwebapp-manifests/staging/service.yaml",
+        "type": "gcs/object"
+      },
+      "useDefaultArtifact": true,
       "usePriorArtifact": false
     }
   ],
@@ -50,7 +84,7 @@
       "moniker": {
         "app": "helloworldwebapp"
       },
-      "name": "Deploy to Staging",
+      "name": "Deploy Replicaset to Staging",
       "refId": "1",
       "relationships": {
         "loadBalancers": [],
@@ -59,7 +93,9 @@
       "requiredArtifactIds": [
         "4f4d38de-80c3-4bc1-a807-c565bc4024ee"
       ],
-      "requisiteStageRefIds": [],
+      "requisiteStageRefIds": [
+        "8"
+      ],
       "skipExpressionEvaluation": false,
       "source": "artifact",
       "trafficManagement": {
@@ -70,7 +106,7 @@
           "services": [
             "service helloworldwebapp-service"
           ],
-          "strategy": "redblack"
+          "strategy": "highlander"
         }
       },
       "type": "deployManifest"
@@ -92,26 +128,6 @@
       "refId": "2",
       "requisiteStageRefIds": [
         "5"
-      ],
-      "type": "deleteManifest"
-    },
-    {
-      "account": "spinnaker-install-account",
-      "app": "helloworldwebapp",
-      "cloudProvider": "kubernetes",
-      "cluster": "replicaSet helloworldwebapp-frontend",
-      "criteria": "second_newest",
-      "failPipeline": false,
-      "kind": "replicaSet",
-      "location": "helloworldwebapp-staging",
-      "mode": "dynamic",
-      "name": "Delete Old Replicaset",
-      "options": {
-        "cascading": true
-      },
-      "refId": "4",
-      "requisiteStageRefIds": [
-        "6"
       ],
       "type": "deleteManifest"
     },
@@ -191,6 +207,62 @@
         "2"
       ],
       "type": "checkPreconditions"
+    },
+    {
+      "account": "spinnaker-install-account",
+      "cloudProvider": "kubernetes",
+      "manifestArtifactAccount": "gcs-install-account",
+      "manifestArtifactId": "097c2e8e-295f-4020-85d9-18ed18f6133b",
+      "moniker": {
+        "app": "helloworldwebapp"
+      },
+      "name": "Deploy Namespace",
+      "refId": "7",
+      "relationships": {
+        "loadBalancers": [],
+        "securityGroups": []
+      },
+      "requiredArtifactIds": [],
+      "requisiteStageRefIds": [],
+      "skipExpressionEvaluation": false,
+      "source": "artifact",
+      "trafficManagement": {
+        "enabled": false,
+        "options": {
+          "enableTraffic": false,
+          "services": []
+        }
+      },
+      "type": "deployManifest"
+    },
+    {
+      "account": "spinnaker-install-account",
+      "cloudProvider": "kubernetes",
+      "manifestArtifactAccount": "gcs-install-account",
+      "manifestArtifactId": "24f64da7-9eac-46df-8b0d-f7092b6a03e4",
+      "moniker": {
+        "app": "helloworldwebapp"
+      },
+      "name": "Deploy Service",
+      "refId": "8",
+      "relationships": {
+        "loadBalancers": [],
+        "securityGroups": []
+      },
+      "requiredArtifactIds": [],
+      "requisiteStageRefIds": [
+        "7"
+      ],
+      "skipExpressionEvaluation": false,
+      "source": "artifact",
+      "trafficManagement": {
+        "enabled": false,
+        "options": {
+          "enableTraffic": false,
+          "services": []
+        }
+      },
+      "type": "deployManifest"
     }
   ],
   "triggers": [
