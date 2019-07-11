@@ -57,14 +57,18 @@ This process creates two Spinnaker pipelines under the **helloworldwebapp** Spin
 
 * **Deploy to Staging**
 
-  This triggers on a newly pushed GCR image, and Blue/Green deploys the image to the
-  **helloworldwebapp-staging** namespace. It then runs a validation job to check the health status of the service. On
-  success, the old replicaset is deleted.
+  This triggers on a newly pushed GCR image, and deploys the image to the
+  **helloworldwebapp-staging** namespace. It then runs a validation job to check the health status of the service.
 
 * **Deploy to Production**
 
-  This starts on a successful **Deploy to Staging** run and also Blue/Green deploys 
+  This starts on a successful **Deploy to Staging** run and Blue/Green deploys 
   the tested image to **helloworldwebapp-prod** namespace. It then runs the health validation job.
+ 
+  On success, the old replicaset is scaled down after a 5 minute wait period.
+
+  On failure, the old replicaset is re-enabled and the new replicaset is disabled. A Pub/Sub
+  notification of the failure is sent via the preconfigured Pub/Sub publisher.
 
 You can navigate to your Spinnaker UI to see these pipelines.
 
