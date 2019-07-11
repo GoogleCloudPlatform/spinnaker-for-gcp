@@ -34,6 +34,15 @@ Note that this phase could take 30-60 minutes. **Spinnaker will be inaccessible 
 ~/spinnaker-for-gcp/scripts/expose/configure_endpoint.sh
 ```
 
+### Install sample applications and pipelines
+
+There are sample applications with example pipelines available to install and try out.
+View and install the samples by running this:
+
+```bash
+~/spinnaker-for-gcp/scripts/manage/list_samples.sh
+```
+
 ## Delete Spinnaker
 
 ### Generate a cleanup script
