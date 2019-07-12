@@ -22,6 +22,15 @@ View the who, what, when and where of your Spinnaker installation
 View the logging output of the individual components of your Spinnaker installation
 [here](https://console.developers.google.com/logs/viewer?project={{project-id}}&resource=k8s_container%2Fcluster_name%2F$GKE_CLUSTER%2Fnamespace_name%2Fspinnaker).
 
+### Install sample applications and pipelines
+
+There are sample applications with example pipelines available to install and try out.
+View and install the samples by running this:
+
+```bash
+~/spinnaker-for-gcp/scripts/manage/list_samples.sh
+```
+
 ## Delete Spinnaker
 
 ### Generate a cleanup script
