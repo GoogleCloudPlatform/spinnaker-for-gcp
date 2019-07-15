@@ -3,9 +3,11 @@ steps:
   args: [ 'install', '$PROJECT_ID/helloworldwebapp' ]
   env: [ 'PROJECT_ROOT=$PROJECT_ID/helloworldwebapp' ]
   dir: 'src'
-- name: 'gcr.io/cloud-builders/gsutil'
-  args: [ 'cp', '-r', 'config/*', 'gs://$BUCKET_NAME/helloworldwebapp-manifests/' ]
 - name: 'gcr.io/cloud-builders/docker'
   args: [ 'build', '-t', 'gcr.io/$PROJECT_ID/$REPO_NAME:$SHORT_SHA', '.' ]
 images:
   - 'gcr.io/$PROJECT_ID/$REPO_NAME:$SHORT_SHA'
+artifacts:
+  objects:
+    location: gs://$BUCKET_NAME/helloworldwebapp-manifests/
+    paths: [ 'config/*' ]

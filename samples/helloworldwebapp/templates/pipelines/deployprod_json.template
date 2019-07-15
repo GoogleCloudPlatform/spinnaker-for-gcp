@@ -3,27 +3,17 @@
   "description": "When staging deployment and validation completes, Blue/Green deploy new image to production environment and validate.",
   "expectedArtifacts": [
     {
-      "defaultArtifact": {
-        "id": "13957f56-cdd7-4e92-a5be-eecb1450ed2d",
-        "name": "gs://$BUCKET_NAME/helloworldwebapp-manifests/prod/replicaset.yaml",
-        "reference": "gs://$BUCKET_NAME/helloworldwebapp-manifests/prod/replicaset.yaml",
-        "type": "gcs/object"
-      },
       "displayName": "Prod Replicaset",
       "id": "d9013e3f-e9cd-4f18-ace6-ef14369b7fec",
       "matchArtifact": {
         "id": "b4557686-0d7e-4163-8cb5-f7e7f1310fa8",
-        "name": "gs://$BUCKET_NAME/helloworldwebapp-manifests/prod/replicaset.yaml",
+        "name": "gs://$BUCKET_NAME/helloworldwebapp-manifests/prod-replicaset.yaml",
         "type": "gcs/object"
       },
-      "useDefaultArtifact": true,
-      "usePriorArtifact": false
+      "useDefaultArtifact": false,
+      "usePriorArtifact": true
     },
     {
-      "defaultArtifact": {
-        "customKind": true,
-        "id": "bb5c3b12-6328-4451-95d4-ff140d175154"
-      },
       "displayName": "Hello World WebApp Image",
       "id": "4f4d38de-80c3-4bc1-a807-c565bc4024ee",
       "matchArtifact": {
@@ -35,38 +25,26 @@
       "usePriorArtifact": true
     },
     {
-      "defaultArtifact": {
-        "id": "d93b89f4-0e9b-4234-8da9-c46aa96e038a",
-        "name": "gs://$BUCKET_NAME/helloworldwebapp-manifests/prod/namespace.yaml",
-        "reference": "gs://$BUCKET_NAME/helloworldwebapp-manifests/prod/namespace.yaml",
-        "type": "gcs/object"
-      },
       "displayName": "Prod Namespace",
       "id": "730af75f-50ad-49ab-b754-ec8ae75938f8",
       "matchArtifact": {
         "id": "1d82dc39-76e1-4a96-8f9c-7f68b3edfa67",
-        "name": "gs://$BUCKET_NAME/helloworldwebapp-manifests/prod/namespace.yaml",
+        "name": "gs://$BUCKET_NAME/helloworldwebapp-manifests/prod-namespace.yaml",
         "type": "gcs/object"
       },
-      "useDefaultArtifact": true,
-      "usePriorArtifact": false
+      "useDefaultArtifact": false,
+      "usePriorArtifact": true
     },
     {
-      "defaultArtifact": {
-        "id": "0b41af93-d80c-438b-abd5-39605a5e3b3a",
-        "name": "gs://$BUCKET_NAME/helloworldwebapp-manifests/prod/service.yaml",
-        "reference": "gs://$BUCKET_NAME/helloworldwebapp-manifests/prod/service.yaml",
-        "type": "gcs/object"
-      },
       "displayName": "Prod Service",
       "id": "76641671-4d6b-4aee-94b4-dba73fbabfcd",
       "matchArtifact": {
         "id": "63b7838b-045b-4681-9a54-852cdb22efd0",
-        "name": "gs://$BUCKET_NAME/helloworldwebapp-manifests/prod/service.yaml",
+        "name": "gs://$BUCKET_NAME/helloworldwebapp-manifests/prod-service.yaml",
         "type": "gcs/object"
       },
-      "useDefaultArtifact": true,
-      "usePriorArtifact": false
+      "useDefaultArtifact": false,
+      "usePriorArtifact": true
     }
   ],
   "keepWaitingPipelines": false,
