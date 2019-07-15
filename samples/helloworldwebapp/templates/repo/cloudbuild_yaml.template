@@ -3,6 +3,21 @@ steps:
   args: [ 'install', '$PROJECT_ID/helloworldwebapp' ]
   env: [ 'PROJECT_ROOT=$PROJECT_ID/helloworldwebapp' ]
   dir: 'src'
+- name: 'ubuntu'
+  entrypoint: 'bash'
+  args:
+  - '-c'
+  - |
+    mkdir config-all
+
+    # rename config files to be appended with the environment, e.g. staging-service.yaml
+    for env in config/*; do
+      if [ -d $env ]; then
+        for file in $env/*; do
+          cp $file config-all/$(basename $env)-$(basename $file)
+        done
+      fi
+    done
 - name: 'gcr.io/cloud-builders/docker'
   args: [ 'build', '-t', 'gcr.io/$PROJECT_ID/$REPO_NAME:$SHORT_SHA', '.' ]
 images:
@@ -10,4 +25,4 @@ images:
 artifacts:
   objects:
     location: gs://$BUCKET_NAME/helloworldwebapp-manifests/
-    paths: [ 'config/*' ]
+    paths: [ 'config-all/*' ]

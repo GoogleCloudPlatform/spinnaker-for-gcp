@@ -37,10 +37,10 @@ cp -r templates/repo/src ~/$PROJECT_ID/spinnaker-for-gcp-helloworldwebapp/
 cp templates/repo/Dockerfile ~/$PROJECT_ID/spinnaker-for-gcp-helloworldwebapp/
 
 cat templates/repo/cloudbuild_yaml.template | envsubst '$BUCKET_NAME' > ~/$PROJECT_ID/spinnaker-for-gcp-helloworldwebapp/cloudbuild.yaml
-cat ~/$PROJECT_ID/spinnaker-for-gcp-helloworldwebapp/config/staging-replicaset_yaml.template | envsubst > ~/$PROJECT_ID/spinnaker-for-gcp-helloworldwebapp/config/staging-replicaset.yaml
-rm ~/$PROJECT_ID/spinnaker-for-gcp-helloworldwebapp/config/staging-replicaset_yaml.template
-cat ~/$PROJECT_ID/spinnaker-for-gcp-helloworldwebapp/config/prod-replicaset_yaml.template | envsubst > ~/$PROJECT_ID/spinnaker-for-gcp-helloworldwebapp/config/prod-replicaset.yaml
-rm ~/$PROJECT_ID/spinnaker-for-gcp-helloworldwebapp/config/prod-replicaset_yaml.template
+cat ~/$PROJECT_ID/spinnaker-for-gcp-helloworldwebapp/config/staging/replicaset_yaml.template | envsubst > ~/$PROJECT_ID/spinnaker-for-gcp-helloworldwebapp/config/staging/replicaset.yaml
+rm ~/$PROJECT_ID/spinnaker-for-gcp-helloworldwebapp/config/staging/replicaset_yaml.template
+cat ~/$PROJECT_ID/spinnaker-for-gcp-helloworldwebapp/config/prod/replicaset_yaml.template | envsubst > ~/$PROJECT_ID/spinnaker-for-gcp-helloworldwebapp/config/prod/replicaset.yaml
+rm ~/$PROJECT_ID/spinnaker-for-gcp-helloworldwebapp/config/prod/replicaset_yaml.template
 
 pushd ~/$PROJECT_ID/spinnaker-for-gcp-helloworldwebapp
 
