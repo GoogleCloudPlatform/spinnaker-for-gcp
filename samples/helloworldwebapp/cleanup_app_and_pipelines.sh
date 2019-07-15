@@ -24,8 +24,8 @@ rm -rf ~/$PROJECT_ID/spinnaker-for-gcp-helloworldwebapp
 
 bold "Deleting helloworldwebapp-prod and helloworldwebapp-staging Kubernetes resources..."
 
-kubectl delete -f samples/helloworldwebapp/templates/repo/config/staging-namespace.yaml
-kubectl delete -f samples/helloworldwebapp/templates/repo/config/prod-namespace.yaml
+kubectl delete -f samples/helloworldwebapp/templates/repo/config/staging/namespace.yaml
+kubectl delete -f samples/helloworldwebapp/templates/repo/config/prod/namespace.yaml
 
 bold "Deleting Cloud Build trigger..."
 
