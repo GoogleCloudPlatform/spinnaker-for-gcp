@@ -57,7 +57,7 @@ This process creates two Spinnaker pipelines under the **helloworldwebapp** Spin
 
 * **Deploy to Staging**
 
-  This triggers on a newly pushed GCR image, and deploys the image to the
+  This triggers on a newly completed GCB build, and deploys the image to the
   **helloworldwebapp-staging** namespace. It then runs a validation job to check the health status of the service.
 
 * **Deploy to Production**
