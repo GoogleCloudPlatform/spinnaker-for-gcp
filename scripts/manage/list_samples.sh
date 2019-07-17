@@ -4,8 +4,8 @@ bold() {
   echo ". $(tput bold)" "$*" "$(tput sgr0)";
 }
 
-bold "Here is a list of sample applications to available to install. Selecting one will launch
-a tutorial to install it."
+bold "Here is a list of sample applications available to install. Selecting one will launch" \
+      "a tutorial to install it."
 
 PS3='Please enter your choice: '
 
