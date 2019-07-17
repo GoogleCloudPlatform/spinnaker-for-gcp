@@ -25,7 +25,7 @@ View the logging output of the individual components of your Spinnaker installat
 ### Install sample applications and pipelines
 
 There are sample applications with example pipelines available to install and try out.
-View and install the samples by running this:
+View and install the samples by running this command:
 
 ```bash
 ~/spinnaker-for-gcp/scripts/manage/list_samples.sh

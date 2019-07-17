@@ -1,6 +1,6 @@
 {
   "application": "helloworldwebapp",
-  "description": "On new image updates, Blue/Green deploy new image to staging environment and validate.",
+  "description": "On GCB build completion, deploy new image to staging environment and validate.",
   "expectedArtifacts": [
     {
       "displayName": "Staging Replicaset",
