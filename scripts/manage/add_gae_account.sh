@@ -43,3 +43,7 @@ done
 
 ~/hal/hal config provider appengine enable
 ~/hal/hal config provider appengine account add $GAE_ACCOUNT_NAME --project $MANAGED_PROJECT_ID
+
+bold "Remember that your configuration changes have only been made locally."
+bold "They must be pushed and applied to your deployment to take effect:"
+bold "  ~/spinnaker-for-gcp/scripts/manage/push_and_apply.sh"
