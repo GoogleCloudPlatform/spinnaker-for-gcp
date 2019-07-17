@@ -86,5 +86,12 @@ fi
 
 chmod +x $DELETION_SCRIPT_FILENAME
 
+echo
 bold "Use this command to delete all the resources that were provisioned as part of your Spinnaker installation:"
-bold "$DELETION_SCRIPT_FILENAME"
+bold "  $DELETION_SCRIPT_FILENAME"
+
+echo
+bold "Warning: If you installed Spinnaker on pre-existing infrastructure (GKE cluster, Redis, service accounts, ...)," \
+     "this script deletes them. If you want to keep them, edit the generated cleanup script $DELETION_SCRIPT_FILENAME" \
+     "to comment out the specific deletion commands for items you want to keep:"
+bold "  cloudshell edit $DELETION_SCRIPT_FILENAME"
