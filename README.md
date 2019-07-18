@@ -22,7 +22,7 @@ management environment and workflow for ongoing administration of Spinnaker.
 
 Spinnaker is composed of a number of individual
 [microservices](https://www.spinnaker.io/reference/architecture/). These
-will be deployed in their own Kuberetes Pods, managed by Deployment objects,
+will be deployed in their own Kubernetes Pods, managed by Deployment objects,
 behind Service objects.
 
 ### Management components
