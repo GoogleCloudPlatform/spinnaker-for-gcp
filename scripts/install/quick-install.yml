@@ -243,7 +243,6 @@ data:
             kinds: []
             omitKinds: []
             customResources: []
-            oauthScopes: []
             oAuthScopes: []
           primaryAccount: spinnaker-install-account
         oraclebmcs:
