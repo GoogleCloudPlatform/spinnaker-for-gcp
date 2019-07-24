@@ -179,6 +179,32 @@ Update the commands and documentation in your management environment to the late
 ~/spinnaker-for-gcp/scripts/manage/connect_to_redis.sh
 ```
 
+### Restore a backup to Cloudshell
+
+Restore a backup of the halyard configuration and deployment configuration from Cloud Source Repositories to your Cloudshell. 
+
+```bash
+~/spinnaker-for-gcp/scripts/manage/restore_backup_to_cloudshell.sh -p $PROJECT_ID -r $CONFIG_CSR_REPO -h GIT_HASH
+```
+
+To apply the halyard config changes to the cluster:
+
+```bash
+~/spinnaker-for-gcp/scripts/manage/push_and_apply.sh
+```
+
+To apply changes in the properties file to your deployment:
+
+```bash
+~/spinnaker-for-gcp/scripts/install/setup.sh
+```
+
+All backups can be viewed by running:
+
+```bash
+~/spinnaker-for-gcp/scripts/manage/view_csr_backups.sh
+```
+
 ## Configure Operator Access
 
 To add additional operators, grant them the `Owner` role on GCP Project {{project-id}}: [IAM Permissions](https://console.developers.google.com/iam-admin/iam?project={{project-id}})
