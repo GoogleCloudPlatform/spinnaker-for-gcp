@@ -25,7 +25,7 @@ Shell](https://cloud.google.com/shell/)-based management console.
 
 The article [Install and Manage Spinnaker on Google Cloud
 Platform](https://cloud.google.com/docs/ci-cd/spinnaker/spinnaker-for-gcp)
-has instructions for using the management console.
+has instructions for using this solution.
 
 ## Architecture
 
