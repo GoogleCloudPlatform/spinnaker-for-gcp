@@ -88,8 +88,8 @@ else
 export PROJECT_ID=$PROJECT_ID
 export DEPLOYMENT_NAME=${DEPLOYMENT_NAME:-$NEW_DEPLOYMENT_NAME}
 
-export SPINNAKER_VERSION=1.14.8
-export HALYARD_VERSION=1.21.2
+export SPINNAKER_VERSION=1.14.11
+export HALYARD_VERSION=1.22.1
 
 # The specified network must exist, and it must not be a legacy network.
 # More info on legacy networks can be found here: https://cloud.google.com/vpc/docs/legacy
