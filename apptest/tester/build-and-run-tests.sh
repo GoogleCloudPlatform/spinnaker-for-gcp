@@ -2,8 +2,17 @@
 #
 # Would expect this to be deleted once these tests are properly integrated with GCP Marketplace Verification Pipeline.
 
+bold() {
+  echo ". $(tput bold)" "$*" "$(tput sgr0)";
+}
+
 if [ -z "$PROJECT_ID" ]; then
   PROJECT_ID=$(gcloud info --format='value(config.project)')
+fi
+
+if [ -z "$PROJECT_ID" ]; then
+  bold "Please set PROJECT_ID env var."
+  exit 1
 fi
 
 export PROJECT_ID
