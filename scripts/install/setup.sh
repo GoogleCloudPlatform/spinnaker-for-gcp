@@ -44,9 +44,22 @@ if [ -n "$CLUSTER_EXISTS" ]; then
   SPINNAKER_APPLICATION_COUNT=$(echo $SPINNAKER_APPLICATION_LIST_JSON | jq '.items | length')
 
   if [ -n "$SPINNAKER_APPLICATION_COUNT" ] && [ "$SPINNAKER_APPLICATION_COUNT" != "0" ]; then
-    bold "The GKE cluster $GKE_CLUSTER already contains an installed Spinnaker application." \
-         "Please choose another cluster."
-    exit 1
+    bold "The GKE cluster $GKE_CLUSTER already contains an installed Spinnaker application."
+
+    if [ "$SPINNAKER_APPLICATION_COUNT" == "1" ]; then
+      EXISTING_SPINNAKER_APPLICATION_NAME=$(echo $SPINNAKER_APPLICATION_LIST_JSON | jq -r '.items[0].metadata.name')
+
+      if [ "$EXISTING_SPINNAKER_APPLICATION_NAME" == "$DEPLOYMENT_NAME" ]; then
+        bold "Name of existing Spinnaker application matches name specified in properties file; carrying on with installation..."
+      else
+        bold "Please choose another cluster."
+        exit 1
+      fi
+    else
+      # Should never be more than 1 deployment in a cluster, but protect against it just in case.
+      bold "Please choose another cluster."
+      exit 1
+    fi
   fi
 fi
 
