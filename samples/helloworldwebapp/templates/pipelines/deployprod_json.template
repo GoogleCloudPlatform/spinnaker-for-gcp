@@ -7,7 +7,7 @@
       "id": "d9013e3f-e9cd-4f18-ace6-ef14369b7fec",
       "matchArtifact": {
         "id": "b4557686-0d7e-4163-8cb5-f7e7f1310fa8",
-        "name": "gs://$BUCKET_NAME/helloworldwebapp-manifests/prod-replicaset.yaml",
+        "name": "gs://$BUCKET_NAME/helloworldwebapp-manifests/.*/prod-replicaset.yaml",
         "type": "gcs/object"
       },
       "useDefaultArtifact": false,
@@ -29,7 +29,7 @@
       "id": "730af75f-50ad-49ab-b754-ec8ae75938f8",
       "matchArtifact": {
         "id": "1d82dc39-76e1-4a96-8f9c-7f68b3edfa67",
-        "name": "gs://$BUCKET_NAME/helloworldwebapp-manifests/prod-namespace.yaml",
+        "name": "gs://$BUCKET_NAME/helloworldwebapp-manifests/.*/prod-namespace.yaml",
         "type": "gcs/object"
       },
       "useDefaultArtifact": false,
@@ -40,7 +40,7 @@
       "id": "76641671-4d6b-4aee-94b4-dba73fbabfcd",
       "matchArtifact": {
         "id": "63b7838b-045b-4681-9a54-852cdb22efd0",
-        "name": "gs://$BUCKET_NAME/helloworldwebapp-manifests/prod-service.yaml",
+        "name": "gs://$BUCKET_NAME/helloworldwebapp-manifests/.*/prod-service.yaml",
         "type": "gcs/object"
       },
       "useDefaultArtifact": false,
