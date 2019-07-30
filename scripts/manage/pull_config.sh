@@ -27,7 +27,7 @@ bold "Copying halyard/$HALYARD_POD:/home/spinnaker/.hal into $HOME/.hal..."
 
 kubectl cp halyard/$HALYARD_POD:/home/spinnaker/.hal .hal
 
-REWRITABLE_KEYS=(kubeconfigFile jsonPath jsonKey)
+REWRITABLE_KEYS=(kubeconfigFile jsonPath jsonKey passwordFile)
 for k in "${REWRITABLE_KEYS[@]}"; do
   grep $k .hal/config &> /dev/null
   FOUND_TOKEN=$?
