@@ -4,7 +4,7 @@
 ~/spinnaker-for-gcp/scripts/manage/grant_iap_access.sh
 ```
 
-Alternatively, you can manually grant the `IAP-secured Web App User` role on the `spinnaker/spin-deck` resource to the user you'd like to grant access to [here](https://console.developers.google.com/security/iap?project={{project-id}}).
+To give a user non-operator access to Spinnaker, grant the `IAP-secured Web App User` role on the `spinnaker/spin-deck` resource to the user you'd like to grant access to [here](https://console.developers.google.com/security/iap?project={{project-id}}).
 
 ## Use Spinnaker
 
