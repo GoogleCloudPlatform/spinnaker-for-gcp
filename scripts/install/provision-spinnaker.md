@@ -80,16 +80,6 @@ Note that this phase could take 30-60 minutes. **Spinnaker will be inaccessible 
 ~/spinnaker-for-gcp/scripts/expose/configure_endpoint.sh
 ```
 
-### View Spinnaker Audit Log
-
-View the who, what, when and where of your Spinnaker installation
-[here](https://console.developers.google.com/logs/viewer?project={{project-id}}&resource=cloud_function&minLogLevel=200).
-
-### View Spinnaker Container Logs
-
-View the logging output of the individual components of your Spinnaker installation
-[here](https://console.developers.google.com/logs/viewer?project={{project-id}}&resource=k8s_container%2Fnamespace_name%2Fspinnaker).
-
 ## Next steps: manage Spinnaker
 
 Now that you've installed Spinnaker on Google Kubernetes Engine, and
