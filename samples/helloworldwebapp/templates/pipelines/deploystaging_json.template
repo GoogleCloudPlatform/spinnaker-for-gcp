@@ -7,7 +7,7 @@
       "id": "04429e2c-b48c-48e7-ac9b-6fdc4e3d7f59",
       "matchArtifact": {
         "id": "f52080c9-c9ce-4406-a869-e04af6c01389",
-        "name": "gs://$BUCKET_NAME/helloworldwebapp-manifests/staging-replicaset.yaml",
+        "name": "gs://$BUCKET_NAME/helloworldwebapp-manifests/.*/staging-replicaset.yaml",
         "type": "gcs/object"
       },
       "useDefaultArtifact": false,
@@ -29,7 +29,7 @@
       "id": "097c2e8e-295f-4020-85d9-18ed18f6133b",
       "matchArtifact": {
         "id": "4be2cb5b-bfee-43cc-a2e8-c544777f3436",
-        "name": "gs://$BUCKET_NAME/helloworldwebapp-manifests/staging-namespace.yaml",
+        "name": "gs://$BUCKET_NAME/helloworldwebapp-manifests/.*/staging-namespace.yaml",
         "type": "gcs/object"
       },
       "useDefaultArtifact": false,
@@ -40,7 +40,7 @@
       "id": "24f64da7-9eac-46df-8b0d-f7092b6a03e4",
       "matchArtifact": {
         "id": "09755b68-001a-4d61-bb17-985546618e5f",
-        "name": "gs://$BUCKET_NAME/helloworldwebapp-manifests/staging-service.yaml",
+        "name": "gs://$BUCKET_NAME/helloworldwebapp-manifests/.*/staging-service.yaml",
         "type": "gcs/object"
       },
       "useDefaultArtifact": false,
