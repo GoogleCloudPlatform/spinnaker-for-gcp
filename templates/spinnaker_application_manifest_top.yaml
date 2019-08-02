@@ -44,7 +44,7 @@ spec:
     - name: Google Click to Deploy
       url: https://cloud.google.com/solutions/#click-to-deploy
     links:
-    - description: 'User Guide: Google Click to Deploy Spinnaker'
-      url: https://github.com/GoogleCloudPlatform/spinnaker-for-gcp/blob/master/README.md
+    - description: 'User Guide: Install and Manage Spinnaker on Google Cloud Platform'
+      url: https://cloud.google.com/docs/ci-cd/spinnaker/spinnaker-for-gcp
     - description: 'Spinnaker Documentation'
       url: https://spinnaker.io
