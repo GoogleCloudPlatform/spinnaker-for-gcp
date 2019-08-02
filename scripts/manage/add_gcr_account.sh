@@ -42,9 +42,17 @@ for r in "${GCR_REQUIRED_ROLES[@]}"; do
   fi
 done
 
+GCR_SERVICE_ACCOUNT_DEST=".hal/default/credentials/gcr-account-$MANAGED_PROJECT_ID.json"
+
+bold "Storing JSON secret key to $GCR_SERVICE_ACCOUNT_DEST for $SERVICE_ACCOUNT_NAME"
+
+mkdir -p $(dirname $GCR_SERVICE_ACCOUNT_DEST)
+gcloud iam service-accounts keys create $GCR_SERVICE_ACCOUNT_DEST \
+    --iam-account $SA_EMAIL
+
 
 ~/hal/hal config provider docker-registry enable
-~/hal/hal config provider docker-registry account add $GCR_ACCOUNT_NAME --address $GCR_ADRESS
+~/hal/hal config provider docker-registry account add $GCR_ACCOUNT_NAME --address $GCR_ADRESS --username _json_key --password-file $GCR_SERVICE_ACCOUNT_DEST
 
 bold "Remember that your configuration changes have only been made locally."
 bold "They must be pushed and applied to your deployment to take effect:"
