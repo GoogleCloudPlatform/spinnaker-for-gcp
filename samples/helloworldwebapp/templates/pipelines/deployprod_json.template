@@ -250,7 +250,7 @@
       "name": "Wait before Scale Down",
       "refId": "9",
       "requisiteStageRefIds": [
-        "15"
+        "17"
       ],
       "type": "wait",
       "waitTime": 300
@@ -374,6 +374,34 @@
       "refId": "16",
       "requisiteStageRefIds": [
         "4"
+      ],
+      "type": "checkPreconditions"
+    },
+    {
+      "name": "Old Prod Version Present",
+      "preconditions": [
+        {
+          "cloudProvider": "kubernetes",
+          "context": {
+            "cluster": "replicaSet helloworldwebapp-frontend",
+            "comparison": ">",
+            "credentials": "spinnaker-install-account",
+            "expected": 1,
+            "moniker": {
+              "app": "helloworldwebapp",
+              "cluster": "replicaSet helloworldwebapp-frontend"
+            },
+            "regions": [
+              "helloworldwebapp-prod"
+            ]
+          },
+          "failPipeline": false,
+          "type": "clusterSize"
+        }
+      ],
+      "refId": "17",
+      "requisiteStageRefIds": [
+        "15"
       ],
       "type": "checkPreconditions"
     }
