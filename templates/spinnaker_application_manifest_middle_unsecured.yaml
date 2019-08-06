@@ -1,17 +1,17 @@
     notes: |-
       # Manage your Spinnaker
-      [Open Management Environment in Cloud Shell](https://console.cloud.google.com/cloudshell/editor?shellonly=true&cloudshell_git_repo=https://github.com/GoogleCloudPlatform/spinnaker-for-gcp.git&cloudshell_working_dir=scripts/manage&cloudshell_tutorial=landing_page_expanded.md&cloudshell_print=instructions.txt)
+      [Open management console in Cloud Shell](https://console.cloud.google.com/cloudshell/editor?shellonly=true&cloudshell_git_repo=https://github.com/GoogleCloudPlatform/spinnaker-for-gcp.git&cloudshell_working_dir=scripts/manage&cloudshell_tutorial=landing_page_expanded.md&cloudshell_print=instructions.txt)
 
-      Ensure you are connected to the correct GKE Cluster from within Cloud Shell. Follow the instructions in the Management Environment to check the Kubernetes context you are using and update it if necessary.
+      Ensure you're connected to the correct GKE Cluster from within Cloud Shell. Follow the instructions in the management console to check the Kubernetes context you are using and update it if necessary.
 
       # Connect to your Spinnaker
       Follow the link above to establish port forwarding via Cloud Shell. Note that you can securely expose your Spinnaker via that link as well so it can be directly accessed in the future.
 
       # View the who, what, when and where of your Spinnaker installation
-      [Spinnaker Audit Log](https://console.developers.google.com/logs/viewer?project=$PROJECT_ID&resource=cloud_function&logName=projects%2F$PROJECT_ID%2Flogs%2F$CLOUD_FUNCTION_NAME&minLogLevel=200)
+      [Spinnaker audit log](https://console.developers.google.com/logs/viewer?project=$PROJECT_ID&resource=cloud_function&logName=projects%2F$PROJECT_ID%2Flogs%2F$CLOUD_FUNCTION_NAME&minLogLevel=200)
 
-      # View Spinnaker Container Logs
-      [Spinnaker Container Logs](https://console.developers.google.com/logs/viewer?project=$PROJECT_ID&resource=k8s_container%2Fcluster_name%2F$GKE_CLUSTER%2Fnamespace_name%2Fspinnaker)
+      # View Spinnaker container logs
+      [Spinnaker container logs](https://console.developers.google.com/logs/viewer?project=$PROJECT_ID&resource=k8s_container%2Fcluster_name%2F$GKE_CLUSTER%2Fnamespace_name%2Fspinnaker)
 
-      # Config Backups
+      # Configuration Backups
       Full backups are stored in [this bucket](https://console.developers.google.com/storage/browser/$BUCKET_NAME/backups/?project=$PROJECT_ID).
