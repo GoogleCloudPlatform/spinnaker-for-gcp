@@ -48,15 +48,15 @@ HALYARD_POD=spin-halyard-0
 TEMP_DIR=$(mktemp -d -t halyard.XXXXX)
 pushd $TEMP_DIR
 
-EXISTING_CSR_REPO=$(gcloud source repos list --format="value(name)" --filter="name=projects/$PROJECT_ID/repos/$CONFIG_CSR_REPO")
+EXISTING_CSR_REPO=$(gcloud source repos list --format="value(name)" --filter="name=projects/$PROJECT_ID/repos/$CONFIG_CSR_REPO" --project=$PROJECT_ID)
 
 if [ -z "$EXISTING_CSR_REPO" ]; then
   bold "Creating Cloud Source Repository $CONFIG_CSR_REPO..."
 
-  gcloud source repos create $CONFIG_CSR_REPO
+  gcloud source repos create $CONFIG_CSR_REPO --project=$PROJECT_ID
 fi
 
-gcloud source repos clone $CONFIG_CSR_REPO
+gcloud source repos clone $CONFIG_CSR_REPO --project=$PROJECT_ID
 cd $CONFIG_CSR_REPO
 
 rm -rf .hal
