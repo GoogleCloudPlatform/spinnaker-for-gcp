@@ -8,7 +8,7 @@ GIT_USERNAME=$(git config --global --get user.name)
 GIT_EMAIL=$(git config --global --get user.email)
 
 if [ -z "$GIT_USERNAME" ]; then
-  bold "Your Git account username is not set. Run 'git config --global user.name \"Your Name\"' and try again"
+  bold "Your Git account username is not set. Run 'git config --global user.name \"Your Name\"' and try again."
   exit 1
 fi
 
