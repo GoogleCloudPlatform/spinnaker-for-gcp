@@ -31,6 +31,9 @@ gcloud container clusters delete $GKE_CLUSTER --zone $ZONE --project $PROJECT_ID
 bold "Deleting bucket $BUCKET_URI..."
 gsutil rm -r $BUCKET_URI
 
+bold "Deleting Cloud Source Repository $CONFIG_CSR_REPO..."
+gcloud source repos delete $CONFIG_CSR_REPO --project=$PROJECT_ID
+
 bold "Deleting subscription $GCR_PUBSUB_SUBSCRIPTION in $PROJECT_ID..."
 gcloud pubsub subscriptions delete $GCR_PUBSUB_SUBSCRIPTION --project $PROJECT_ID
 
