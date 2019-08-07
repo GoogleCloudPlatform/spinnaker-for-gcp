@@ -198,11 +198,16 @@ data:
         aws:
           enabled: false
           accounts: []
+          bakeryDefaults:
+            baseImages: []
           defaultKeyPairTemplate: '{{name}}-keypair'
           defaultRegions:
           - name: us-west-2
           defaults:
             iamRole: BaseIAMRole
+        ecs:
+          enabled: false
+          accounts: []
         azure:
           enabled: false
           accounts: []
@@ -231,9 +236,11 @@ data:
           - name: spinnaker-install-account
             requiredGroupMembership: []
             providerVersion: V2
+            permissions: {}
             dockerRegistries: []
             configureImagePullSecrets: true
             serviceAccount: true
+            cacheThreads: 1
             namespaces: []
             omitNamespaces:
             - halyard
@@ -243,9 +250,16 @@ data:
             kinds: []
             omitKinds: []
             customResources: []
+            cachingPolicies: []
             oAuthScopes: []
           primaryAccount: spinnaker-install-account
-        oraclebmcs:
+        oracle:
+          enabled: false
+          accounts: []
+          bakeryDefaults:
+            templateFile: oci.json
+            baseImages: []
+        cloudfoundry:
           enabled: false
           accounts: []
       deploymentEnvironment:
@@ -258,8 +272,21 @@ data:
         vault:
           enabled: false
         customSizing: {}
+        sidecars: {}
+        initContainers: {}
+        hostAliases: {}
+        affinity: {}
+        nodeSelectors: {}
         gitConfig:
           upstreamUser: spinnaker
+        livenessProbeConfig:
+          enabled: false
+        haServices:
+          clouddriver:
+            enabled: false
+            disableClouddriverRoDeck: false
+          echo:
+            enabled: false
       persistentStorage:
         persistentStoreType: gcs
         azs: {}
@@ -268,8 +295,9 @@ data:
           bucket: $BUCKET_NAME
           rootFolder: front50
         redis: {}
-        s3: {}
-        oraclebmcs: {}
+        s3:
+          rootFolder: front50
+        oracle: {}
       features:
         auth: false
         fiat: false
@@ -280,6 +308,7 @@ data:
       metricStores:
         datadog:
           enabled: false
+          tags: []
         prometheus:
           enabled: false
           add_source_metalabels: true
@@ -290,12 +319,21 @@ data:
       notifications:
         slack:
           enabled: false
+        twilio:
+          enabled: false
+          baseUrl: https://api.twilio.com/
       timezone: $TIMEZONE
       ci:
         jenkins:
           enabled: false
           masters: []
         travis:
+          enabled: false
+          masters: []
+        wercker:
+          enabled: false
+          masters: []
+        concourse:
           enabled: false
           masters: []
         gcb:
@@ -305,6 +343,10 @@ data:
             permissions: {}
             project: $PROJECT_ID
             subscriptionName: $GCB_PUBSUB_SUBSCRIPTION
+      repository:
+        artifactory:
+          enabled: false
+          searches: []
       security:
         apiSecurity:
           ssl:
@@ -321,9 +363,12 @@ data:
             userInfoMapping: {}
           saml:
             enabled: false
+            userAttributeMapping: {}
           ldap:
             enabled: false
           x509:
+            enabled: false
+          iap:
             enabled: false
           enabled: false
         authz:
@@ -335,18 +380,39 @@ data:
               roleProviderType: GITHUB
             file:
               roleProviderType: FILE
+            ldap:
+              roleProviderType: LDAP
           enabled: false
       artifacts:
+        bitbucket:
+          enabled: false
+          accounts: []
         gcs:
           enabled: true
           accounts:
           - name: gcs-install-account
+        oracle:
+          enabled: false
+          accounts: []
         github:
+          enabled: false
+          accounts: []
+        gitlab:
           enabled: false
           accounts: []
         http:
           enabled: false
           accounts: []
+        helm:
+          enabled: false
+          accounts: []
+        s3:
+          enabled: false
+          accounts: []
+        maven:
+          enabled: false
+          accounts: []
+        templates: []
       pubsub:
         enabled: true
         google:
@@ -397,6 +463,9 @@ data:
         stagesEnabled: true
         templatesEnabled: true
         showAllConfigsEnabled: true
+      webhook:
+        trust:
+          enabled: false
 ---
 
 apiVersion: batch/v1
