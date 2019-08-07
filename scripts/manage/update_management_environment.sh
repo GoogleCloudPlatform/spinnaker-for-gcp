@@ -23,6 +23,9 @@ fi
 git checkout master
 git pull origin master
 
+# New properties have been added over time and we want to ensure these are declared in the properties file.
+~/spinnaker-for-gcp/scripts/manage/add_missing_properties.sh
+
 # Update the GKE Application details view.
 ~/spinnaker-for-gcp/scripts/manage/deploy_application_manifest.sh
 

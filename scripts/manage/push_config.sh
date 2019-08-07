@@ -37,11 +37,29 @@ if [ $CURRENT_CONTEXT_CLUSTER != $GKE_CLUSTER ]; then
   exit 1
 fi
 
+if [ -z "$CONFIG_CSR_REPO" ]; then
+  bold "CONFIG_CSR_REPO was not set. Please run the $HOME/spinnaker-for-gcp/scripts/manage/update_management_environment.sh" \
+       "command to ensure you have all the necessary properties declared."
+  exit 1
+fi
+
 HALYARD_POD=spin-halyard-0
 
 TEMP_DIR=$(mktemp -d -t halyard.XXXXX)
 pushd $TEMP_DIR
 
+EXISTING_CSR_REPO=$(gcloud source repos list --format="value(name)" --filter="name=projects/$PROJECT_ID/repos/$CONFIG_CSR_REPO" --project=$PROJECT_ID)
+
+if [ -z "$EXISTING_CSR_REPO" ]; then
+  bold "Creating Cloud Source Repository $CONFIG_CSR_REPO..."
+
+  gcloud source repos create $CONFIG_CSR_REPO --project=$PROJECT_ID
+fi
+
+gcloud source repos clone $CONFIG_CSR_REPO --project=$PROJECT_ID
+cd $CONFIG_CSR_REPO
+
+rm -rf .hal
 mkdir .hal
 
 # We want just these subdirs within ~/.hal to be copied into place on the Halyard Daemon pod.
@@ -68,12 +86,9 @@ for k in "${REWRITABLE_KEYS[@]}"; do
   fi
 done
 
-TIMESTAMP=$(date +%Y%m%d%H%M%S -u)
-HALCONFIG_ARCHIVE_FILENAME=halconfig-$TIMESTAMP.tar.gz
-bold "Backing up $HOME/.hal to $BUCKET_URI/backups/$HALCONFIG_ARCHIVE_FILENAME..."
-tar cfz $HALCONFIG_ARCHIVE_FILENAME .hal
-gsutil -q cp $HALCONFIG_ARCHIVE_FILENAME $BUCKET_URI/backups/$HALCONFIG_ARCHIVE_FILENAME
+bold "Backing up $HOME/.hal..."
 
+rm -rf deployment_config_files
 mkdir deployment_config_files
 
 copy_if_exists() {
@@ -91,11 +106,7 @@ copy_if_exists ~/spinnaker-for-gcp/scripts/manage/landing_page_expanded.md deplo
 copy_if_exists ~/.spin/config deployment_config_files
 copy_if_exists ~/.spin/key.json deployment_config_files
 
-DEPLOYMENT_CONFIG_ARCHIVE_FILENAME=deployment-config-$TIMESTAMP.tar.gz
-bold "Backing up Spinnaker deployment config files to $BUCKET_URI/backups/$DEPLOYMENT_CONFIG_ARCHIVE_FILENAME..."
-tar cfz $DEPLOYMENT_CONFIG_ARCHIVE_FILENAME -C deployment_config_files $(ls deployment_config_files)
-  
-gsutil -q cp $DEPLOYMENT_CONFIG_ARCHIVE_FILENAME $BUCKET_URI/backups/$DEPLOYMENT_CONFIG_ARCHIVE_FILENAME
+bold "Backing up Spinnaker deployment config files..."
 
 # Remove old persistent config so new config can be copied into place.
 bold "Removing halyard/$HALYARD_POD:/home/spinnaker/.hal..."
@@ -103,7 +114,8 @@ kubectl -n halyard exec -it $HALYARD_POD -- bash -c "rm -rf ~/.hal/*"
 
 # Copy new config into place.
 bold "Copying $HOME/.hal into halyard/$HALYARD_POD:/home/spinnaker/.hal..."
-kubectl -n halyard cp $TEMP_DIR/.hal spin-halyard-0:/home/spinnaker
+
+kubectl -n halyard cp $TEMP_DIR/$CONFIG_CSR_REPO/.hal spin-halyard-0:/home/spinnaker
 
 EXISTING_DEPLOYMENT_SECRET_NAME=$(kubectl get secret -n halyard \
   --field-selector metadata.name=="spinnaker-deployment" \
@@ -117,6 +129,10 @@ fi
 bold "Creating Kubernetes secret spinnaker-deployment containing Spinnaker deployment config files..."
 kubectl create secret generic spinnaker-deployment -n halyard \
   --from-file deployment_config_files
+
+git add .
+git commit -m 'Automated backup.'
+git push
 
 popd
 rm -rf $TEMP_DIR

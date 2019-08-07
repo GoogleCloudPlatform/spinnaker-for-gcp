@@ -13,5 +13,5 @@
       # View Spinnaker container logs
       [Spinnaker container logs](https://console.developers.google.com/logs/viewer?project=$PROJECT_ID&resource=k8s_container%2Fcluster_name%2F$GKE_CLUSTER%2Fnamespace_name%2Fspinnaker)
 
-      # Configuration Backups
-      Full backups are stored in [this bucket](https://console.developers.google.com/storage/browser/$BUCKET_NAME/backups/?project=$PROJECT_ID).
+      # Configuration backups
+      Full backups are stored in [this repo](https://source.cloud.google.com/$PROJECT_ID/$CONFIG_CSR_REPO).
