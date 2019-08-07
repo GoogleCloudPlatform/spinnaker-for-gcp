@@ -13,7 +13,7 @@ if [ -z "$GIT_USERNAME" ]; then
 fi
 
 if [ -z "$GIT_EMAIL" ]; then
-  bold "Your Git account email is not set. Run 'git config --global user.email \"you@example.com\"' and try again"
+  bold "Your Git account email is not set. Run 'git config --global user.email \"you@example.com\"' and try again."
   exit 1
 fi
 
