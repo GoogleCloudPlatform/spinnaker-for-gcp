@@ -72,6 +72,8 @@ fi
 gcloud source repos clone $CONFIG_CSR_REPO --project=$PROJECT_ID
 cd $CONFIG_CSR_REPO
 
+bold "Backing up $HOME/.hal..."
+
 rm -rf .hal
 mkdir .hal
 
@@ -99,27 +101,36 @@ for k in "${REWRITABLE_KEYS[@]}"; do
   fi
 done
 
-bold "Backing up $HOME/.hal..."
+bold "Backing up Spinnaker deployment config files..."
 
 rm -rf deployment_config_files
 mkdir deployment_config_files
 
 copy_if_exists() {
   if [ -e $1 ]; then
-    cp $1 $2
+    # If a filter token was passed, only copy the file if the token is present in the source file.
+    if [ $3 ]; then
+      if [ "$(grep $3 $1)" ]; then
+        cp $1 $2
+      fi
+    else
+      cp $1 $2
+    fi
   fi
 }
 
 copy_if_exists ~/spinnaker-for-gcp/scripts/install/properties deployment_config_files
 copy_if_exists ~/spinnaker-for-gcp/scripts/install/spinnakerAuditLog/config.json deployment_config_files
 copy_if_exists ~/spinnaker-for-gcp/scripts/install/spinnakerAuditLog/index.js deployment_config_files
-copy_if_exists ~/spinnaker-for-gcp/scripts/expose/configure_iap_expanded.md deployment_config_files
-copy_if_exists ~/spinnaker-for-gcp/scripts/expose/openapi_expanded.yml deployment_config_files
 copy_if_exists ~/spinnaker-for-gcp/scripts/manage/landing_page_expanded.md deployment_config_files
-copy_if_exists ~/.spin/config deployment_config_files
-copy_if_exists ~/.spin/key.json deployment_config_files
 
-bold "Backing up Spinnaker deployment config files..."
+# These files are generated when Spinnaker is exposed via IAP.
+# If the operator is managing more than one installation we don't want to inadvertently backup files from the wrong installation.
+copy_if_exists ~/spinnaker-for-gcp/scripts/expose/configure_iap_expanded.md deployment_config_files "$PROJECT_ID\."
+copy_if_exists ~/spinnaker-for-gcp/scripts/expose/openapi_expanded.yml deployment_config_files "$PROJECT_ID\."
+copy_if_exists ~/.spin/config deployment_config_files "$PROJECT_ID\."
+copy_if_exists ~/.spin/config deployment_config_files "localhost\:"
+copy_if_exists ~/.spin/key.json deployment_config_files "$PROJECT_ID\."
 
 # Remove old persistent config so new config can be copied into place.
 bold "Removing halyard/$HALYARD_POD:/home/spinnaker/.hal..."
