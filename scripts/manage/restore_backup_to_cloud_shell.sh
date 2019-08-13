@@ -11,7 +11,7 @@ while getopts ":p:r:h:" options; do
     p ) PROJECT_ID=$OPTARG ;;
     r ) CONFIG_CSR_REPO=$OPTARG ;;
     h ) GIT_HASH=$OPTARG ;;
-    \? ) bold "invalid option supplied: -$OPTARG"
+    \? ) bold "Invalid option supplied: -$OPTARG"
   esac
 done
 
@@ -23,7 +23,7 @@ if [ -z "$PROJECT_ID" ]; then
 fi
 
 if [ -z "$CONFIG_CSR_REPO" ]; then
-  bold "Cloud Source repository name is required. $EXAMPLE_COMMAND"
+  bold "Cloud Source Repository name is required. $EXAMPLE_COMMAND"
   exit 1
 fi
 
@@ -40,10 +40,20 @@ EXISTING_CSR_REPO=$(gcloud source repos list --format="value(name)" --filter="na
 if [ -n "$EXISTING_CSR_REPO" ]; then
   gcloud source repos clone $CONFIG_CSR_REPO --project=$PROJECT_ID
 else
-  bold "Cloud source repository $CONFIG_CSR_REPO not found"
+  bold "Cloud Source Repository $CONFIG_CSR_REPO not found"
   popd
   rm -rf $TEMP_DIR
-  exit
+  exit 1
+fi
+
+cd $CONFIG_CSR_REPO
+HASH_CHECKOUT_ERROR=$(git branch --contains $GIT_HASH 2>&1 > /dev/null)
+
+if [ -n "$HASH_CHECKOUT_ERROR" ]; then
+  bold "Git commit hash: $GIT_HASH not found. Please enter a valid commit hash."
+  popd
+  rm -rf $TEMP_DIR
+  exit 1
 fi
 
 HASH_PREVIEW_LINK="https://source.cloud.google.com/$PROJECT_ID/$EXISTING_CSR_REPO/+/$GIT_HASH"
@@ -61,7 +71,6 @@ case $yn in
   ;;
 esac
 
-cd $CONFIG_CSR_REPO
 git checkout $GIT_HASH &> /dev/null
 
 # Remove local hal config so persistent config from backup can be copied into place.
@@ -116,9 +125,15 @@ mkdir -p ~/.spin
 remove_and_copy config ~/.spin/config
 remove_and_copy key.json ~/.spin/key.json
 
+if [ -e ~/.spin/config ]; then
+  bold "Rewriting key path in ~/.spin/config to reflect local user '$USER' on Cloud Shell VM..."
+  sed -i "s/^    serviceAccountKeyPath: .*/    serviceAccountKeyPath: \"\/home\/$USER\/.spin\/key.json\"/" ~/.spin/config
+fi
+
 popd
 rm -rf $TEMP_DIR
 
 bold "Configuration applied. To diff this config with what was last deployed, go to:"
 bold "https://source.cloud.google.com/$PROJECT_ID/$EXISTING_CSR_REPO/+/$GIT_HASH...master"
-bold "To apply the halyard config changes to the cluster, run ~/spinnaker-for-gcp/scripts/manage/push_and_apply.sh. To apply changes in the properties file to your deployment, run ~/spinnaker-for-gcp/scripts/install/setup.sh"
+bold "To apply the halyard config changes to the cluster, run:"
+bold "~/spinnaker-for-gcp/scripts/manage/push_and_apply.sh"
