@@ -15,7 +15,7 @@ while getopts ":p:r:h:" options; do
   esac
 done
 
-EXAMPLE_COMMAND="'restore_backup_to_cloudshell.sh -p PROJECT -r REPOSITORY_NAME -h GIT_HASH'"
+EXAMPLE_COMMAND="'restore_backup_to_cloud_shell.sh -p PROJECT -r REPOSITORY_NAME -h GIT_HASH'"
 
 if [ -z "$PROJECT_ID" ]; then
   bold "Project id is required. $EXAMPLE_COMMAND"
@@ -48,7 +48,9 @@ fi
 
 HASH_PREVIEW_LINK="https://source.cloud.google.com/$PROJECT_ID/$EXISTING_CSR_REPO/+/$GIT_HASH"
 
-read -p ". $(tput bold)You are about to replace the configuration files in your cloudshell with the configuration at $HASH_PREVIEW_LINK . This step is not reversible. Do you wish to continue (Y/n)? $(tput sgr0)" yn
+read -p ". $(tput bold)You are about to replace the configuration files in your Cloud Shell with the configuration at:
+. $HASH_PREVIEW_LINK
+. This step is not reversible. Do you wish to continue (Y/n)? $(tput sgr0)" yn
 case $yn in
   [Yy]* ) ;;
   "" ) ;;
@@ -117,5 +119,6 @@ remove_and_copy key.json ~/.spin/key.json
 popd
 rm -rf $TEMP_DIR
 
-bold "Configuration applied. To diff this config with what was last deployed, go to https://source.cloud.google.com/$PROJECT_ID/$EXISTING_CSR_REPO/+/$GIT_HASH...master"
+bold "Configuration applied. To diff this config with what was last deployed, go to:"
+bold "https://source.cloud.google.com/$PROJECT_ID/$EXISTING_CSR_REPO/+/$GIT_HASH...master"
 bold "To apply the halyard config changes to the cluster, run ~/spinnaker-for-gcp/scripts/manage/push_and_apply.sh. To apply changes in the properties file to your deployment, run ~/spinnaker-for-gcp/scripts/install/setup.sh"

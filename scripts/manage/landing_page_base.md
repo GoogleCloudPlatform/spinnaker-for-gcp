@@ -179,24 +179,12 @@ Update the commands and documentation in your management environment to the late
 ~/spinnaker-for-gcp/scripts/manage/connect_to_redis.sh
 ```
 
-### Restore a backup to Cloudshell
+### Restore a backup to Cloud Shell
 
-Restore a backup of the halyard configuration and deployment configuration from Cloud Source Repositories to your Cloudshell. 
-
-```bash
-~/spinnaker-for-gcp/scripts/manage/restore_backup_to_cloudshell.sh -p $PROJECT_ID -r $CONFIG_CSR_REPO -h GIT_HASH
-```
-
-To apply the halyard config changes to the cluster:
+Restore a backup of the halyard configuration and deployment configuration from Cloud Source Repositories to your Cloud Shell. 
 
 ```bash
-~/spinnaker-for-gcp/scripts/manage/push_and_apply.sh
-```
-
-To apply changes in the properties file to your deployment:
-
-```bash
-~/spinnaker-for-gcp/scripts/install/setup.sh
+~/spinnaker-for-gcp/scripts/manage/restore_backup_to_cloud_shell.sh -p $PROJECT_ID -r $CONFIG_CSR_REPO -h GIT_HASH
 ```
 
 All backups can be viewed by running:
