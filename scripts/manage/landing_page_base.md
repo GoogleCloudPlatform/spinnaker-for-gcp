@@ -187,7 +187,7 @@ Restore a backup of the halyard configuration and deployment configuration from 
 ~/spinnaker-for-gcp/scripts/manage/restore_backup_to_cloud_shell.sh -p $PROJECT_ID -r $CONFIG_CSR_REPO -h GIT_HASH
 ```
 
-All backups can be viewed in [Cloud Source Repository](https://source.cloud.google.com/$PROJECT_ID/$CONFIG_CSR_REPO).
+All backups can be viewed in this [Cloud Source Repository](https://source.cloud.google.com/$PROJECT_ID/$CONFIG_CSR_REPO).
 
 ## Configure Operator Access
 

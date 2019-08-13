@@ -80,28 +80,11 @@ rm -rf ~/.hal
 # Copy persistent config into place.
 bold "Copying $CONFIG_CSR_REPO/.hal into $HOME/.hal..."
 
-REWRITABLE_KEYS=(kubeconfigFile jsonPath jsonKey)
-for k in "${REWRITABLE_KEYS[@]}"; do
-  grep $k .hal/config &> /dev/null
-  FOUND_TOKEN=$?
-
-  if [ "$FOUND_TOKEN" == "0" ]; then
-    bold "Rewriting $k path to reflect local user '$USER' on Cloud Shell VM..."
-    sed -i "s/$k: \/home\/spinnaker/$k: \/home\/$USER/" .hal/config
-  fi
-done
+source ~/spinnaker-for-gcp/scripts/manage/restore_config_utils.sh
+rewrite_hal_key_paths
 
 # We want just these subdirs from the backup to be copied into place in ~/.hal.
-DIRS=(credentials profiles service-settings)
-
-for p in "${DIRS[@]}"; do
-  for f in $(find .hal/*/$p -prune 2> /dev/null); do
-    SUB_PATH=$(echo $f | rev | cut -d '/' -f 1,2 | rev)
-    mkdir -p ~/.hal/$SUB_PATH
-    cp -RT .hal/$SUB_PATH ~/.hal/$SUB_PATH
-  done
-done
-
+copy_hal_subdirs
 cp .hal/config ~/.hal
 
 remove_and_copy() {
@@ -126,8 +109,7 @@ remove_and_copy config ~/.spin/config
 remove_and_copy key.json ~/.spin/key.json
 
 if [ -e ~/.spin/config ]; then
-  bold "Rewriting key path in ~/.spin/config to reflect local user '$USER' on Cloud Shell VM..."
-  sed -i "s/^    serviceAccountKeyPath: .*/    serviceAccountKeyPath: \"\/home\/$USER\/.spin\/key.json\"/" ~/.spin/config
+  rewrite_spin_key_path
 fi
 
 popd
