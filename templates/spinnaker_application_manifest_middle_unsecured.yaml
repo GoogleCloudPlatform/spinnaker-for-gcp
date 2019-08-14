@@ -15,3 +15,6 @@
 
       # Configuration backups
       Full backups are stored in [this repo](https://source.cloud.google.com/$PROJECT_ID/$CONFIG_CSR_REPO).
+
+      # Stay up to date
+      Join the [Spinnaker for GCP Announce](https://groups.google.com/forum/#!forum/spinnaker-for-gcp-announce) Google Group.
