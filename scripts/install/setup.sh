@@ -323,6 +323,6 @@ deploy_ready spin-deck "UI server"
 echo
 bold "Installation complete."
 echo
-bold "Make sure to Sign up for Spinnaker for GCP updates and announcements:"
+bold "Sign up for Spinnaker for GCP updates and announcements:"
 bold "  https://groups.google.com/forum/#!forum/spinnaker-for-gcp-announce"
 echo
