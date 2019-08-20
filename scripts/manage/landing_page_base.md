@@ -175,7 +175,7 @@ Update the commands and documentation in your management environment to the late
 
 ### Sign up for Spinnaker for GCP updates and announcements
 
-Join this [Google Group](https://groups.google.com/forum/#!forum/spinnaker-for-gcp-announce).
+Join the [mailing list](https://groups.google.com/forum/#!forum/spinnaker-for-gcp-announce) to keep informed about updates and other announcements.
 
 ### Connect to Redis
 
