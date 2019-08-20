@@ -173,6 +173,10 @@ Update the commands and documentation in your management environment to the late
 ~/spinnaker-for-gcp/scripts/manage/update_management_environment.sh
 ```
 
+### Sign up for Spinnaker for GCP updates and announcements
+
+Join this [Google Group](https://groups.google.com/forum/#!forum/spinnaker-for-gcp-announce).
+
 ### Connect to Redis
 
 ```bash
