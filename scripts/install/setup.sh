@@ -29,11 +29,9 @@ if [ $NUM_ENABLED_APIS != $NUM_REQUIRED_APIS ]; then
   gcloud services --project $PROJECT_ID enable $REQUIRED_APIS
 fi
 
-bold "Checking for existing cluster $GKE_CLUSTER..."
+source ~/spinnaker-for-gcp/scripts/manage/cluster_utils.sh
 
-CLUSTER_EXISTS=$(gcloud beta container clusters list --project $PROJECT_ID \
-  --filter="name=$GKE_CLUSTER" \
-  --format="value(name)")
+CLUSTER_EXISTS=$(check_for_existing_cluster)
 
 if [ -n "$CLUSTER_EXISTS" ]; then
   bold "Retrieving credentials for GKE cluster $GKE_CLUSTER..."
