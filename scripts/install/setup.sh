@@ -261,7 +261,7 @@ job_ready() {
 
 job_ready hal-deploy-apply
 
-~/spinnaker-for-gcp/scripts/manage/update_landing_page.sh
+source ~/spinnaker-for-gcp/scripts/manage/update_landing_page.sh
 ~/spinnaker-for-gcp/scripts/manage/deploy_application_manifest.sh
 
 # Delete any existing deployment config secret.
@@ -289,10 +289,14 @@ else
   bold "Using existing audit log cloud function $CLOUD_FUNCTION_NAME..."
 fi
 
-# We want the local hal config to match what was deployed.
-~/spinnaker-for-gcp/scripts/manage/pull_config.sh
-# We want a full backup stored in the bucket and the full deployment config stored in a secret.
-~/spinnaker-for-gcp/scripts/manage/push_config.sh
+if [ "$USE_CLOUD_SHELL_HAL_CONFIG" = true ] ; then
+  ~/spinnaker-for-gcp/scripts/manage/push_and_apply.sh
+else
+  # We want the local hal config to match what was deployed.
+  ~/spinnaker-for-gcp/scripts/manage/pull_config.sh
+  # We want a full backup stored in the bucket and the full deployment config stored in a secret.
+  ~/spinnaker-for-gcp/scripts/manage/push_config.sh
+fi
 
 deploy_ready() {
   printf "Waiting on $2 to come online"
@@ -317,6 +321,10 @@ deploy_ready spin-deck "UI server"
 
 # We want a backup containing the newly-created ~/.spin/* files as well.
 ~/spinnaker-for-gcp/scripts/manage/push_config.sh
+
+if [ "$USE_CLOUD_SHELL_HAL_CONFIG" = true -a -n "$IP_ADDR" ] ; then
+  ~/spinnaker-for-gcp/scripts/expose/launch_configure_iap.sh
+fi
 
 echo
 bold "Installation complete."
