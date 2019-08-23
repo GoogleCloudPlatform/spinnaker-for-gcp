@@ -261,6 +261,8 @@ job_ready() {
 
 job_ready hal-deploy-apply
 
+# Sourced to import $IP_ADDR. 
+# Used at the end of setup to check if installation is exposed via a secured endpoint.
 source ~/spinnaker-for-gcp/scripts/manage/update_landing_page.sh
 ~/spinnaker-for-gcp/scripts/manage/deploy_application_manifest.sh
 
@@ -322,6 +324,7 @@ deploy_ready spin-deck "UI server"
 # We want a backup containing the newly-created ~/.spin/* files as well.
 ~/spinnaker-for-gcp/scripts/manage/push_config.sh
 
+# If restoring a secured endpoint, leave the user on the documentation for iap configuration.
 if [ "$USE_CLOUD_SHELL_HAL_CONFIG" = true -a -n "$IP_ADDR" ] ; then
   ~/spinnaker-for-gcp/scripts/expose/launch_configure_iap.sh
 fi
