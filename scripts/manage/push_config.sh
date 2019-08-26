@@ -4,6 +4,7 @@ bold() {
   echo ". $(tput bold)" "$*" "$(tput sgr0)";
 }
 
+~/spinnaker-for-gcp/scripts/manage/check_duplicate_dirs.sh || exit 1
 ~/spinnaker-for-gcp/scripts/manage/check_git_config.sh || exit 1
 
 source ~/spinnaker-for-gcp/scripts/install/properties

@@ -4,6 +4,8 @@ bold() {
   echo ". $(tput bold)" "$*" "$(tput sgr0)";
 }
 
+~/spinnaker-for-gcp/scripts/manage/check_duplicate_dirs.sh || exit 1
+
 CURRENT_CONTEXT=$(kubectl config current-context)
 
 if [ "$?" != "0" ]; then
