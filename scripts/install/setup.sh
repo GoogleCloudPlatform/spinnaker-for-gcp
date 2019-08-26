@@ -31,11 +31,9 @@ if [ $NUM_ENABLED_APIS != $NUM_REQUIRED_APIS ]; then
   gcloud services --project $PROJECT_ID enable $REQUIRED_APIS
 fi
 
-bold "Checking for existing cluster $GKE_CLUSTER..."
+source ~/spinnaker-for-gcp/scripts/manage/cluster_utils.sh
 
-CLUSTER_EXISTS=$(gcloud beta container clusters list --project $PROJECT_ID \
-  --filter="name=$GKE_CLUSTER" \
-  --format="value(name)")
+CLUSTER_EXISTS=$(check_for_existing_cluster)
 
 if [ -n "$CLUSTER_EXISTS" ]; then
   bold "Retrieving credentials for GKE cluster $GKE_CLUSTER..."
@@ -265,7 +263,9 @@ job_ready() {
 
 job_ready hal-deploy-apply
 
-~/spinnaker-for-gcp/scripts/manage/update_landing_page.sh
+# Sourced to import $IP_ADDR. 
+# Used at the end of setup to check if installation is exposed via a secured endpoint.
+source ~/spinnaker-for-gcp/scripts/manage/update_landing_page.sh
 ~/spinnaker-for-gcp/scripts/manage/deploy_application_manifest.sh
 
 # Delete any existing deployment config secret.
@@ -293,10 +293,14 @@ else
   bold "Using existing audit log cloud function $CLOUD_FUNCTION_NAME..."
 fi
 
-# We want the local hal config to match what was deployed.
-~/spinnaker-for-gcp/scripts/manage/pull_config.sh
-# We want a full backup stored in the bucket and the full deployment config stored in a secret.
-~/spinnaker-for-gcp/scripts/manage/push_config.sh
+if [ "$USE_CLOUD_SHELL_HAL_CONFIG" = true ] ; then
+  ~/spinnaker-for-gcp/scripts/manage/push_and_apply.sh
+else
+  # We want the local hal config to match what was deployed.
+  ~/spinnaker-for-gcp/scripts/manage/pull_config.sh
+  # We want a full backup stored in the bucket and the full deployment config stored in a secret.
+  ~/spinnaker-for-gcp/scripts/manage/push_config.sh
+fi
 
 deploy_ready() {
   printf "Waiting on $2 to come online"
@@ -321,6 +325,11 @@ deploy_ready spin-deck "UI server"
 
 # We want a backup containing the newly-created ~/.spin/* files as well.
 ~/spinnaker-for-gcp/scripts/manage/push_config.sh
+
+# If restoring a secured endpoint, leave the user on the documentation for iap configuration.
+if [ "$USE_CLOUD_SHELL_HAL_CONFIG" = true -a -n "$IP_ADDR" ] ; then
+  ~/spinnaker-for-gcp/scripts/expose/launch_configure_iap.sh
+fi
 
 echo
 bold "Installation complete."

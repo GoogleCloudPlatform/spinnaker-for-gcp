@@ -40,6 +40,17 @@ if [ $CURRENT_CONTEXT_CLUSTER != $GKE_CLUSTER ]; then
   exit 1
 fi
 
+source ~/spinnaker-for-gcp/scripts/manage/cluster_utils.sh
+
+CLUSTER_EXISTS=$(check_for_existing_cluster)
+
+if [ -z "$CLUSTER_EXISTS" ]; then
+  bold "Cluster $GKE_CLUSTER cannot be found. It may not exist."
+  bold "To recreate your installation with this config, run:"
+  bold "USE_CLOUD_SHELL_HAL_CONFIG=true ~/spinnaker-for-gcp/scripts/install/setup.sh"
+  exit 1
+fi
+
 if [ -z "$CONFIG_CSR_REPO" ]; then
   bold "CONFIG_CSR_REPO was not set. Please run the $HOME/spinnaker-for-gcp/scripts/manage/update_management_environment.sh" \
        "command to ensure you have all the necessary properties declared."
