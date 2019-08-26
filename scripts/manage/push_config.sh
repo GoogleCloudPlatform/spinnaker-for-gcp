@@ -45,7 +45,7 @@ CLUSTER_EXISTS=$(check_for_existing_cluster)
 
 if [ -z "$CLUSTER_EXISTS" ]; then
   bold "Cluster $GKE_CLUSTER cannot be found. It may not exist."
-  bold "To recreate the cluster with this config, run:"
+  bold "To recreate your installation with this config, run:"
   bold "USE_CLOUD_SHELL_HAL_CONFIG=true ~/spinnaker-for-gcp/scripts/install/setup.sh"
   exit 1
 fi
