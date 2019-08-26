@@ -12,6 +12,8 @@ bold() {
   echo ". $(tput bold)" "$*" "$(tput sgr0)";
 }
 
+~/spinnaker-for-gcp/scripts/manage/check_duplicate_dirs.sh || exit 1
+
 if [ -z "$PROJECT_ID" ]; then
   PROJECT_ID=$(gcloud info --format='value(config.project)')
 fi

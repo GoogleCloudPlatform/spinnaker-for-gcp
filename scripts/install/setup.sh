@@ -8,6 +8,8 @@ err() {
   echo "$*" >&2;
 }
 
+~/spinnaker-for-gcp/scripts/manage/check_duplicate_dirs.sh || exit 1
+
 PROPERTIES_FILE="$HOME/spinnaker-for-gcp/scripts/install/properties"
 
 source "$PROPERTIES_FILE"
