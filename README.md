@@ -18,14 +18,14 @@ management environment and workflow for ongoing administration of Spinnaker.
 
 # Use this solution
 
-Click this button to install and manage Spinnaker using the [Cloud
-Shell](https://cloud.google.com/shell/)-based management console.
-
-[![Install Spinnaker](https://gstatic.com/cloudssh/images/open-btn.png)](https://console.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/spinnaker-for-gcp.git&cloudshell_working_dir=scripts/install&cloudshell_tutorial=provision-spinnaker.md&cloudshell_print=instructions.txt)
+[Start Spinnaker for GCP from the Google Cloud Platform
+Marketplace](https://console.cloud.google.com/marketplace/details/google-cloud-platform/spinnaker)
 
 The article [Install and Manage Spinnaker on Google Cloud
 Platform](https://cloud.google.com/docs/ci-cd/spinnaker/spinnaker-for-gcp)
 has instructions for using this solution.
+
+# More details about Spinnaker for GCP
 
 ## Architecture
 
