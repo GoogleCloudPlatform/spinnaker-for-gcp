@@ -5,7 +5,7 @@ bold() {
 }
 
 rewrite_hal_key_paths() {
-  REWRITABLE_KEYS=(kubeconfigFile jsonPath jsonKey passwordFile path)
+  REWRITABLE_KEYS=(kubeconfigFile jsonPath jsonKey passwordFile path templatePath)
   for k in "${REWRITABLE_KEYS[@]}"; do
     grep $k .hal/config &> /dev/null
     FOUND_TOKEN=$?

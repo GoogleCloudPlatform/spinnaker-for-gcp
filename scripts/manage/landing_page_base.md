@@ -60,10 +60,9 @@ the '`~/.hal/default/credentials`' directory on your Cloud Shell VM. The
 kubeconfig is specified using the `--kubeconfig-file` argument to the
 `hal config provider kubernetes account add` and ...`edit` commands.
 
-Change the `default` path segment if you are using a different name for your deployment.
-
-The same requirement applies for any Google JSON key file specified via the
-`--json-path` argument to various commands.
+A similar requirement applies for any other local file referenced from your halyard config,
+including Google JSON key files specified via the `--json-path` argument to various commands.
+These files must live within '`~/.hal/default/credentials`' or '`~/.hal/default/profiles`'.
 
 ### Push and apply updated config to Spinnaker deployment
 
