@@ -192,8 +192,8 @@ if [ -z "$CLUSTER_EXISTS" ]; then
   gcloud container clusters get-credentials $GKE_CLUSTER --zone $ZONE --project $PROJECT_ID
 else
   bold "Using existing GKE cluster $GKE_CLUSTER..."
+  check_existing_cluster_prereqs
 fi
-
 
 GCR_PUBSUB_TOPIC_NAME=projects/$PROJECT_ID/topics/gcr
 EXISTING_GCR_PUBSUB_TOPIC_NAME=$(gcloud pubsub topics list --project $PROJECT_ID \
