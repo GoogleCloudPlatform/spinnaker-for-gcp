@@ -109,6 +109,9 @@ export DEPLOYMENT_NAME=${DEPLOYMENT_NAME:-$NEW_DEPLOYMENT_NAME}
 export SPINNAKER_VERSION=1.14.11
 export HALYARD_VERSION=1.22.1
 
+export ZONE=$ZONE
+export REGION=$REGION
+
 # The specified network must exist, and it must not be a legacy network.
 # More info on legacy networks can be found here: https://cloud.google.com/vpc/docs/legacy
 export NETWORK=$NETWORK
@@ -133,7 +136,7 @@ fi
 cat >> ~/spinnaker-for-gcp/scripts/install/properties <<EOL
 export NETWORK_PROJECT=\$PROJECT_ID
 export NETWORK_REFERENCE=projects/\$NETWORK_PROJECT/global/networks/\$NETWORK
-export SUBNET_REFERENCE=projects/\$NETWORK_PROJECT/regions/$REGION/subnetworks/\$SUBNET
+export SUBNET_REFERENCE=projects/\$NETWORK_PROJECT/regions/\$REGION/subnetworks/\$SUBNET
 EOL
 
 if [ "$SHARED_VPC_HOST_PROJECT" ]; then
@@ -147,8 +150,6 @@ cat >> ~/spinnaker-for-gcp/scripts/install/properties <<EOL
 
 # If cluster does not exist, it will be created.
 export GKE_CLUSTER=${GKE_CLUSTER:-\$DEPLOYMENT_NAME}
-export ZONE=$ZONE
-export REGION=$REGION
 
 # These are only considered if a new GKE cluster is being created.
 export GKE_CLUSTER_VERSION=1.12.7
