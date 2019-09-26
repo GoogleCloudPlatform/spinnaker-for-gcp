@@ -124,7 +124,7 @@ if [ "$SHARED_VPC_HOST_PROJECT" ]; then
 #   2) Specify the name of the shared subnet in \$SUBNET up above.
 #   3) Specify the Shared VPC host project id ($SHARED_VPC_HOST_PROJECT) in \$NETWORK_PROJECT below.
 #   4) Ensure the subnet referenced by \$SUBNET defines 2 named secondary ranges (one for
-#      pods, and one for clusters).
+#      pods, and one for services).
 #   5) Specify the names of the 2 secondary ranges in \$CLUSTER_SECONDARY_RANGE_NAME and
 #      \$SERVICES_SECONDARY_RANGE_NAME down below.
 EOL
