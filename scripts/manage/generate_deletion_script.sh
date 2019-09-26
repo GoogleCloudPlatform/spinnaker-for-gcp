@@ -43,8 +43,8 @@ gcloud pubsub subscriptions delete $GCB_PUBSUB_SUBSCRIPTION --project $PROJECT_I
 bold "Deleting cloud function $CLOUD_FUNCTION_NAME in $PROJECT_ID..."
 gcloud functions delete $CLOUD_FUNCTION_NAME --project $PROJECT_ID
 
-bold "Deleting redis instance $REDIS_INSTANCE in $PROJECT_ID..."
-gcloud redis instances delete $REDIS_INSTANCE --region $REGION --project $PROJECT_ID
+bold "Deleting redis instance $REDIS_INSTANCE in $NETWORK_PROJECT..."
+gcloud redis instances delete $REDIS_INSTANCE --region $REGION --project $NETWORK_PROJECT
 EOL
 
 if [ "$SA_EMAIL" ]; then

@@ -22,3 +22,7 @@ export CONFIG_CSR_REPO=\$DEPLOYMENT_NAME-config
 EOL
 
 add_property_if_missing CONFIG_CSR_REPO "$CSR_PROPERTY_DECLARATION"
+
+add_property_if_missing NETWORK_PROJECT "export NETWORK_PROJECT=\$PROJECT_ID"
+add_property_if_missing NETWORK_REFERENCE "export NETWORK_REFERENCE=projects/\$NETWORK_PROJECT/global/networks/\$NETWORK"
+add_property_if_missing SUBNET_REFERENCE "export SUBNET_REFERENCE=projects/\$NETWORK_PROJECT/regions/$REGION/subnetworks/\$SUBNET"

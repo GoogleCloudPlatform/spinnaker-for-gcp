@@ -24,12 +24,24 @@ NUM_ENABLED_APIS=$(gcloud services list --project $PROJECT_ID \
   --format="value(config.name)" | wc -l)
 
 if [ $NUM_ENABLED_APIS != $NUM_REQUIRED_APIS ]; then
-  bold "Enabling required APIs ($REQUIRED_APIS)..."
+  bold "Enabling required APIs ($REQUIRED_APIS) in $PROJECT_ID..."
   bold "This phase will take a few minutes (progress will not be reported during this operation)."
   bold
   bold "Once the required APIs are enabled, the remaining components will be installed and configured. The entire installation may take 10 minutes or more."
 
   gcloud services --project $PROJECT_ID enable $REQUIRED_APIS
+fi
+
+source ~/spinnaker-for-gcp/scripts/manage/service_utils.sh
+
+if [ "$PROJECT_ID" != "$NETWORK_PROJECT" ]; then
+  # Cloud Memorystore for Redis requires the Redis instance to be deployed in the Shared VPC
+  # host project: https://cloud.google.com/memorystore/docs/redis/networking#limited_and_unsupported_networks
+  if [ ! $(has_service_enabled $NETWORK_PROJECT redis.googleapis.com) ]; then
+    bold "Enabling redis.googleapis.com in $NETWORK_PROJECT..."
+
+    gcloud services --project $NETWORK_PROJECT enable redis.googleapis.com
+  fi
 fi
 
 source ~/spinnaker-for-gcp/scripts/manage/cluster_utils.sh
@@ -64,12 +76,12 @@ if [ -n "$CLUSTER_EXISTS" ]; then
   fi
 fi
 
-NETWORK_SUBNET_MODE=$(gcloud compute networks list --project $PROJECT_ID \
+NETWORK_SUBNET_MODE=$(gcloud compute networks list --project $NETWORK_PROJECT \
   --filter "name=$NETWORK" \
   --format "value(x_gcloud_subnet_mode)")
 
 if [ -z "$NETWORK_SUBNET_MODE" ]; then
-  bold "Network $NETWORK was not found in project $PROJECT_ID."
+  bold "Network $NETWORK was not found in project $NETWORK_PROJECT."
   exit 1
 elif [ "$NETWORK_SUBNET_MODE" = "LEGACY" ]; then
   bold "Network $NETWORK is a legacy network. This installation requires a" \
@@ -79,14 +91,16 @@ elif [ "$NETWORK_SUBNET_MODE" = "LEGACY" ]; then
 fi
 
 # Verify that the subnet exists in the network.
-SUBNET_CHECK=$(gcloud compute networks subnets list --network=$NETWORK --filter "region: ($REGION) AND name: ($SUBNET)" --format "value(name)")
+SUBNET_CHECK=$(gcloud compute networks subnets list --project=$NETWORK_PROJECT \
+  --network=$NETWORK --filter "region: ($REGION) AND name: ($SUBNET)" \
+  --format "value(name)")
 
 if [ -z "$SUBNET_CHECK" ]; then
   bold "Subnet $SUBNET was not found in network $NETWORK" \
-       "in project $PROJECT_ID. Please specify an existing subnet in" \
+       "in project $NETWORK_PROJECT. Please specify an existing subnet in" \
        "$PROPERTIES_FILE and re-run this script. You can verify" \
        "what subnetworks exist in this network by running:"
-  bold "  gcloud compute networks subnets list --project $PROJECT_ID --network=$NETWORK --filter \"region: ($REGION)\""
+  bold "  gcloud compute networks subnets list --project $NETWORK_PROJECT --network=$NETWORK --filter \"region: ($REGION)\""
   exit 1
 fi
 
@@ -128,20 +142,20 @@ for r in "${K8S_REQUIRED_ROLES[@]}"; do
 done
 
 export REDIS_INSTANCE_HOST=$(gcloud redis instances list \
-  --project $PROJECT_ID --region $REGION \
-  --filter="name=projects/$PROJECT_ID/locations/$REGION/instances/$REDIS_INSTANCE" \
+  --project $NETWORK_PROJECT --region $REGION \
+  --filter="name=projects/$NETWORK_PROJECT/locations/$REGION/instances/$REDIS_INSTANCE" \
   --format="value(host)")
 
 if [ -z "$REDIS_INSTANCE_HOST" ]; then
-  bold "Creating redis instance $REDIS_INSTANCE..."
+  bold "Creating redis instance $REDIS_INSTANCE in project $NETWORK_PROJECT..."
 
-  gcloud redis instances create $REDIS_INSTANCE --project $PROJECT_ID \
-    --region=$REGION --zone=$ZONE --network=$NETWORK \
+  gcloud redis instances create $REDIS_INSTANCE --project $NETWORK_PROJECT \
+    --region=$REGION --zone=$ZONE --network=$NETWORK_REFERENCE \
     --redis-config=notify-keyspace-events=gxE
 
   export REDIS_INSTANCE_HOST=$(gcloud redis instances list \
-    --project $PROJECT_ID --region $REGION \
-    --filter="name=projects/$PROJECT_ID/locations/$REGION/instances/$REDIS_INSTANCE" \
+    --project $NETWORK_PROJECT --region $REGION \
+    --filter="name=projects/$NETWORK_PROJECT/locations/$REGION/instances/$REDIS_INSTANCE" \
     --format="value(host)")
 else
   bold "Using existing redis instance $REDIS_INSTANCE ($REDIS_INSTANCE_HOST)..."
@@ -164,12 +178,14 @@ if [ -z "$CLUSTER_EXISTS" ]; then
 
   # TODO: Move some of these config settings to properties file.
   # TODO: Should this be regional instead?
-  gcloud beta container clusters create $GKE_CLUSTER --project $PROJECT_ID \
-    --zone $ZONE --network $NETWORK --username "admin" --subnetwork $SUBNET --cluster-version $GKE_CLUSTER_VERSION \
-    --machine-type $GKE_MACHINE_TYPE --image-type "COS" --disk-type $GKE_DISK_TYPE \
-    --disk-size $GKE_DISK_SIZE --service-account $SA_EMAIL --num-nodes $GKE_NUM_NODES \
-    --enable-stackdriver-kubernetes --enable-autoupgrade --enable-autorepair \
-    --enable-ip-alias --addons HorizontalPodAutoscaling,HttpLoadBalancing
+  eval gcloud beta container clusters create $GKE_CLUSTER --project $PROJECT_ID \
+    --zone $ZONE --username "admin" --network $NETWORK_REFERENCE --subnetwork $SUBNET_REFERENCE \
+    --cluster-version $GKE_CLUSTER_VERSION --machine-type $GKE_MACHINE_TYPE --image-type "COS" \
+    --disk-type $GKE_DISK_TYPE --disk-size $GKE_DISK_SIZE --service-account $SA_EMAIL \
+    --num-nodes $GKE_NUM_NODES --enable-stackdriver-kubernetes --enable-autoupgrade \
+    --enable-autorepair --enable-ip-alias --addons HorizontalPodAutoscaling,HttpLoadBalancing \
+    "${CLUSTER_SECONDARY_RANGE_NAME:+'--cluster-secondary-range-name' $CLUSTER_SECONDARY_RANGE_NAME}" \
+    "${SERVICES_SECONDARY_RANGE_NAME:+'--services-secondary-range-name' $SERVICES_SECONDARY_RANGE_NAME}"
 
   # If the cluster already exists, we already retrieved credentials way up at the top of the script.
   bold "Retrieving credentials for GKE cluster $GKE_CLUSTER..."

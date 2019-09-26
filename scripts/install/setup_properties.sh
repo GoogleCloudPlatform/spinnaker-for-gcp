@@ -26,56 +26,72 @@ fi
 PROPERTIES_FILE="$HOME/spinnaker-for-gcp/scripts/install/properties"
 if [ -f "$PROPERTIES_FILE" ]; then
   bold "The properties file already exists at $PROPERTIES_FILE. Please move it out of the way if you want to generate a new properties file."
-else
-  if [ "$GKE_CLUSTER" ]; then
-    if [ -z "$ZONE" ]; then
-      echo "If GKE_CLUSTER is specified, ZONE must also be specified."
-      exit 1
-    fi
+  exit 1
+fi
 
-    # Since cluster already exists, must resolve service account from the cluster.
-    EXISTING_SA_EMAIL=$(gcloud beta container clusters describe --project $PROJECT_ID \
-                          --zone $ZONE $GKE_CLUSTER --format="value(nodeConfig.serviceAccount)")
-
-    if [ -z $EXISTING_SA_EMAIL ]; then
-      echo "Unable to resolve service account from existing cluster $GKE_CLUSTER in zone $ZONE."
-      exit 1
-    fi
-
-    if [ "$EXISTING_SA_EMAIL" == "default" ]; then
-      SERVICE_ACCOUNT_NAME="Compute Engine default service account"
-    else
-      SERVICE_ACCOUNT_NAME=$(echo $EXISTING_SA_EMAIL | cut -d @ -f 1)
-    fi
+if [ "$GKE_CLUSTER" ]; then
+  if [ -z "$ZONE" ]; then
+    echo "If GKE_CLUSTER is specified, ZONE must also be specified."
+    exit 1
   fi
 
-  NETWORK="default"
-  SUBNET="default"
-  ZONE=${ZONE:-us-west1-b}
-  REGION=$(echo $ZONE | cut -d - -f 1,2)
+  # Since cluster already exists, must resolve service account from the cluster.
+  EXISTING_SA_EMAIL=$(gcloud beta container clusters describe --project $PROJECT_ID \
+                        --zone $ZONE $GKE_CLUSTER --format="value(nodeConfig.serviceAccount)")
 
-  # Check if Redis api is enabled.
-  if [ $(gcloud services list --project $PROJECT_ID \
-           --filter="config.name:redis.googleapis.com" \
-           --format="value(config.name)") ]; then
-    # Query existing Redis instances so we can avoid naming collisions.
+  if [ -z $EXISTING_SA_EMAIL ]; then
+    echo "Unable to resolve service account from existing cluster $GKE_CLUSTER in zone $ZONE."
+    exit 1
+  fi
+
+  if [ "$EXISTING_SA_EMAIL" == "default" ]; then
+    SERVICE_ACCOUNT_NAME="Compute Engine default service account"
+  else
+    SERVICE_ACCOUNT_NAME=$(echo $EXISTING_SA_EMAIL | cut -d @ -f 1)
+  fi
+fi
+
+NETWORK="default"
+SUBNET="default"
+ZONE=${ZONE:-us-west1-b}
+REGION=$(echo $ZONE | cut -d - -f 1,2)
+
+source ~/spinnaker-for-gcp/scripts/manage/service_utils.sh
+
+query_redis_instance_names() {
+  if [ $(has_service_enabled $1 redis.googleapis.com) ]; then
     # TODO: Should really query redis instances across _all_ regions to ensure no deployment naming collision.
     # TODO: Alternatively, could incorporate region in generated deployment name.
-    EXISTING_REDIS_NAMES=$(gcloud redis instances list --region $REGION --project $PROJECT_ID \
+    EXISTING_REDIS_NAMES=$(gcloud redis instances list --region $REGION --project $1 \
                              --filter="name:spinnaker-" \
                              --format="value(name)")
-    EXISTING_DEPLOYMENT_COUNT=$(echo "$EXISTING_REDIS_NAMES" | sed '/^$/d' | wc -l)
-    NEW_DEPLOYMENT_SUFFIX=$(($EXISTING_DEPLOYMENT_COUNT + 1))
-    NEW_DEPLOYMENT_NAME="spinnaker-$NEW_DEPLOYMENT_SUFFIX"
 
-    while [[ "$(echo "$EXISTING_REDIS_NAMES" | grep ^$NEW_DEPLOYMENT_NAME$ | wc -l)" != "0" ]]; do
-      NEW_DEPLOYMENT_NAME="spinnaker-$((++NEW_DEPLOYMENT_SUFFIX))"
-    done
-  else
-    NEW_DEPLOYMENT_NAME="spinnaker-1"
+    echo "$EXISTING_REDIS_NAMES"
   fi
+}
 
-  cat > ~/spinnaker-for-gcp/scripts/install/properties <<EOL
+EXISTING_REDIS_NAMES=$(query_redis_instance_names $PROJECT_ID)
+
+# Also avoid name collisions with potential Shared VPC host project.
+if [ $(has_service_enabled $PROJECT_ID compute.googleapis.com) ]; then
+  SHARED_VPC_HOST_PROJECT=$(gcloud compute shared-vpc get-host-project $PROJECT_ID --format="value(name)")
+fi
+
+if [ "$SHARED_VPC_HOST_PROJECT" ]; then
+  SHARED_VPC_HOST_PROJECT_REDIS_NAMES=$(query_redis_instance_names $SHARED_VPC_HOST_PROJECT)
+
+  EXISTING_REDIS_NAMES="$EXISTING_REDIS_NAMES"$'\n'"$SHARED_VPC_HOST_PROJECT_REDIS_NAMES"
+fi
+
+EXISTING_DEPLOYMENT_COUNT=$(echo "$EXISTING_REDIS_NAMES" | sed '/^$/d' | wc -l)
+NEW_DEPLOYMENT_SUFFIX=$(($EXISTING_DEPLOYMENT_COUNT + 1))
+NEW_DEPLOYMENT_NAME="spinnaker-$NEW_DEPLOYMENT_SUFFIX"
+
+while [[ "$(echo "$EXISTING_REDIS_NAMES" | grep ^$NEW_DEPLOYMENT_NAME$ | wc -l)" != "0" ]]; do
+  NEW_DEPLOYMENT_NAME="spinnaker-$((++NEW_DEPLOYMENT_SUFFIX))"
+done
+
+cat > ~/spinnaker-for-gcp/scripts/install/properties <<EOL
 #!/usr/bin/env bash
 
 # This file is generated just once per Spinnaker installation, prior to running setup.sh.
@@ -97,6 +113,37 @@ export HALYARD_VERSION=1.22.1
 # More info on legacy networks can be found here: https://cloud.google.com/vpc/docs/legacy
 export NETWORK=$NETWORK
 export SUBNET=$SUBNET
+
+EOL
+
+if [ "$SHARED_VPC_HOST_PROJECT" ]; then
+  cat >> ~/spinnaker-for-gcp/scripts/install/properties <<EOL
+# If you want to use a shared network/subnet from the Shared VPC host project, you'll need to perform
+# these steps prior to running the setup.sh script:
+#   1) Specify the name of the shared network in \$NETWORK up above.
+#   2) Specify the name of the shared subnet in \$SUBNET up above.
+#   3) Specify the Shared VPC host project id ($SHARED_VPC_HOST_PROJECT) in \$NETWORK_PROJECT below.
+#   4) Ensure the subnet referenced by \$SUBNET defines 2 named secondary ranges (one for
+#      pods, and one for services).
+#   5) Specify the names of the 2 secondary ranges in \$CLUSTER_SECONDARY_RANGE_NAME and
+#      \$SERVICES_SECONDARY_RANGE_NAME down below.
+EOL
+fi
+
+cat >> ~/spinnaker-for-gcp/scripts/install/properties <<EOL
+export NETWORK_PROJECT=\$PROJECT_ID
+export NETWORK_REFERENCE=projects/\$NETWORK_PROJECT/global/networks/\$NETWORK
+export SUBNET_REFERENCE=projects/\$NETWORK_PROJECT/regions/$REGION/subnetworks/\$SUBNET
+EOL
+
+if [ "$SHARED_VPC_HOST_PROJECT" ]; then
+  cat >> ~/spinnaker-for-gcp/scripts/install/properties <<EOL
+export CLUSTER_SECONDARY_RANGE_NAME=
+export SERVICES_SECONDARY_RANGE_NAME=
+EOL
+fi
+
+cat >> ~/spinnaker-for-gcp/scripts/install/properties <<EOL
 
 # If cluster does not exist, it will be created.
 export GKE_CLUSTER=${GKE_CLUSTER:-\$DEPLOYMENT_NAME}
@@ -150,4 +197,10 @@ export DOMAIN_NAME=\$DEPLOYMENT_NAME.endpoints.$PROJECT_ID.cloud.goog
 # This email address will be granted permissions as an IAP-Secured Web App User.
 export IAP_USER=$(gcloud auth list --format="value(account)" --filter="status=ACTIVE")
 EOL
+
+if [ "$SHARED_VPC_HOST_PROJECT" ]; then
+  bold "If you want to use a shared network/subnet from the Shared VPC host project ($SHARED_VPC_HOST_PROJECT)," \
+    "there are additional instructions you must follow in the properties file. You must perform those steps" \
+    "prior to running the setup.sh script:"
+  bold "  cloudshell edit ~/spinnaker-for-gcp/scripts/install/properties"
 fi
