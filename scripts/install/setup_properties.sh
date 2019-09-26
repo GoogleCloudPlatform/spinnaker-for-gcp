@@ -197,3 +197,10 @@ export DOMAIN_NAME=\$DEPLOYMENT_NAME.endpoints.$PROJECT_ID.cloud.goog
 # This email address will be granted permissions as an IAP-Secured Web App User.
 export IAP_USER=$(gcloud auth list --format="value(account)" --filter="status=ACTIVE")
 EOL
+
+if [ "$SHARED_VPC_HOST_PROJECT" ]; then
+  bold "If you want to use a shared network/subnet from the Shared VPC host project ($SHARED_VPC_HOST_PROJECT)," \
+    "there are additional instructions you must follow in the properties file. You must perform those steps" \
+    "prior to running the setup.sh script:"
+  bold "  cloudshell edit ~/spinnaker-for-gcp/scripts/install/properties"
+fi
