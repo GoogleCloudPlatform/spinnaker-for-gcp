@@ -152,7 +152,7 @@ cat >> ~/spinnaker-for-gcp/scripts/install/properties <<EOL
 export GKE_CLUSTER=${GKE_CLUSTER:-\$DEPLOYMENT_NAME}
 
 # These are only considered if a new GKE cluster is being created.
-export GKE_CLUSTER_VERSION=1.12.7
+export GKE_CLUSTER_VERSION=1.13.7
 export GKE_MACHINE_TYPE=n1-highmem-4
 export GKE_DISK_TYPE=pd-standard
 export GKE_DISK_SIZE=100
