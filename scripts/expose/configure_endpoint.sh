@@ -67,7 +67,7 @@ EXISTING_MANAGED_CERT=$(gcloud beta compute ssl-certificates list \
 if [ -z "$EXISTING_MANAGED_CERT" ]; then
   bold "Creating managed SSL certificate $MANAGED_CERT for domain $DOMAIN_NAME..."
 
-  gcloud beta compute ssl-certificates create $MANAGED_CERT --domains $DOMAIN_NAME \
+  gcloud beta compute ssl-certificates create $MANAGED_CERT --domains $DOMAIN_NAME --global \
     --project $PROJECT_ID
 else
   bold "Using existing managed SSL certificate $EXISTING_MANAGED_CERT..."
