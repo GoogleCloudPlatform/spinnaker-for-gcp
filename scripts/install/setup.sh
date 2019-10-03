@@ -1,21 +1,75 @@
 #!/usr/bin/env bash
 
-bold() {
-  echo ". $(tput bold)" "$*" "$(tput sgr0)";
-}
-
 err() {
   echo "$*" >&2;
 }
 
-~/spinnaker-for-gcp/scripts/manage/check_duplicate_dirs.sh || exit 1
-~/spinnaker-for-gcp/scripts/manage/check_git_config.sh || exit 1
+[ -z "$REPO_PATH" ] && REPO_PATH="$HOME"
 
-PROPERTIES_FILE="$HOME/spinnaker-for-gcp/scripts/install/properties"
+source $REPO_PATH/spinnaker-for-gcp/scripts/manage/service_utils.sh
+
+REQUIRED_BINARIES=(git gcloud jq kubectl)
+
+MISSING_BINARIES=""
+for b in "${REQUIRED_BINARIES[@]}"; do
+  BINARY_PATH=$(check_for_command $b)
+  if [ -z "$BINARY_PATH" ]; then
+    if [ -z $MISSING_BINARIES ]; then
+      MISSING_BINARIES="$b"
+    else 
+      MISSING_BINARIES="$MISSING_BINARIES, $b"
+    fi
+  fi
+done
+
+if [ -n "$MISSING_BINARIES" ]; then 
+  bold "The following command(s) are required for setup but were not found: $MISSING_BINARIES"
+  exit 1
+fi
+
+REPO_PATH=$REPO_PATH $REPO_PATH/spinnaker-for-gcp/scripts/manage/check_git_config.sh || exit 1
+
+[ -z "$PROPERTIES_FILE" ] && PROPERTIES_FILE="$REPO_PATH/spinnaker-for-gcp/scripts/install/properties"
 
 source "$PROPERTIES_FILE"
 
-~/spinnaker-for-gcp/scripts/manage/check_project_mismatch.sh
+if [ "$PROJECT_ID" != "$NETWORK_PROJECT" -a "$CI" = true ]; then
+ bold "Automated setup of Spinnaker for GCP with a Shared VPC host project is currently unsupported. To proceed, continue the setup in Cloud Shell."
+ exit 1
+fi
+
+REPO_PATH=$REPO_PATH PROPERTIES_FILE=$PROPERTIES_FILE $REPO_PATH/spinnaker-for-gcp/scripts/manage/check_project_mismatch.sh
+
+if [ "$CI" = true ]; then
+  OPERATOR_SA_EMAIL=$(gcloud config list account --format "value(core.account)")
+
+  SETUP_REQUIRED_ROLES=(cloudfunctions.developer compute.networkViewer container.admin iam.serviceAccountCreator iam.serviceAccountUser pubsub.editor redis.admin serviceusage.serviceUsageAdmin source.admin storage.admin)
+  SETUP_EXISTING_ROLES=$(gcloud projects get-iam-policy --filter bindings.members:$OPERATOR_SA_EMAIL $PROJECT_ID \
+    --flatten bindings[].members --format="value(bindings.role)")
+
+  if [ -z "$SETUP_EXISTING_ROLES" ]; then
+    bold "Unable to verify that the service account \"$OPERATOR_SA_EMAIL\" has the required IAM roles."
+    bold "\"$OPERATOR_SA_EMAIL\" requires the IAM role \"Project IAM Admin\" to proceed."
+    exit 1
+  fi
+
+  MISSING_ROLES=""
+  for r in "${SETUP_REQUIRED_ROLES[@]}"; do
+    if [ -z "$(echo $SETUP_EXISTING_ROLES | grep $r)" ]; then
+      if [ -z $MISSING_ROLES ]; then
+        MISSING_ROLES="$r"
+      else 
+        MISSING_ROLES="$MISSING_ROLES, $r"
+      fi
+    fi
+  done
+
+  if [ -n "$MISSING_ROLES" ]; then 
+    bold "The service account in use, \"$OPERATOR_SA_EMAIL\", is missing the following required role(s): $MISSING_ROLES."
+    bold "Add the required role(s) and try re-running the script."
+    exit 1
+  fi
+fi
 
 REQUIRED_APIS="cloudbuild.googleapis.com cloudfunctions.googleapis.com container.googleapis.com endpoints.googleapis.com iap.googleapis.com monitoring.googleapis.com redis.googleapis.com sourcerepo.googleapis.com"
 NUM_REQUIRED_APIS=$(wc -w <<< "$REQUIRED_APIS")
@@ -32,8 +86,6 @@ if [ $NUM_ENABLED_APIS != $NUM_REQUIRED_APIS ]; then
   gcloud services --project $PROJECT_ID enable $REQUIRED_APIS
 fi
 
-source ~/spinnaker-for-gcp/scripts/manage/service_utils.sh
-
 if [ "$PROJECT_ID" != "$NETWORK_PROJECT" ]; then
   # Cloud Memorystore for Redis requires the Redis instance to be deployed in the Shared VPC
   # host project: https://cloud.google.com/memorystore/docs/redis/networking#limited_and_unsupported_networks
@@ -44,7 +96,7 @@ if [ "$PROJECT_ID" != "$NETWORK_PROJECT" ]; then
   fi
 fi
 
-source ~/spinnaker-for-gcp/scripts/manage/cluster_utils.sh
+source $REPO_PATH/spinnaker-for-gcp/scripts/manage/cluster_utils.sh
 
 CLUSTER_EXISTS=$(check_for_existing_cluster)
 
@@ -268,7 +320,7 @@ fi
 
 bold "Provisioning Spinnaker resources..."
 
-envsubst < ~/spinnaker-for-gcp/scripts/install/quick-install.yml | kubectl apply -f -
+envsubst < $REPO_PATH/spinnaker-for-gcp/scripts/install/quick-install.yml | kubectl apply -f -
 
 job_ready() {
   printf "Waiting on job $1 to complete"
@@ -284,8 +336,9 @@ job_ready hal-deploy-apply
 
 # Sourced to import $IP_ADDR. 
 # Used at the end of setup to check if installation is exposed via a secured endpoint.
-source ~/spinnaker-for-gcp/scripts/manage/update_landing_page.sh
-~/spinnaker-for-gcp/scripts/manage/deploy_application_manifest.sh
+source $REPO_PATH/spinnaker-for-gcp/scripts/manage/update_landing_page.sh
+
+REPO_PATH=$REPO_PATH PROPERTIES_FILE=$PROPERTIES_FILE $REPO_PATH/spinnaker-for-gcp/scripts/manage/deploy_application_manifest.sh
 
 # Delete any existing deployment config secret.
 # It will be recreated with up-to-date contents during push_config.sh.
@@ -304,21 +357,21 @@ EXISTING_CLOUD_FUNCTION=$(gcloud functions list --project $PROJECT_ID \
 if [ -z "$EXISTING_CLOUD_FUNCTION" ]; then
   bold "Deploying audit log cloud function $CLOUD_FUNCTION_NAME..."
 
-  cat ~/spinnaker-for-gcp/scripts/install/spinnakerAuditLog/config_json.template | envsubst > ~/spinnaker-for-gcp/scripts/install/spinnakerAuditLog/config.json
-  cat ~/spinnaker-for-gcp/scripts/install/spinnakerAuditLog/index_js.template | envsubst > ~/spinnaker-for-gcp/scripts/install/spinnakerAuditLog/index.js
-  gcloud functions deploy $CLOUD_FUNCTION_NAME --source ~/spinnaker-for-gcp/scripts/install/spinnakerAuditLog \
+  cat $REPO_PATH/spinnaker-for-gcp/scripts/install/spinnakerAuditLog/config_json.template | envsubst > $REPO_PATH/spinnaker-for-gcp/scripts/install/spinnakerAuditLog/config.json
+  cat $REPO_PATH/spinnaker-for-gcp/scripts/install/spinnakerAuditLog/index_js.template | envsubst > $REPO_PATH/spinnaker-for-gcp/scripts/install/spinnakerAuditLog/index.js
+  gcloud functions deploy $CLOUD_FUNCTION_NAME --source $REPO_PATH/spinnaker-for-gcp/scripts/install/spinnakerAuditLog \
     --trigger-http --memory 2048MB --runtime nodejs8 --allow-unauthenticated --project $PROJECT_ID --region $REGION
 else
   bold "Using existing audit log cloud function $CLOUD_FUNCTION_NAME..."
 fi
 
-if [ "$USE_CLOUD_SHELL_HAL_CONFIG" = true ] ; then
-  ~/spinnaker-for-gcp/scripts/manage/push_and_apply.sh
+if [ "$USE_CLOUD_SHELL_HAL_CONFIG" = true ]; then
+  $REPO_PATH/spinnaker-for-gcp/scripts/manage/push_and_apply.sh
 else
   # We want the local hal config to match what was deployed.
-  ~/spinnaker-for-gcp/scripts/manage/pull_config.sh
+  REPO_PATH=$REPO_PATH PROPERTIES_FILE=$PROPERTIES_FILE $REPO_PATH/spinnaker-for-gcp/scripts/manage/pull_config.sh
   # We want a full backup stored in the bucket and the full deployment config stored in a secret.
-  ~/spinnaker-for-gcp/scripts/manage/push_config.sh
+  REPO_PATH=$REPO_PATH PROPERTIES_FILE=$PROPERTIES_FILE $REPO_PATH/spinnaker-for-gcp/scripts/manage/push_config.sh
 fi
 
 deploy_ready() {
@@ -339,15 +392,17 @@ deploy_ready spin-orca "orchestration engine"
 deploy_ready spin-kayenta "canary analysis engine"
 deploy_ready spin-deck "UI server"
 
-~/spinnaker-for-gcp/scripts/cli/install_hal.sh --version $HALYARD_VERSION
-~/spinnaker-for-gcp/scripts/cli/install_spin.sh
+if [ "$CI" != true ]; then
+  $REPO_PATH/spinnaker-for-gcp/scripts/cli/install_hal.sh --version $HALYARD_VERSION
+  $REPO_PATH/spinnaker-for-gcp/scripts/cli/install_spin.sh
 
-# We want a backup containing the newly-created ~/.spin/* files as well.
-~/spinnaker-for-gcp/scripts/manage/push_config.sh
+  # We want a backup containing the newly-created ~/.spin/* files as well.
+  $REPO_PATH/spinnaker-for-gcp/scripts/manage/push_config.sh  
+fi
 
 # If restoring a secured endpoint, leave the user on the documentation for iap configuration.
-if [ "$USE_CLOUD_SHELL_HAL_CONFIG" = true -a -n "$IP_ADDR" ] ; then
-  ~/spinnaker-for-gcp/scripts/expose/launch_configure_iap.sh
+if [ "$USE_CLOUD_SHELL_HAL_CONFIG" = true -a -n "$IP_ADDR" -a "$CI" != true ]; then
+  $REPO_PATH/spinnaker-for-gcp/scripts/expose/launch_configure_iap.sh
 fi
 
 echo

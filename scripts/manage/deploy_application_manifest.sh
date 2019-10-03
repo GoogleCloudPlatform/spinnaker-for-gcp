@@ -1,16 +1,18 @@
 #!/usr/bin/env bash
 
-bold() {
-  echo ". $(tput bold)" "$*" "$(tput sgr0)";
-}
+[ -z "$REPO_PATH" ] && REPO_PATH="$HOME"
 
-if [ ! -f "$HOME/spinnaker-for-gcp/scripts/install/properties" ]; then
+source $REPO_PATH/spinnaker-for-gcp/scripts/manage/service_utils.sh
+
+[ -z "$PROPERTIES_FILE" ] && PROPERTIES_FILE="$REPO_PATH/spinnaker-for-gcp/scripts/install/properties"
+
+if [ ! -f "$PROPERTIES_FILE" ]; then
   bold "No properties file was found. Not updating GKE Application details view."
-  git checkout -- ~/spinnaker-for-gcp/scripts/manage/landing_page_expanded.md
+  git checkout -- $REPO_PATH/spinnaker-for-gcp/scripts/manage/landing_page_expanded.md
   exit 0
 fi
 
-source ~/spinnaker-for-gcp/scripts/install/properties
+source "$PROPERTIES_FILE"
 
 # Query for static ip address as a signal that the Spinnaker installation is exposed via a secured endpoint.
 export IP_ADDR=$(gcloud compute addresses list --filter="name=$STATIC_IP_NAME" \
@@ -23,9 +25,9 @@ else
 fi
 
 kubectl apply -f "https://raw.githubusercontent.com/GoogleCloudPlatform/marketplace-k8s-app-tools/master/crd/app-crd.yaml"
-cat ~/spinnaker-for-gcp/templates/spinnaker_application_manifest_top.yaml \
-  ~/spinnaker-for-gcp/templates/$APP_MANIFEST_MIDDLE \
-  ~/spinnaker-for-gcp/templates/spinnaker_application_manifest_bottom.yaml \
+cat $REPO_PATH/spinnaker-for-gcp/templates/spinnaker_application_manifest_top.yaml \
+  $REPO_PATH/spinnaker-for-gcp/templates/$APP_MANIFEST_MIDDLE \
+  $REPO_PATH/spinnaker-for-gcp/templates/spinnaker_application_manifest_bottom.yaml \
   | envsubst | kubectl apply -f -
 
 bold "Labeling resources as components of application $DEPLOYMENT_NAME..."

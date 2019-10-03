@@ -1,13 +1,15 @@
 #!/usr/bin/env bash
 
-bold() {
-  echo ". $(tput bold)" "$*" "$(tput sgr0)";
-}
+[ -z "$REPO_PATH" ] && REPO_PATH="$HOME"
 
-~/spinnaker-for-gcp/scripts/manage/check_duplicate_dirs.sh || exit 1
-~/spinnaker-for-gcp/scripts/manage/check_git_config.sh || exit 1
+source $REPO_PATH/spinnaker-for-gcp/scripts/manage/service_utils.sh
 
-source ~/spinnaker-for-gcp/scripts/install/properties
+[ -z "$PROPERTIES_FILE" ] && PROPERTIES_FILE="$REPO_PATH/spinnaker-for-gcp/scripts/install/properties"
+
+$REPO_PATH/spinnaker-for-gcp/scripts/manage/check_duplicate_dirs.sh || exit 1
+$REPO_PATH/spinnaker-for-gcp/scripts/manage/check_git_config.sh || exit 1
+
+source "$PROPERTIES_FILE"
 
 # TODO(duftler): Add check to ensure that we are not overriding with older or empty config.
 
@@ -40,19 +42,19 @@ if [ $CURRENT_CONTEXT_CLUSTER != $GKE_CLUSTER ]; then
   exit 1
 fi
 
-source ~/spinnaker-for-gcp/scripts/manage/cluster_utils.sh
+source $REPO_PATH/spinnaker-for-gcp/scripts/manage/cluster_utils.sh
 
 CLUSTER_EXISTS=$(check_for_existing_cluster)
 
 if [ -z "$CLUSTER_EXISTS" ]; then
   bold "Cluster $GKE_CLUSTER cannot be found. It may not exist."
   bold "To recreate your installation with this config, run:"
-  bold "USE_CLOUD_SHELL_HAL_CONFIG=true ~/spinnaker-for-gcp/scripts/install/setup.sh"
+  bold "USE_CLOUD_SHELL_HAL_CONFIG=true $REPO_PATH/spinnaker-for-gcp/scripts/install/setup.sh"
   exit 1
 fi
 
 if [ -z "$CONFIG_CSR_REPO" ]; then
-  bold "CONFIG_CSR_REPO was not set. Please run the $HOME/spinnaker-for-gcp/scripts/manage/update_management_environment.sh" \
+  bold "CONFIG_CSR_REPO was not set. Please run the $REPO_PATH/spinnaker-for-gcp/scripts/manage/update_management_environment.sh" \
        "command to ensure you have all the necessary properties declared."
   exit 1
 fi
@@ -73,23 +75,23 @@ fi
 gcloud source repos clone $CONFIG_CSR_REPO --project=$PROJECT_ID
 cd $CONFIG_CSR_REPO
 
-bold "Backing up $HOME/.hal..."
+bold "Backing up $REPO_PATH/.hal..."
 
 rm -rf .hal
 mkdir .hal
 
-# We want just these subdirs within ~/.hal to be copied into place on the Halyard Daemon pod.
+# We want just these subdirs within $REPO_PATH/.hal to be copied into place on the Halyard Daemon pod.
 DIRS=(credentials profiles service-settings)
 
 for p in "${DIRS[@]}"; do
-  for f in $(find ~/.hal/*/$p -prune 2> /dev/null); do
+  for f in $(find $REPO_PATH/.hal/*/$p -prune 2> /dev/null); do
     SUB_PATH=$(echo $f | rev | cut -d '/' -f 1,2 | rev)
     mkdir -p .hal/$SUB_PATH
-    cp -RT ~/.hal/$SUB_PATH .hal/$SUB_PATH
+    cp -RT $REPO_PATH/.hal/$SUB_PATH .hal/$SUB_PATH
   done
 done
 
-cp ~/.hal/config .hal
+cp $REPO_PATH/.hal/config .hal
 
 REWRITABLE_KEYS=(kubeconfigFile jsonPath jsonKey passwordFile path templatePath)
 for k in "${REWRITABLE_KEYS[@]}"; do
@@ -120,25 +122,25 @@ copy_if_exists() {
   fi
 }
 
-copy_if_exists ~/spinnaker-for-gcp/scripts/install/properties deployment_config_files
-copy_if_exists ~/spinnaker-for-gcp/scripts/install/spinnakerAuditLog/config.json deployment_config_files
-copy_if_exists ~/spinnaker-for-gcp/scripts/install/spinnakerAuditLog/index.js deployment_config_files
-copy_if_exists ~/spinnaker-for-gcp/scripts/manage/landing_page_expanded.md deployment_config_files
+copy_if_exists "$PROPERTIES_FILE" deployment_config_files
+copy_if_exists $REPO_PATH/spinnaker-for-gcp/scripts/install/spinnakerAuditLog/config.json deployment_config_files
+copy_if_exists $REPO_PATH/spinnaker-for-gcp/scripts/install/spinnakerAuditLog/index.js deployment_config_files
+copy_if_exists $REPO_PATH/spinnaker-for-gcp/scripts/manage/landing_page_expanded.md deployment_config_files
 
 # These files are generated when Spinnaker is exposed via IAP.
 # If the operator is managing more than one installation we don't want to inadvertently backup files from the wrong installation.
-copy_if_exists ~/spinnaker-for-gcp/scripts/expose/configure_iap_expanded.md deployment_config_files "$PROJECT_ID\."
-copy_if_exists ~/spinnaker-for-gcp/scripts/expose/openapi_expanded.yml deployment_config_files "$PROJECT_ID\."
-copy_if_exists ~/.spin/config deployment_config_files "$PROJECT_ID\."
-copy_if_exists ~/.spin/config deployment_config_files "localhost\:"
-copy_if_exists ~/.spin/key.json deployment_config_files "$PROJECT_ID\."
+copy_if_exists $REPO_PATH/spinnaker-for-gcp/scripts/expose/configure_iap_expanded.md deployment_config_files "$PROJECT_ID\."
+copy_if_exists $REPO_PATH/spinnaker-for-gcp/scripts/expose/openapi_expanded.yml deployment_config_files "$PROJECT_ID\."
+copy_if_exists $REPO_PATH/.spin/config deployment_config_files "$PROJECT_ID\."
+copy_if_exists $REPO_PATH/.spin/config deployment_config_files "localhost\:"
+copy_if_exists $REPO_PATH/.spin/key.json deployment_config_files "$PROJECT_ID\."
 
 # Remove old persistent config so new config can be copied into place.
 bold "Removing halyard/$HALYARD_POD:/home/spinnaker/.hal..."
-kubectl -n halyard exec -it $HALYARD_POD -- bash -c "rm -rf ~/.hal/*"
+kubectl -n halyard exec $HALYARD_POD -- bash -c "rm -rf $REPO_PATH/.hal/*"
 
 # Copy new config into place.
-bold "Copying $HOME/.hal into halyard/$HALYARD_POD:/home/spinnaker/.hal..."
+bold "Copying $REPO_PATH/.hal into halyard/$HALYARD_POD:/home/spinnaker/.hal..."
 
 kubectl -n halyard cp $TEMP_DIR/$CONFIG_CSR_REPO/.hal spin-halyard-0:/home/spinnaker
 

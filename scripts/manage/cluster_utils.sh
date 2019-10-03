@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-bold() {
-  echo ". $(tput bold)" "$*" "$(tput sgr0)";
-}
+[ -z "$REPO_PATH" ] && REPO_PATH="$HOME"
+
+source $REPO_PATH/spinnaker-for-gcp/scripts/manage/service_utils.sh
 
 check_for_existing_cluster() {
   bold "Checking for existing cluster $GKE_CLUSTER..." >&2
