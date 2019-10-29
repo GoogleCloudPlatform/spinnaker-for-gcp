@@ -60,14 +60,9 @@ only.
 ~/spinnaker-for-gcp/scripts/manage/connect_unsecured.sh
 ```
 
-To connect to the Deck UI, click the link below, which highlights the Preview
-button above.
+To connect to the Deck UI, click on the Preview button above and select "Preview on port 8080":
 
-<walkthrough-spotlight-pointer
-    spotlightId="devshell-web-preview-button"
-    text="Connect to Spinnaker via 'Preview on port 8080'">
-</walkthrough-spotlight-pointer>
-
+![Image](https://github.com/GoogleCloudPlatform/spinnaker-for-gcp/raw/master/scripts/manage/preview_button.png)
 
 ### Expose Spinnaker publicly
 
