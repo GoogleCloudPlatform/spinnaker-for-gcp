@@ -78,7 +78,7 @@ bold "Deleting static IP address $STATIC_IP_NAME in $PROJECT_ID..."
 gcloud compute addresses delete $STATIC_IP_NAME --global --project $PROJECT_ID
 
 bold "Deleting managed SSL certificate $MANAGED_CERT in project $PROJECT_ID..."
-gcloud beta compute ssl-certificates delete $MANAGED_CERT --project $PROJECT_ID
+gcloud beta compute ssl-certificates delete $MANAGED_CERT --global --project $PROJECT_ID
 
 bold "Deleting service endpoint $DOMAIN_NAME in project $PROJECT_ID..."
 gcloud endpoints services delete $DOMAIN_NAME --project $PROJECT_ID
