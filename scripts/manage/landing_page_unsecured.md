@@ -1,17 +1,17 @@
 ## Use Spinnaker
 
-### Forward Port to Deck
+### Forward the port to Deck, and connect
+
+Don't use the `hal deploy connect` command. Instead, use the following command
+only.
 
 ```bash
 ~/spinnaker-for-gcp/scripts/manage/connect_unsecured.sh
 ```
 
-### Connect to Deck
+To connect to the Deck UI, click on the Preview button above and select "Preview on port 8080":
 
-<walkthrough-spotlight-pointer
-    spotlightId="devshell-web-preview-button"
-    text="Connect to Spinnaker via 'Preview on port 8080'">
-</walkthrough-spotlight-pointer>
+![Image](https://github.com/GoogleCloudPlatform/spinnaker-for-gcp/raw/master/scripts/manage/preview_button.png)
 
 ### View Spinnaker Audit Log
 
