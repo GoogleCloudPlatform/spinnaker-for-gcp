@@ -39,12 +39,45 @@ if [ $DOMAIN_NAME = "$DEPLOYMENT_NAME.endpoints.$PROJECT_ID.cloud.goog" ]; then
     --project $PROJECT_ID)
 
   if [ -z "$EXISTING_SERVICE_NAME" ]; then
-    bold "Creating service endpoint $DOMAIN_NAME..."
+    gcurl() {
+      curl -s -H "Authorization:Bearer $(gcloud auth print-access-token)" \
+        -H "Content-Type: application/json" -H "Accept: application/json" \
+        -H "X-Goog-User-Project: $PROJECT_ID" $*
+    }
+
+    bold "Creating service $DOMAIN_NAME..."
+
+    gcurl -X POST -d \
+      "{\"serviceName\":\"$DOMAIN_NAME\",\"producerProjectId\":\"$PROJECT_ID\"}" \
+      https://servicemanagement.googleapis.com/v1/services/
+
+    while [ -z "$SERVICE_NAME" ]; do
+      SERVICE_NAME=$(gcloud endpoints services list \
+        --filter="serviceName:$DOMAIN_NAME" \
+        --format="value(serviceName)")
+      sleep 5
+     echo -n .
+    done
+    echo
+  else
+    bold "Using existing service $EXISTING_SERVICE_NAME..."
+  fi
+
+  # The service can exist without an endpoint configuration. The presence of the
+  # service configuration title is sufficient to indicate that we have configured
+  # the endpoint.
+  EXISTING_SERVICE_CONFIGURATION_NAME=$(gcloud endpoints services list \
+    --filter="serviceName=$DOMAIN_NAME" --format="value(serviceConfig.title)" \
+    --project $PROJECT_ID)
+
+  if [ -z "$EXISTING_SERVICE_CONFIGURATION_NAME" ]; then
+    bold "Deploying service endpoint configuration for $DOMAIN_NAME..."
 
     cat expose/openapi.yml | envsubst > expose/openapi_expanded.yml
+
     gcloud endpoints services deploy expose/openapi_expanded.yml --project $PROJECT_ID
   else
-    bold "Using existing service endpoint $EXISTING_SERVICE_NAME..."
+    bold "Using existing service endpoint configuration for $DOMAIN_NAME..."
   fi
 else
   CURRENT_IP_ADDR=$(dig +short $DOMAIN_NAME)
