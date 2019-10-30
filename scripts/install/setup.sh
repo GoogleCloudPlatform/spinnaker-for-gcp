@@ -305,7 +305,7 @@ if [ -z "$EXISTING_CLOUD_FUNCTION" ]; then
   cat ~/spinnaker-for-gcp/scripts/install/spinnakerAuditLog/config_json.template | envsubst > ~/spinnaker-for-gcp/scripts/install/spinnakerAuditLog/config.json
   cat ~/spinnaker-for-gcp/scripts/install/spinnakerAuditLog/index_js.template | envsubst > ~/spinnaker-for-gcp/scripts/install/spinnakerAuditLog/index.js
   gcloud functions deploy $CLOUD_FUNCTION_NAME --source ~/spinnaker-for-gcp/scripts/install/spinnakerAuditLog \
-    --trigger-http --memory 2048MB --runtime nodejs8 --project $PROJECT_ID
+    --trigger-http --memory 2048MB --runtime nodejs8 --allow-unauthenticated --project $PROJECT_ID
 else
   bold "Using existing audit log cloud function $CLOUD_FUNCTION_NAME..."
 fi
