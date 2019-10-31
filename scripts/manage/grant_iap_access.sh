@@ -27,7 +27,7 @@ gcurl() {
 
 bold "Querying for existing IAM policy..."
 
-export EXISTING_IAM_POLICY=$(gcurl -X POST -d "{}" \
+export EXISTING_IAM_POLICY=$(gcurl -X POST -d "{"options":{"requested_policy_version":3}}" \
   https://iap.googleapis.com/v1beta1/projects/$PROJECT_NUMBER/iap_web/compute/services/$BACKEND_SERVICE_ID:getIamPolicy)
 
 if [ "$(echo $EXISTING_IAM_POLICY | grep "\"$MEMBER_TO_ADD\"")" ]; then
