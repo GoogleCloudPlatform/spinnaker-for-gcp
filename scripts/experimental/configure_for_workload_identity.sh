@@ -44,7 +44,7 @@ gcloud beta container clusters update $GKE_CLUSTER \
 unset CLUSTER_STATUS
 
 while [ "$CLUSTER_STATUS" != "RUNNING" ]; do
-  CLUSTER_STATUS=$(gcloud beta container clusters describe $GKE_CLUSTER \
+  CLUSTER_STATUS=$(gcloud container clusters describe $GKE_CLUSTER \
     --zone=$ZONE \
     --format="value(status)" \
     --project=$PROJECT_ID)
@@ -121,7 +121,7 @@ kubectl annotate serviceaccount \
   $KSA_NAME \
   iam.gke.io/gcp-service-account=$GSA_NAME@$PROJECT_ID.iam.gserviceaccount.com
 
-NODE_POOL_NAME=$(gcloud beta container clusters describe $GKE_CLUSTER \
+NODE_POOL_NAME=$(gcloud container clusters describe $GKE_CLUSTER \
   --zone=$ZONE \
   --format="value(nodePools[0].name)" \
   --project=$PROJECT_ID)
