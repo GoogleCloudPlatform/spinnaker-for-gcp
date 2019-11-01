@@ -35,13 +35,6 @@ PROPERTIES_FILE="$HOME/spinnaker-for-gcp/scripts/install/properties"
 
 source "$PROPERTIES_FILE"
 
-bold "Scaling down deployments to 0..."
-kubectl scale deployment spin-clouddriver -n spinnaker --replicas=0
-kubectl scale deployment spin-echo -n spinnaker --replicas=0
-kubectl scale deployment spin-front50 -n spinnaker --replicas=0
-kubectl scale deployment spin-igor -n spinnaker --replicas=0
-kubectl scale deployment spin-kayenta -n spinnaker --replicas=0
-
 bold "Enabling workload identity on cluster $GKE_CLUSTER in project $PROJECT_ID..."
 gcloud beta container clusters update $GKE_CLUSTER \
   --zone=$ZONE \
@@ -59,18 +52,6 @@ while [ "$CLUSTER_STATUS" != "RUNNING" ]; do
  echo -n .
 done
 echo
-
-NODE_POOL_NAME=$(gcloud beta container clusters describe $GKE_CLUSTER \
-  --zone=$ZONE \
-  --format="value(nodePools[0].name)" \
-  --project=$PROJECT_ID)
-
-bold "Enabling GKE_METADATA_SERVER on node pool $NODE_POOL_NAME..."
-gcloud beta container node-pools update $NODE_POOL_NAME \
-  --cluster=$GKE_CLUSTER \
-  --zone=$ZONE \
-  --workload-metadata-from-node=GKE_METADATA_SERVER \
-  --project=$PROJECT_ID
 
 KSA_NAME=default
 GSA_NAME=spinnaker-wi-acct
@@ -140,9 +121,14 @@ kubectl annotate serviceaccount \
   $KSA_NAME \
   iam.gke.io/gcp-service-account=$GSA_NAME@$PROJECT_ID.iam.gserviceaccount.com
 
-bold "Scaling deployments back up to 1..."
-kubectl scale deployment spin-clouddriver -n spinnaker --replicas=1
-kubectl scale deployment spin-echo -n spinnaker --replicas=1
-kubectl scale deployment spin-front50 -n spinnaker --replicas=1
-kubectl scale deployment spin-igor -n spinnaker --replicas=1
-kubectl scale deployment spin-kayenta -n spinnaker --replicas=1
+NODE_POOL_NAME=$(gcloud beta container clusters describe $GKE_CLUSTER \
+  --zone=$ZONE \
+  --format="value(nodePools[0].name)" \
+  --project=$PROJECT_ID)
+
+bold "Enabling GKE_METADATA_SERVER on node pool $NODE_POOL_NAME..."
+gcloud beta container node-pools update $NODE_POOL_NAME \
+  --cluster=$GKE_CLUSTER \
+  --zone=$ZONE \
+  --workload-metadata-from-node=GKE_METADATA_SERVER \
+  --project=$PROJECT_ID
