@@ -267,6 +267,7 @@ data:
         size: SMALL
         type: Distributed
         accountName: spinnaker-install-account
+        imageVariant: SLIM
         updateVersions: true
         consul:
           enabled: false
@@ -277,6 +278,7 @@ data:
         initContainers: {}
         hostAliases: {}
         affinity: {}
+        tolerations: {}
         nodeSelectors: {}
         gitConfig:
           upstreamUser: spinnaker
@@ -304,7 +306,6 @@ data:
         fiat: false
         chaos: false
         entityTags: false
-        jobs: false
         artifacts: true
       metricStores:
         datadog:
@@ -315,6 +316,9 @@ data:
           add_source_metalabels: true
         stackdriver:
           enabled: false
+        newrelic:
+          enabled: false
+          tags: []
         period: 30
         enabled: false
       notifications:
@@ -323,6 +327,8 @@ data:
         twilio:
           enabled: false
           baseUrl: https://api.twilio.com/
+        github-status:
+          enabled: false
       timezone: $TIMEZONE
       ci:
         jenkins:
@@ -464,9 +470,21 @@ data:
         stagesEnabled: true
         templatesEnabled: true
         showAllConfigsEnabled: true
+      plugins:
+        plugins: []
+        enabled: false
+        downloadingEnabled: false
+        pluginConfigurations:
+          plugins: {}
       webhook:
         trust:
           enabled: false
+      telemetry:
+        enabled: false
+        endpoint: https://stats.spinnaker.io
+        instanceId:
+        connectionTimeoutMillis: 3000
+        readTimeoutMillis: 5000
 ---
 
 apiVersion: batch/v1
