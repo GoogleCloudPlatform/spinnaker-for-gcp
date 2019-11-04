@@ -49,6 +49,8 @@ source ~/spinnaker-for-gcp/scripts/manage/cluster_utils.sh
 CLUSTER_EXISTS=$(check_for_existing_cluster)
 
 if [ -n "$CLUSTER_EXISTS" ]; then
+  check_existing_cluster_location
+
   bold "Retrieving credentials for GKE cluster $GKE_CLUSTER..."
   gcloud container clusters get-credentials $GKE_CLUSTER --zone $ZONE --project $PROJECT_ID
 
