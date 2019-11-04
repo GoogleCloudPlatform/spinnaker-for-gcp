@@ -7,11 +7,37 @@ bold() {
 check_for_existing_cluster() {
   bold "Checking for existing cluster $GKE_CLUSTER..." >&2
 
-  CLUSTER_EXISTS=$(gcloud beta container clusters list --project $PROJECT_ID \
+  CLUSTER_EXISTS=$(gcloud container clusters list --project $PROJECT_ID \
     --filter="name=$GKE_CLUSTER" \
     --format="value(name)")
 
   echo $CLUSTER_EXISTS
+}
+
+check_existing_cluster_location() {
+  bold "Verifying location of existing cluster $GKE_CLUSTER..."
+
+  # Query for cluster in specified zone, just in case there are multiple clusters with the same name.
+  CLUSTER_EXISTS_IN_SPECIFIED_ZONE=$(gcloud container clusters list --project $PROJECT_ID \
+    --zone=$ZONE \
+    --filter="name=$GKE_CLUSTER" \
+    --format="value(location)")
+
+  # If it's not in the specified zone, figure out where exactly it is.
+  if [ -z "$CLUSTER_EXISTS_IN_SPECIFIED_ZONE" ]; then
+    EXISTING_CLUSTER_LOCATION=$(gcloud container clusters list --project $PROJECT_ID \
+      --filter="name=$GKE_CLUSTER" \
+      --format="value(location)")
+
+    LOCATION_IS_REGION=$(gcloud compute regions list --project $PROJECT_ID \
+      --filter="name=$EXISTING_CLUSTER_LOCATION" \
+      --format="value(name)")
+
+    if [ -n "$LOCATION_IS_REGION" ]; then
+      bold "Your pre-existing cluster $GKE_CLUSTER is regional; we do not support regional clusters."
+      exit 1
+    fi
+  fi
 }
 
 check_existing_cluster_prereqs() {
