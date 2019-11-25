@@ -89,4 +89,8 @@ In the above example, the Git `user.name` and `user.email` must be configured be
 - `PROPERTIES_FILE`: This is the absolute path to the your generated Spinnaker for GCP properties file.
 - `CI`: This must be set to `true` when running `setup.sh` outside of Cloud Shell.
 
-Once configured, execute the job to install Spinnaker for GCP. Changes to the properties file can be applied by re-running the job. Additional instructions for how to access or manage the deployed Spinnaker application are available [here](https://cloud.google.com/docs/ci-cd/spinnaker/spinnaker-for-gcp#access_spinnaker).
+1. Execute the job to install Spinnaker for GCP. 
+
+If you change the properties file, apply the change by re-running the job. 
+
+Additional instructions for how to access or manage the deployed Spinnaker application are available [here](https://cloud.google.com/docs/ci-cd/spinnaker/spinnaker-for-gcp#access_spinnaker).
