@@ -6,7 +6,7 @@ The following section assumes you have an existing Jenkins server. If not, consi
 
 ## Jenkins on GCP
 
-If your Jenkins server is running on GCP, follow [best practices](https://cloud.google.com/compute/docs/access/create-enable-service-accounts-for-instances#best_practices) for managing its service account. Your Jenkins server must have full access to all Google Cloud APIs to successfully install Spinnaker for GCP.
+If your Jenkins server is running on GCP, follow [best practices](https://cloud.google.com/compute/docs/access/create-enable-service-accounts-for-instances#best_practices) for managing its service account. Your Jenkins server must have full access to all Google Cloud APIs to successfully install Spinnaker for GCP. See the [Compute Engine documentation](https://cloud.google.com/compute/docs/access/create-enable-service-accounts-for-instances#changeserviceaccountandscopes) for guidance on how to modify an instance's Google Cloud API access scopes.
 
 You can't use Jenkins to install Spinnaker for GCP with a shared VPC. For Shared VPC support, conduct the [setup in Cloud Shell](https://cloud.google.com/docs/ci-cd/spinnaker/spinnaker-for-gcp).
 
@@ -51,6 +51,12 @@ The Jenkins server must be configured with a GCP service account with the follow
 - Service Account User - roles/iam.serviceAccountUser
 
 These roles can be enabled through the IAM UI or with [gcloud](https://cloud.google.com/sdk/gcloud/reference/projects/add-iam-policy-binding).
+
+## Enable Cloud Resource Manager API
+
+The Cloud Resource Manager API must be enabled for Jenkins to successfully retrieve IAM policies. Enable it for your project by visiting the below URL and substituting your project number.
+
+https://console.developers.google.com/apis/api/cloudresourcemanager.googleapis.com/overview?project=[MY-PROJECT-NUMBER]
 
 ## Properties file
 
