@@ -4,7 +4,9 @@
 
 [ -z "$PROPERTIES_FILE" ] && PROPERTIES_FILE="$PARENT_DIR/spinnaker-for-gcp/scripts/install/properties"
 
-source "$PROPERTIES_FILE"
+if [ -f "$PROPERTIES_FILE" ]; then
+    source "$PROPERTIES_FILE"
+fi
 
 bold() {
   echo ". $(tput bold)" "$*" "$(tput sgr0)";
