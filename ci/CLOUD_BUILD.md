@@ -24,7 +24,7 @@ You can enable these roles using the IAM UI or with [gcloud](https://cloud.googl
 
 ## Enable Cloud Resource Manager API
 
-The Cloud Resource Manager API must be enabled for Cloud Build to successfully retrieve IAM policies. Enable it for your project by visiting the below URL and substituting your project number.
+For Cloud Build to successfully retrieve IAM policies, you must enable the Cloud Resource Manager API. Visit this URL, substituting your project number.
 
 https://console.developers.google.com/apis/api/cloudresourcemanager.googleapis.com/overview?project=[MY-PROJECT-NUMBER]
 
