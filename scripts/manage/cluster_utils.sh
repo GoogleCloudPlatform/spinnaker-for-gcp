@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-[ -z "$REPO_PATH" ] && REPO_PATH="$HOME"
+[ -z "$PARENT_DIR" ] && PARENT_DIR="$HOME"
 
-source $REPO_PATH/spinnaker-for-gcp/scripts/manage/service_utils.sh
+source $PARENT_DIR/spinnaker-for-gcp/scripts/manage/service_utils.sh
 
 check_for_existing_cluster() {
   bold "Checking for existing cluster $GKE_CLUSTER..." >&2

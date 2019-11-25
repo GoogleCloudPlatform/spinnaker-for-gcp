@@ -32,11 +32,11 @@ To get Cloud Build to install Spinnaker for GCP, you need to generate a properti
 
 ## Submitting a Build
 
-Cloud Builds can be trigged using [gcloud](https://cloud.google.com/cloud-build/docs/running-builds/start-build-manually), [build triggers](https://cloud.google.com/cloud-build/docs/running-builds/automate-builds), or [GitHub app triggers](https://cloud.google.com/cloud-build/docs/create-github-app-triggers). The solution in this repository installs Spinnaker for GCP using a gcloud-triggered build. Follow these steps to start a build:
+Cloud Builds can be triggered using [gcloud](https://cloud.google.com/cloud-build/docs/running-builds/start-build-manually), [build triggers](https://cloud.google.com/cloud-build/docs/running-builds/automate-builds), or [GitHub app triggers](https://cloud.google.com/cloud-build/docs/create-github-app-triggers). The solution in this repository installs Spinnaker for GCP using a gcloud-triggered build. Follow these steps to start a build:
 
 1. Create a new directory. The contents of this directory will be submitted to Cloud Build.
 2. Place the generated properties file into that directory.
-3. Copy the [cloudbuild.yaml](cloudbuild.yaml) file into the directory and edit the `user.name` and `user.email` used in the git configuration steps.
+3. Copy the [cloudbuild.yaml](cloudbuild.yaml) file into the directory and edit the `user.name` and `user.email` used in the Git configuration steps.
 
 ```yaml
   - name: gcr.io/cloud-builders/git
@@ -48,4 +48,4 @@ Cloud Builds can be trigged using [gcloud](https://cloud.google.com/cloud-build/
 4. Copy the [Dockerfile](Dockerfile) and [install.bash](install.bash) file into the directory.
 5. Submit the build to Cloud Build: `gcloud builds submit --timeout "25m"  --config cloudbuild.yaml .`
 
-Cloud Build will execute the job, installing Spinnaker for GCP. If you make any changes to the properties file, re-runthe job. Additional instructions for how to access or manage the deployed Spinnaker application are available [here](https://cloud.google.com/docs/ci-cd/spinnaker/spinnaker-for-gcp#access_spinnaker).
+Cloud Build will execute the job, installing Spinnaker for GCP. If you make any changes to the properties file, re-run the job. Additional instructions for how to access or manage the deployed Spinnaker application are available [here](https://cloud.google.com/docs/ci-cd/spinnaker/spinnaker-for-gcp#access_spinnaker).

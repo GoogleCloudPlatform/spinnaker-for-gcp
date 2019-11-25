@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-[ -z "$REPO_PATH" ] && REPO_PATH="$HOME"
+[ -z "$PARENT_DIR" ] && PARENT_DIR="$HOME"
 
-source $REPO_PATH/spinnaker-for-gcp/scripts/manage/service_utils.sh
+source $PARENT_DIR/spinnaker-for-gcp/scripts/manage/service_utils.sh
 
 rewrite_hal_key_paths() {
   REWRITABLE_KEYS=(kubeconfigFile jsonPath jsonKey passwordFile path templatePath)
@@ -23,13 +23,13 @@ copy_hal_subdirs() {
   for p in "${DIRS[@]}"; do
     for f in $(find .hal/*/$p -prune 2> /dev/null); do
       SUB_PATH=$(echo $f | rev | cut -d '/' -f 1,2 | rev)
-      mkdir -p $REPO_PATH/.hal/$SUB_PATH
-      cp -RT .hal/$SUB_PATH $REPO_PATH/.hal/$SUB_PATH
+      mkdir -p $PARENT_DIR/.hal/$SUB_PATH
+      cp -RT .hal/$SUB_PATH $PARENT_DIR/.hal/$SUB_PATH
     done
   done  
 }
 
 rewrite_spin_key_path() {
-  bold "Rewriting key path in $REPO_PATH/.spin/config to reflect local user '$USER' on Cloud Shell VM..."
-  sed -i "s/^    serviceAccountKeyPath: .*/    serviceAccountKeyPath: \"\/home\/$USER\/.spin\/key.json\"/" $REPO_PATH/.spin/config  
+  bold "Rewriting key path in $PARENT_DIR/.spin/config to reflect local user '$USER' on Cloud Shell VM..."
+  sed -i "s/^    serviceAccountKeyPath: .*/    serviceAccountKeyPath: \"\/home\/$USER\/.spin\/key.json\"/" $PARENT_DIR/.spin/config  
 }

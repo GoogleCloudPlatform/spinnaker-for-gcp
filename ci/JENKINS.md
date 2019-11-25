@@ -12,7 +12,7 @@ You can't use Jenkins to install Spinnaker for GCP with a shared VPC. For Shared
 
 ## Dependencies
 
-There are several dependencies that must be installed to the Jenkins server before it can be used to install Spinnaker for GCP.
+There are several dependencies that must be available to the Jenkins server before it can be used to install Spinnaker for GCP.
 
 ### Google Cloud SDK
 
@@ -58,8 +58,7 @@ To get Jenkins to install Spinnaker for GCP, you need to generate a properties f
 
 1. Run [setup_properties.sh](../scripts/install/setup_properties.sh).
  
-1. Make the resulting properties file available to the installation script as it executes the Jenkins job.
-   You can use the [Credentials plug-in](https://wiki.jenkins.io/display/JENKINS/Credentials+Plugin), or use a secrets-management solution (like [Hashicorp Vault](https://www.vaultproject.io/) and configure Jenkins to read it from there.
+1. Make the resulting properties file available to the installation script as it executes the Jenkins job. In this example, the properties file has been uploaded to the Jenkins server using the [Credentials plug-in](https://wiki.jenkins.io/display/JENKINS/Credentials+Plugin). It is made accessible to the job by binding the file to the PROPERTIES variable. Alternatively, you can use a secrets-management solution (like [Hashicorp Vault](https://www.vaultproject.io/) and configure Jenkins to read it from there.
 
 ### Configure the Jenkins job
 
@@ -79,14 +78,14 @@ git clone https://github.com/GoogleCloudPlatform/spinnaker-for-gcp.git
 git config --global user.name "jenkins-user"
 git config --global user.email "jenkins-user@example.com"
 
-REPO_PATH=$WORKSPACE PROPERTIES_FILE=$PROPERTIES CI=true $WORKSPACE/spinnaker-for-gcp/scripts/install/setup.sh
+PARENT_DIR=$WORKSPACE PROPERTIES_FILE=$PROPERTIES CI=true $WORKSPACE/spinnaker-for-gcp/scripts/install/setup.sh
 ```
 
 In the above example, the Git `user.name` and `user.email` must be configured before you run `setup.sh`. Git operations can also be managed using the [Jenkins Git plugin](https://plugins.jenkins.io/git).
 
 `setup.sh` requires several variables to be passed in:
 
-- `REPO_PATH`: The absolute path for the Jenkins workspace. Jenkins makes this available via `$WORKSPACE`.
+- `PARENT_DIR`: The absolute path for the Jenkins workspace. Jenkins makes this available via `$WORKSPACE`.
 - `PROPERTIES_FILE`: This is the absolute path to the your generated Spinnaker for GCP properties file.
 - `CI`: This must be set to `true` when running `setup.sh` outside of Cloud Shell.
 

@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 
-[ -z "$REPO_PATH" ] && REPO_PATH="$HOME"
+[ -z "$PARENT_DIR" ] && PARENT_DIR="$HOME"
 
-source $REPO_PATH/spinnaker-for-gcp/scripts/manage/service_utils.sh
+source $PARENT_DIR/spinnaker-for-gcp/scripts/manage/service_utils.sh
 
-[ -z "$PROPERTIES_FILE" ] && PROPERTIES_FILE="$REPO_PATH/spinnaker-for-gcp/scripts/install/properties"
+[ -z "$PROPERTIES_FILE" ] && PROPERTIES_FILE="$PARENT_DIR/spinnaker-for-gcp/scripts/install/properties"
 
 if [ ! -f "$PROPERTIES_FILE" ]; then
   bold "No properties file was found. Resetting the management environment."
-  git checkout -- $REPO_PATH/spinnaker-for-gcp/scripts/manage/landing_page_expanded.md
+  git checkout -- $PARENT_DIR/spinnaker-for-gcp/scripts/manage/landing_page_expanded.md
   exit 0
 fi
 
@@ -20,10 +20,10 @@ export IP_ADDR=$(gcloud compute addresses list --filter="name=$STATIC_IP_NAME" \
 
 if [ -z "$IP_ADDR" ]; then
   bold "Updating Cloud Shell landing page for unsecured Spinnaker..."
-  cat $REPO_PATH/spinnaker-for-gcp/scripts/manage/landing_page_base.md $REPO_PATH/spinnaker-for-gcp/scripts/manage/landing_page_unsecured.md \
-    | envsubst > $REPO_PATH/spinnaker-for-gcp/scripts/manage/landing_page_expanded.md
+  cat $PARENT_DIR/spinnaker-for-gcp/scripts/manage/landing_page_base.md $PARENT_DIR/spinnaker-for-gcp/scripts/manage/landing_page_unsecured.md \
+    | envsubst > $PARENT_DIR/spinnaker-for-gcp/scripts/manage/landing_page_expanded.md
 else
   bold "Updating Cloud Shell landing page for secured Spinnaker..."
-  cat $REPO_PATH/spinnaker-for-gcp/scripts/manage/landing_page_base.md $REPO_PATH/spinnaker-for-gcp/scripts/manage/landing_page_secured.md \
-    | envsubst > $REPO_PATH/spinnaker-for-gcp/scripts/manage/landing_page_expanded.md
+  cat $PARENT_DIR/spinnaker-for-gcp/scripts/manage/landing_page_base.md $PARENT_DIR/spinnaker-for-gcp/scripts/manage/landing_page_secured.md \
+    | envsubst > $PARENT_DIR/spinnaker-for-gcp/scripts/manage/landing_page_expanded.md
 fi

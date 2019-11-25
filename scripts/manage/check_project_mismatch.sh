@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
-[ -z "$REPO_PATH" ] && REPO_PATH="$HOME"
+[ -z "$PARENT_DIR" ] && PARENT_DIR="$HOME"
 
-source $REPO_PATH/spinnaker-for-gcp/scripts/manage/service_utils.sh
+source $PARENT_DIR/spinnaker-for-gcp/scripts/manage/service_utils.sh
 
-[ -z "$PROPERTIES_FILE" ] && PROPERTIES_FILE="$REPO_PATH/spinnaker-for-gcp/scripts/install/properties"
+[ -z "$PROPERTIES_FILE" ] && PROPERTIES_FILE="$PARENT_DIR/spinnaker-for-gcp/scripts/install/properties"
 
 source "$PROPERTIES_FILE"
 
