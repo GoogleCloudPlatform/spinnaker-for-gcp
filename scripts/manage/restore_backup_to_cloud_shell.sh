@@ -117,5 +117,6 @@ rm -rf $TEMP_DIR
 
 bold "Configuration applied. To diff this config with what was last deployed, go to:"
 bold "https://source.cloud.google.com/$PROJECT_ID/$EXISTING_CSR_REPO/+/$GIT_HASH...master"
+bold "Note: If secure access via IAP is already configured, that access is left unchanged and remains secure."
 bold "To apply the halyard config changes to the cluster, run:"
 bold "~/spinnaker-for-gcp/scripts/manage/push_and_apply.sh"
