@@ -36,7 +36,7 @@ if [ "$CI" = true ]; then
   MISSING_ROLES=""
   for r in "${SETUP_REQUIRED_ROLES[@]}"; do
     if [ -z "$(echo $SETUP_EXISTING_ROLES | grep $r)" ]; then
-      if [ -z $MISSING_ROLES ]; then
+      if [ -z "$MISSING_ROLES" ]; then
         MISSING_ROLES="$r"
       else 
         MISSING_ROLES="$MISSING_ROLES, $r"
