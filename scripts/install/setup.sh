@@ -169,7 +169,7 @@ gsutil ls $BUCKET_URI
 if [ $? != 0 ]; then
   bold "Creating bucket $BUCKET_URI..."
 
-  gsutil mb -p $PROJECT_ID $BUCKET_URI
+  gsutil mb -p $PROJECT_ID -l $REGION $BUCKET_URI
   gsutil versioning set on $BUCKET_URI
 else
   bold "Using existing bucket $BUCKET_URI..."
@@ -307,7 +307,7 @@ if [ -z "$EXISTING_CLOUD_FUNCTION" ]; then
   cat ~/spinnaker-for-gcp/scripts/install/spinnakerAuditLog/config_json.template | envsubst > ~/spinnaker-for-gcp/scripts/install/spinnakerAuditLog/config.json
   cat ~/spinnaker-for-gcp/scripts/install/spinnakerAuditLog/index_js.template | envsubst > ~/spinnaker-for-gcp/scripts/install/spinnakerAuditLog/index.js
   gcloud functions deploy $CLOUD_FUNCTION_NAME --source ~/spinnaker-for-gcp/scripts/install/spinnakerAuditLog \
-    --trigger-http --memory 2048MB --runtime nodejs8 --allow-unauthenticated --project $PROJECT_ID
+    --trigger-http --memory 2048MB --runtime nodejs8 --allow-unauthenticated --project $PROJECT_ID --region $REGION
 else
   bold "Using existing audit log cloud function $CLOUD_FUNCTION_NAME..."
 fi
