@@ -20,13 +20,13 @@ To install Spinnaker for GCP, you need to grant the [Cloud Build service account
 - Project IAM Admin - roles/resourcemanager.projectIamAdmin
 - Service Account User - roles/iam.serviceAccountUser
 
-You can enable these roles using the IAM UI or with [gcloud](https://cloud.google.com/sdk/gcloud/reference/projects/add-iam-policy-binding).
+You can grant these roles using the IAM UI or with [gcloud](https://cloud.google.com/sdk/gcloud/reference/projects/add-iam-policy-binding).
 
 ## Enable Cloud Resource Manager API
 
-For Cloud Build to successfully retrieve IAM policies, you must enable the Cloud Resource Manager API. Visit this URL, substituting your project number.
+For Cloud Build to successfully retrieve IAM policies, you must enable the Cloud Resource Manager API. Visit this URL, substituting your project id.
 
-https://console.developers.google.com/apis/api/cloudresourcemanager.googleapis.com/overview?project=[MY-PROJECT-NUMBER]
+https://console.developers.google.com/apis/api/cloudresourcemanager.googleapis.com/overview?project=[PROJECT_ID]
 
 ## Properties file
 
@@ -52,6 +52,6 @@ Cloud Builds can be triggered using [gcloud](https://cloud.google.com/cloud-buil
 ```
 
 4. Copy the [Dockerfile](Dockerfile) and [install.bash](install.bash) file into the directory.
-5. Submit the build to Cloud Build: `gcloud builds submit --timeout "25m"  --config cloudbuild.yaml .`
+5. Submit the build to Cloud Build: `gcloud builds submit --timeout "25m"  --config cloudbuild.yaml --project PROJECT_ID .`
 
 Cloud Build will execute the job, installing Spinnaker for GCP. If you make any changes to the properties file, re-run the job. Additional instructions for how to access or manage the deployed Spinnaker application are available [here](https://cloud.google.com/docs/ci-cd/spinnaker/spinnaker-for-gcp#access_spinnaker).

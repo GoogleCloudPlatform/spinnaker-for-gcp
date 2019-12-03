@@ -10,4 +10,4 @@ steps:
 - name: 'installer'
   args: ['bash', './install.bash']
   env:
-  - 'TERM=xterm'  
+  - 'TERM=xterm'

@@ -54,9 +54,9 @@ These roles can be enabled through the IAM UI or with [gcloud](https://cloud.goo
 
 ## Enable Cloud Resource Manager API
 
-The Cloud Resource Manager API must be enabled for Jenkins to successfully retrieve IAM policies. Enable it for your project by visiting the below URL and substituting your project number.
+The Cloud Resource Manager API must be enabled for Jenkins to successfully retrieve IAM policies. Enable it for your project by visiting the below URL and substituting your project id.
 
-https://console.developers.google.com/apis/api/cloudresourcemanager.googleapis.com/overview?project=[MY-PROJECT-NUMBER]
+https://console.developers.google.com/apis/api/cloudresourcemanager.googleapis.com/overview?project=[PROJECT_ID]
 
 ## Properties file
 
@@ -64,16 +64,17 @@ To get Jenkins to install Spinnaker for GCP, you need to generate a properties f
 
 1. Run [setup_properties.sh](../scripts/install/setup_properties.sh).
  
-1. Make the resulting properties file available to the installation script as it executes the Jenkins job. In this example, the properties file has been uploaded to the Jenkins server using the [Credentials plug-in](https://wiki.jenkins.io/display/JENKINS/Credentials+Plugin). It is made accessible to the job by binding the file to the PROPERTIES variable. Alternatively, you can use a secrets-management solution (like [Hashicorp Vault](https://www.vaultproject.io/) and configure Jenkins to read it from there.
+1. Make the resulting properties file available to the installation script as it executes the Jenkins job. In this example, the properties file has been uploaded to the Jenkins server using the [Credentials plug-in](https://wiki.jenkins.io/display/JENKINS/Credentials+Plugin). It is made accessible to the job by binding the file to the PROPERTIES variable. Alternatively, you can use a secrets-management solution (like [Hashicorp Vault](https://www.vaultproject.io/)) and configure Jenkins to read it from there.
 
 ### Configure the Jenkins job
 
 Once the dependencies are fulfilled, follow these steps to configure a job to install Spinnaker for GCP. 
 
 1. Create a `New Item` from the Jenkins menu and select a `Freestyle project`. 
-2. From the configuration screen, enable `Color ANSI Console Output` and set the `ANSI color map` to `xterm`.
-3. Add an `Execute Shell` build step.
-4. Configure the build step to retrieve and execute the `setup.sh` script.
+1. From the configuration screen, enable `Color ANSI Console Output` and set the `ANSI color map` to `xterm`.
+1. Under `Build Environment`, enable `Delete workspace before build starts`.
+1. Add an `Execute Shell` build step.
+1. Configure the build step to retrieve and execute the `setup.sh` script.
 
 ```shell
 #!/usr/bin/env bash
@@ -92,7 +93,7 @@ In the above example, the Git `user.name` and `user.email` must be configured be
 `setup.sh` requires several variables to be passed in:
 
 - `PARENT_DIR`: The absolute path for the Jenkins workspace. Jenkins makes this available via `$WORKSPACE`.
-- `PROPERTIES_FILE`: This is the absolute path to the your generated Spinnaker for GCP properties file.
+- `PROPERTIES_FILE`: This is the absolute path to your generated Spinnaker for GCP properties file.
 - `CI`: This must be set to `true` when running `setup.sh` outside of Cloud Shell.
 
 1. Execute the job to install Spinnaker for GCP. 

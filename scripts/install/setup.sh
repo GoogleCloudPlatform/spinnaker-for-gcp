@@ -20,19 +20,19 @@ check_for_shared_vpc $CI
 
 PARENT_DIR=$PARENT_DIR PROPERTIES_FILE=$PROPERTIES_FILE $PARENT_DIR/spinnaker-for-gcp/scripts/manage/check_project_mismatch.sh
 
-if [ "$CI" = true ]; then
-  OPERATOR_SA_EMAIL=$(gcloud config list account --format "value(core.account)")
+OPERATOR_SA_EMAIL=$(gcloud config list account --format "value(core.account)" --project $PROJECT_ID)
+SETUP_EXISTING_ROLES=$(gcloud projects get-iam-policy --filter bindings.members:$OPERATOR_SA_EMAIL $PROJECT_ID \
+  --flatten bindings[].members --format="value(bindings.role)")
 
+if [ -z "$SETUP_EXISTING_ROLES" ]; then
+  bold "Unable to verify that the service account \"$OPERATOR_SA_EMAIL\" has the required IAM roles."
+  bold "\"$OPERATOR_SA_EMAIL\" requires the IAM role \"Project IAM Admin\" to proceed."
+  exit 1
+fi
+
+if [ -z "$(echo $SETUP_EXISTING_ROLES | grep roles/owner)" ]; then
   SETUP_REQUIRED_ROLES=(cloudfunctions.developer compute.networkViewer container.admin iam.serviceAccountCreator iam.serviceAccountUser pubsub.editor redis.admin serviceusage.serviceUsageAdmin source.admin storage.admin)
-  SETUP_EXISTING_ROLES=$(gcloud projects get-iam-policy --filter bindings.members:$OPERATOR_SA_EMAIL $PROJECT_ID \
-    --flatten bindings[].members --format="value(bindings.role)")
-
-  if [ -z "$SETUP_EXISTING_ROLES" ]; then
-    bold "Unable to verify that the service account \"$OPERATOR_SA_EMAIL\" has the required IAM roles."
-    bold "\"$OPERATOR_SA_EMAIL\" requires the IAM role \"Project IAM Admin\" to proceed."
-    exit 1
-  fi
-
+  
   MISSING_ROLES=""
   for r in "${SETUP_REQUIRED_ROLES[@]}"; do
     if [ -z "$(echo $SETUP_EXISTING_ROLES | grep $r)" ]; then
