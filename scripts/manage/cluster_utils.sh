@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-bold() {
-  echo ". $(tput bold)" "$*" "$(tput sgr0)";
-}
+[ -z "$PARENT_DIR" ] && PARENT_DIR="$HOME"
+
+source $PARENT_DIR/spinnaker-for-gcp/scripts/manage/service_utils.sh
 
 check_for_existing_cluster() {
   bold "Checking for existing cluster $GKE_CLUSTER..." >&2

@@ -1,6 +1,6 @@
-bold() {
-  echo ". $(tput bold)" "$*" "$(tput sgr0)";
-}
+[ -z "$PARENT_DIR" ] && PARENT_DIR="$HOME"
+
+source $PARENT_DIR/spinnaker-for-gcp/scripts/manage/service_utils.sh
 
 GIT_USERNAME=$(git config --global --get user.name)
 GIT_EMAIL=$(git config --global --get user.email)
