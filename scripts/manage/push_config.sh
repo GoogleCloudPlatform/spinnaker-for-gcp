@@ -137,7 +137,7 @@ copy_if_exists $PARENT_DIR/.spin/key.json deployment_config_files "$PROJECT_ID\.
 
 # Remove old persistent config so new config can be copied into place.
 bold "Removing halyard/$HALYARD_POD:/home/spinnaker/.hal..."
-kubectl -n halyard exec $HALYARD_POD -- bash -c "rm -rf $PARENT_DIR/.hal/*"
+kubectl -n halyard exec $HALYARD_POD -- bash -c "rm -rf ~/.hal/*"
 
 # Copy new config into place.
 bold "Copying $PARENT_DIR/.hal into halyard/$HALYARD_POD:/home/spinnaker/.hal..."
