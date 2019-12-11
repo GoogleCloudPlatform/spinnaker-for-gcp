@@ -41,7 +41,7 @@ bold "Deleting subscription $GCB_PUBSUB_SUBSCRIPTION in $PROJECT_ID..."
 gcloud pubsub subscriptions delete $GCB_PUBSUB_SUBSCRIPTION --project $PROJECT_ID
 
 bold "Deleting cloud function $CLOUD_FUNCTION_NAME in $PROJECT_ID..."
-gcloud functions delete $CLOUD_FUNCTION_NAME --project $PROJECT_ID
+gcloud functions delete $CLOUD_FUNCTION_NAME --region $REGION --project $PROJECT_ID
 
 bold "Deleting redis instance $REDIS_INSTANCE in $NETWORK_PROJECT..."
 gcloud redis instances delete $REDIS_INSTANCE --region $REGION --project $NETWORK_PROJECT
