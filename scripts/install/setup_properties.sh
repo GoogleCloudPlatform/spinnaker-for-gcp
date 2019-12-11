@@ -53,7 +53,7 @@ fi
 
 NETWORK="default"
 SUBNET="default"
-ZONE=${ZONE:-us-west1-b}
+ZONE=${ZONE:-us-east1-c}
 REGION=$(echo $ZONE | cut -d - -f 1,2)
 
 source ~/spinnaker-for-gcp/scripts/manage/service_utils.sh
