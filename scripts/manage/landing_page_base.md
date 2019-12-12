@@ -114,6 +114,9 @@ accounts) must be pushed and applied to your deployment to take effect:
 
 ### Add Spinnaker account for GKE
 
+This script grants the Spinnaker deployment's Google Service Account the required
+IAM GKE roles in the project containing the referenced cluster.
+
 Before you run this command, make sure you've configured the context you intend
 to use to manage your GKE resources.
 
@@ -126,11 +129,17 @@ clusters](https://www.spinnaker.io/setup/install/providers/kubernetes-v2/gke/).
 
 ### Add Spinnaker account for GCE
 
+This script grants the Spinnaker deployment's Google Service Account the required
+IAM GCE permissions in the managed project.
+
 ```bash
 ~/spinnaker-for-gcp/scripts/manage/add_gce_account.sh
 ```
 
 ### Add Spinnaker account for GAE
+
+This script grants the Spinnaker deployment's Google Service Account the required
+IAM GAE roles in the managed project.
 
 ```bash
 ~/spinnaker-for-gcp/scripts/manage/add_gae_account.sh
