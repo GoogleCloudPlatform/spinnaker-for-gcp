@@ -114,9 +114,10 @@ accounts) must be pushed and applied to your deployment to take effect:
 
 ### Add Spinnaker account for GKE
 
-This script grants the Spinnaker deployment's Google Service Account the required
-[GKE IAM roles](https://cloud.google.com/kubernetes-engine/docs/how-to/iam) in the
-GCP project containing the referenced cluster.
+This script grants the required
+[IAM roles](https://cloud.google.com/kubernetes-engine/docs/how-to/iam) to the
+Spinnaker instance's service account, in the GCP project containing the referenced
+cluster.
 
 Before you run this command, make sure you've configured the context you intend
 to use to manage your GKE resources.
@@ -130,9 +131,10 @@ clusters](https://www.spinnaker.io/setup/install/providers/kubernetes-v2/gke/).
 
 ### Add Spinnaker account for GCE
 
-This script grants the Spinnaker deployment's Google Service Account the required
-[GCE IAM roles](https://cloud.google.com/compute/docs/access/) in the GCP project
-within which you wish to manage GCE resources.
+This script grants the required
+[IAM roles](https://cloud.google.com/compute/docs/access/) to the Spinnaker
+instance's service account, in the GCP project within which you wish to manage
+GCE resources.
 
 ```bash
 ~/spinnaker-for-gcp/scripts/manage/add_gce_account.sh
@@ -140,9 +142,10 @@ within which you wish to manage GCE resources.
 
 ### Add Spinnaker account for GAE
 
-This script grants the Spinnaker deployment's Google Service Account the required
-[GAE IAM roles](https://cloud.google.com/appengine/docs/admin-api/access-control)
-in the GCP project within which you wish to manage GAE resources.
+This script grants the required
+[IAM roles](https://cloud.google.com/appengine/docs/admin-api/access-control)
+to the Spinnaker instance's service account, in the GCP project within which you
+wish to manage GAE resources.
 
 ```bash
 ~/spinnaker-for-gcp/scripts/manage/add_gae_account.sh
