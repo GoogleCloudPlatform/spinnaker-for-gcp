@@ -31,5 +31,5 @@ copy_hal_subdirs() {
 
 rewrite_spin_key_path() {
   bold "Rewriting key path in $PARENT_DIR/.spin/config to reflect local user '$USER' on Cloud Shell VM..."
-  sed -i "s/^    serviceAccountKeyPath: .*/    serviceAccountKeyPath: \"\/home\/$USER\/.spin\/key.json\"/" $PARENT_DIR/.spin/config  
+  sed -i "s/^    serviceAccountKeyPath: .*/    serviceAccountKeyPath: \"\/home\/$USER\/.spin\/key.json\"/" $HOME/.spin/config
 }

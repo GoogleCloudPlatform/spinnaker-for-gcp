@@ -60,9 +60,9 @@ if [ $EXISTING_DEPLOYMENT_SECRET_NAME != 'null' ]; then
   extract_to_file_if_defined configure_iap_expanded.md $PARENT_DIR/spinnaker-for-gcp/scripts/expose/configure_iap_expanded.md
   extract_to_file_if_defined openapi_expanded.yml $PARENT_DIR/spinnaker-for-gcp/scripts/expose/openapi_expanded.yml
   extract_to_file_if_defined landing_page_expanded.md $PARENT_DIR/spinnaker-for-gcp/scripts/manage/landing_page_expanded.md
-  mkdir -p $PARENT_DIR/.spin
-  extract_to_file_if_defined config $PARENT_DIR/.spin/config
-  extract_to_file_if_defined key.json $PARENT_DIR/.spin/key.json
+  mkdir -p ~/.spin
+  extract_to_file_if_defined config ~/.spin/config
+  extract_to_file_if_defined key.json ~/.spin/key.json
 
   rewrite_spin_key_path
 fi

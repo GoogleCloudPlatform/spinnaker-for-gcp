@@ -131,9 +131,9 @@ copy_if_exists $PARENT_DIR/spinnaker-for-gcp/scripts/manage/landing_page_expande
 # If the operator is managing more than one installation we don't want to inadvertently backup files from the wrong installation.
 copy_if_exists $PARENT_DIR/spinnaker-for-gcp/scripts/expose/configure_iap_expanded.md deployment_config_files "$PROJECT_ID\."
 copy_if_exists $PARENT_DIR/spinnaker-for-gcp/scripts/expose/openapi_expanded.yml deployment_config_files "$PROJECT_ID\."
-copy_if_exists $PARENT_DIR/.spin/config deployment_config_files "$PROJECT_ID\."
-copy_if_exists $PARENT_DIR/.spin/config deployment_config_files "localhost\:"
-copy_if_exists $PARENT_DIR/.spin/key.json deployment_config_files "$PROJECT_ID\."
+copy_if_exists ~/.spin/config deployment_config_files "$PROJECT_ID\."
+copy_if_exists ~/.spin/config deployment_config_files "localhost\:"
+copy_if_exists ~/.spin/key.json deployment_config_files "$PROJECT_ID\."
 
 # Remove old persistent config so new config can be copied into place.
 bold "Removing halyard/$HALYARD_POD:/home/spinnaker/.hal..."
