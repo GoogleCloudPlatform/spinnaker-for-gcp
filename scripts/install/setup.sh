@@ -4,7 +4,7 @@ err() {
   echo "$*" >&2;
 }
 
-[ -n "$PARENT_DIR" ] || PARENT_DIR="$HOME"
+[ -n "$PARENT_DIR" ] || PARENT_DIR="$HOME/cloudshell_open"
 
 source $PARENT_DIR/spinnaker-for-gcp/scripts/manage/service_utils.sh
 

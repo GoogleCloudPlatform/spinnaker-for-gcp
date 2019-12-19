@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-[ -z "$PARENT_DIR" ] && PARENT_DIR="$HOME"
+[ -z "$PARENT_DIR" ] && PARENT_DIR="$HOME/cloudshell_open"
 
 [ -z "$PROPERTIES_FILE" ] && PROPERTIES_FILE="$PARENT_DIR/spinnaker-for-gcp/scripts/install/properties"
 

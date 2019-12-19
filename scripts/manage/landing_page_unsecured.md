@@ -6,7 +6,7 @@ Don't use the `hal deploy connect` command. Instead, use the following command
 only.
 
 ```bash
-~/spinnaker-for-gcp/scripts/manage/connect_unsecured.sh
+~/cloudshell_open/spinnaker-for-gcp/scripts/manage/connect_unsecured.sh
 ```
 
 To connect to the Deck UI, click on the Preview button above and select "Preview on port 8080":
@@ -31,7 +31,7 @@ expose it via a secure domain behind the [Identity-Aware Proxy](https://cloud.go
 Note that this phase could take 30-60 minutes. **Spinnaker will be inaccessible during this time.**
 
 ```bash
-~/spinnaker-for-gcp/scripts/expose/configure_endpoint.sh
+~/cloudshell_open/spinnaker-for-gcp/scripts/expose/configure_endpoint.sh
 ```
 
 ### Install sample applications and pipelines
@@ -40,7 +40,7 @@ There are sample applications with example pipelines available to install and tr
 View and install the samples by running this command:
 
 ```bash
-~/spinnaker-for-gcp/scripts/manage/list_samples.sh
+~/cloudshell_open/spinnaker-for-gcp/scripts/manage/list_samples.sh
 ```
 
 ## Delete Spinnaker
@@ -50,5 +50,5 @@ View and install the samples by running this command:
 This command generates a script that deletes all the resources that were provisioned as part of your Spinnaker installation.
 
 ```bash
-~/spinnaker-for-gcp/scripts/manage/generate_deletion_script.sh
+~/cloudshell_open/spinnaker-for-gcp/scripts/manage/generate_deletion_script.sh
 ```

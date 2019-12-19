@@ -4,7 +4,7 @@ bold() {
   echo ". $(tput bold)" "$*" "$(tput sgr0)";
 }
 
-PROPERTIES_FILE=~/spinnaker-for-gcp/scripts/install/properties
+PROPERTIES_FILE=~/cloudshell_open/spinnaker-for-gcp/scripts/install/properties
 
 add_property_if_missing() {
   if [ -z "$(grep "export $1=" $PROPERTIES_FILE)" ]; then

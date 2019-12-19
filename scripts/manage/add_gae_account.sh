@@ -4,7 +4,7 @@ bold() {
   echo ". $(tput bold)" "$*" "$(tput sgr0)";
 }
 
-source ~/spinnaker-for-gcp/scripts/install/properties
+source ~/cloudshell_open/spinnaker-for-gcp/scripts/install/properties
 
 read -e -p "Please enter the id of the project within which you wish to manage GAE resources: " -i $PROJECT_ID MANAGED_PROJECT_ID
 read -e -p "Please enter a name for the new Spinnaker account: " -i "$MANAGED_PROJECT_ID-acct" GAE_ACCOUNT_NAME
@@ -46,4 +46,4 @@ done
 
 bold "Remember that your configuration changes have only been made locally."
 bold "They must be pushed and applied to your deployment to take effect:"
-bold "  ~/spinnaker-for-gcp/scripts/manage/push_and_apply.sh"
+bold "  ~/cloudshell_open/spinnaker-for-gcp/scripts/manage/push_and_apply.sh"

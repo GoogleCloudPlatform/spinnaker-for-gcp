@@ -4,22 +4,22 @@ bold() {
   echo ". $(tput bold)" "$*" "$(tput sgr0)";
 }
 
-source ~/spinnaker-for-gcp/scripts/install/properties
+source ~/cloudshell_open/spinnaker-for-gcp/scripts/install/properties
 
-~/spinnaker-for-gcp/scripts/manage/check_project_mismatch.sh
+~/cloudshell_open/spinnaker-for-gcp/scripts/manage/check_project_mismatch.sh
 
-pushd ~/spinnaker-for-gcp/samples/helloworldwebapp
+pushd ~/cloudshell_open/spinnaker-for-gcp/samples/helloworldwebapp
 
 if ! ~/spin app list &> /dev/null ; then
   bold "Spinnaker instance is not reachable via the Spin CLI. Please make sure the Spinnaker \
 instance is reachable with port-forwarding or is exposed publicly.
 
 To port-forward the Spinnaker UI, run this command:
-~/spinnaker-for-gcp/scripts/manage/connect_unsecured.sh
+~/cloudshell_open/spinnaker-for-gcp/scripts/manage/connect_unsecured.sh
 
 If you would instead like to expose the service with a domain behind Identity-Aware Proxy, \
 run this command:
-~/spinnaker-for-gcp/scripts/expose/configure_endpoint.sh
+~/cloudshell_open/spinnaker-for-gcp/scripts/expose/configure_endpoint.sh
 "
   exit 1
 fi

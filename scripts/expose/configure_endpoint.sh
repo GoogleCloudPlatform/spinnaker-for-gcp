@@ -4,18 +4,18 @@ bold() {
   echo ". $(tput bold)" "$*" "$(tput sgr0)";
 }
 
-pushd ~/spinnaker-for-gcp/scripts
+pushd ~/cloudshell_open/spinnaker-for-gcp/scripts
 
 source ./install/properties
 
-~/spinnaker-for-gcp/scripts/manage/check_project_mismatch.sh
+~/cloudshell_open/spinnaker-for-gcp/scripts/manage/check_project_mismatch.sh
 
 DOMAIN_NAME_LENGTH=$(echo -n $DOMAIN_NAME | wc -m)
 
 if [ "$DOMAIN_NAME_LENGTH" -gt "63" ]; then
   echo "Domain name $DOMAIN_NAME is greater than 63 characters. Please specify a \
 domain name not longer than 63 characters. The domain name is specified in the \
-$HOME/spinnaker-for-gcp/scripts/install/properties file."
+$HOME/cloudshell_open/spinnaker-for-gcp/scripts/install/properties file."
   exit 1
 fi
 

@@ -4,7 +4,7 @@ bold() {
   echo ". $(tput bold)" "$*" "$(tput sgr0)";
 }
 
-~/spinnaker-for-gcp/scripts/manage/check_git_config.sh || exit 1
+~/cloudshell_open/spinnaker-for-gcp/scripts/manage/check_git_config.sh || exit 1
 
 while getopts ":p:r:h:" options; do
   case $options in
@@ -80,7 +80,7 @@ rm -rf ~/.hal
 # Copy persistent config into place.
 bold "Copying $CONFIG_CSR_REPO/.hal into $HOME/.hal..."
 
-source ~/spinnaker-for-gcp/scripts/manage/restore_config_utils.sh
+source ~/cloudshell_open/spinnaker-for-gcp/scripts/manage/restore_config_utils.sh
 rewrite_hal_key_paths
 
 # We want just these subdirs from the backup to be copied into place in ~/.hal.
@@ -97,13 +97,12 @@ remove_and_copy() {
 
 cd deployment_config_files
 bold "Restoring deployment config... from $CONFIG_CSR_REPO"
-remove_and_copy properties ~/spinnaker-for-gcp/scripts/install/properties 
-remove_and_copy config.json ~/spinnaker-for-gcp/scripts/install/spinnakerAuditLog/config.json
-remove_and_copy index.js ~/spinnaker-for-gcp/scripts/install/spinnakerAuditLog/index.js
-remove_and_copy landing_page_expanded.md ~/spinnaker-for-gcp/scripts/manage/landing_page_expanded.md
+remove_and_copy properties ~/cloudshell_open/spinnaker-for-gcp/scripts/install/properties 
+remove_and_copy config.json ~/cloudshell_open/spinnaker-for-gcp/scripts/install/spinnakerAuditLog/config.json
+remove_and_copy index.js ~/cloudshell_open/spinnaker-for-gcp/scripts/install/spinnakerAuditLog/index.js
 
-remove_and_copy configure_iap_expanded.md ~/spinnaker-for-gcp/scripts/expose/configure_iap_expanded.md
-remove_and_copy openapi_expanded.yml ~/spinnaker-for-gcp/scripts/expose/openapi_expanded.yml
+remove_and_copy configure_iap_expanded.md ~/cloudshell_open/spinnaker-for-gcp/scripts/expose/configure_iap_expanded.md
+remove_and_copy openapi_expanded.yml ~/cloudshell_open/spinnaker-for-gcp/scripts/expose/openapi_expanded.yml
 mkdir -p ~/.spin
 remove_and_copy config ~/.spin/config
 remove_and_copy key.json ~/.spin/key.json
@@ -119,4 +118,4 @@ bold "Configuration applied. To diff this config with what was last deployed, go
 bold "https://source.cloud.google.com/$PROJECT_ID/$EXISTING_CSR_REPO/+/$GIT_HASH...master"
 bold "Note: If secure access via IAP is already configured, that access is left unchanged and remains secure."
 bold "To apply the halyard config changes to the cluster, run:"
-bold "~/spinnaker-for-gcp/scripts/manage/push_and_apply.sh"
+bold "~/cloudshell_open/spinnaker-for-gcp/scripts/manage/push_and_apply.sh"

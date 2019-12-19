@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-[ -z "$PARENT_DIR" ] && PARENT_DIR="$HOME"
+[ -z "$PARENT_DIR" ] && PARENT_DIR="$HOME/cloudshell_open"
 
 if [ "$CI" == true ]; then
   HAL_PARENT_DIR=$PARENT_DIR
@@ -131,7 +131,6 @@ copy_if_exists() {
 copy_if_exists "$PROPERTIES_FILE" deployment_config_files
 copy_if_exists $PARENT_DIR/spinnaker-for-gcp/scripts/install/spinnakerAuditLog/config.json deployment_config_files
 copy_if_exists $PARENT_DIR/spinnaker-for-gcp/scripts/install/spinnakerAuditLog/index.js deployment_config_files
-copy_if_exists $PARENT_DIR/spinnaker-for-gcp/scripts/manage/landing_page_expanded.md deployment_config_files
 
 # These files are generated when Spinnaker is exposed via IAP.
 # If the operator is managing more than one installation we don't want to inadvertently backup files from the wrong installation.

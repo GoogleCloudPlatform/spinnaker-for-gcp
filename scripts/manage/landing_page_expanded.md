@@ -16,13 +16,13 @@ Select the project in which your Spinnaker is installed, then click **Start**.
 You can skip this step if you are the original installer/operator, as they will have already been installed.
 
 ```bash
-~/spinnaker-for-gcp/scripts/cli/install_hal.sh && ~/spinnaker-for-gcp/scripts/cli/install_spin.sh && source ~/.bashrc
+~/cloudshell_open/spinnaker-for-gcp/scripts/cli/install_hal.sh && ~/cloudshell_open/spinnaker-for-gcp/scripts/cli/install_spin.sh && source ~/.bashrc
 ```
 
 ### Ensure you are connected to the correct Kubernetes context
 
 ```bash
-PROJECT_ID={{project-id}} ~/spinnaker-for-gcp/scripts/manage/check_cluster_config.sh
+PROJECT_ID={{project-id}} ~/cloudshell_open/spinnaker-for-gcp/scripts/manage/check_cluster_config.sh
 ```
 
 ### Pull Spinnaker config
@@ -31,7 +31,7 @@ Paste and run this command to pull the configuration from your Spinnaker
 deployment into your Cloud Shell.
 
 ```bash
-~/spinnaker-for-gcp/scripts/manage/pull_config.sh
+~/cloudshell_open/spinnaker-for-gcp/scripts/manage/pull_config.sh
 ```
 
 ### Update this console
@@ -42,5 +42,5 @@ This command refreshes the contents of the right-hand pane, including details on
 to connect to Spinnaker.
 
 ```bash
-~/spinnaker-for-gcp/scripts/manage/update_console.sh
+~/cloudshell_open/spinnaker-for-gcp/scripts/manage/update_console.sh
 ```

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-[ -z "$PARENT_DIR" ] && PARENT_DIR="$HOME"
+[ -z "$PARENT_DIR" ] && PARENT_DIR="$HOME/cloudshell_open"
 
 if [ "$CI" == true ]; then
   HAL_PARENT_DIR=$PARENT_DIR
@@ -36,6 +36,6 @@ copy_hal_subdirs() {
 }
 
 rewrite_spin_key_path() {
-  bold "Rewriting key path in $PARENT_DIR/.spin/config to reflect local user '$USER' on Cloud Shell VM..."
+  bold "Rewriting key path in $HOME/.spin/config to reflect local user '$USER' on Cloud Shell VM..."
   sed -i "s/^    serviceAccountKeyPath: .*/    serviceAccountKeyPath: \"\/home\/$USER\/.spin\/key.json\"/" $HOME/.spin/config
 }

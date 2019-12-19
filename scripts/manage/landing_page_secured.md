@@ -1,7 +1,7 @@
 ## Configure User Access (IAP)
 
 ```bash
-~/spinnaker-for-gcp/scripts/manage/grant_iap_access.sh
+~/cloudshell_open/spinnaker-for-gcp/scripts/manage/grant_iap_access.sh
 ```
 
 Alternatively, you can manually grant the `IAP-secured Web App User` role on the `spinnaker/spin-deck` resource to the user you'd like to grant access to [here](https://console.developers.google.com/security/iap?project={{project-id}}).
@@ -28,7 +28,7 @@ There are sample applications with example pipelines available to install and tr
 View and install the samples by running this command:
 
 ```bash
-~/spinnaker-for-gcp/scripts/manage/list_samples.sh
+~/cloudshell_open/spinnaker-for-gcp/scripts/manage/list_samples.sh
 ```
 
 ## Delete Spinnaker
@@ -38,5 +38,5 @@ View and install the samples by running this command:
 This command generates a script that deletes all the resources that were provisioned as part of your Spinnaker installation.
 
 ```bash
-~/spinnaker-for-gcp/scripts/manage/generate_deletion_script.sh
+~/cloudshell_open/spinnaker-for-gcp/scripts/manage/generate_deletion_script.sh
 ```
