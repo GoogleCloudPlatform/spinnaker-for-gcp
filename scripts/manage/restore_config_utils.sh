@@ -23,8 +23,8 @@ copy_hal_subdirs() {
   for p in "${DIRS[@]}"; do
     for f in $(find .hal/*/$p -prune 2> /dev/null); do
       SUB_PATH=$(echo $f | rev | cut -d '/' -f 1,2 | rev)
-      mkdir -p $PARENT_DIR/.hal/$SUB_PATH
-      cp -RT .hal/$SUB_PATH $PARENT_DIR/.hal/$SUB_PATH
+      mkdir -p $HOME/.hal/$SUB_PATH
+      cp -RT .hal/$SUB_PATH $HOME/.hal/$SUB_PATH
     done
   done  
 }
