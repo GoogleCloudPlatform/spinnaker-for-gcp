@@ -2,6 +2,12 @@
 
 [ -z "$PARENT_DIR" ] && PARENT_DIR="$HOME"
 
+if [ "$CI" == true ]; then
+  HAL_PARENT_DIR=$PARENT_DIR
+else
+  HAL_PARENT_DIR=$HOME
+fi
+
 source $PARENT_DIR/spinnaker-for-gcp/scripts/manage/service_utils.sh
 
 [ -z "$PROPERTIES_FILE" ] && PROPERTIES_FILE="$PARENT_DIR/spinnaker-for-gcp/scripts/install/properties"
@@ -75,23 +81,23 @@ fi
 gcloud source repos clone $CONFIG_CSR_REPO --project=$PROJECT_ID
 cd $CONFIG_CSR_REPO
 
-bold "Backing up $HOME/.hal..."
+bold "Backing up $HAL_PARENT_DIR/.hal..."
 
 rm -rf .hal
 mkdir .hal
 
-# We want just these subdirs within $HOME/.hal to be copied into place on the Halyard Daemon pod.
+# We want just these subdirs within $HAL_PARENT_DIR/.hal to be copied into place on the Halyard Daemon pod.
 DIRS=(credentials profiles service-settings)
 
 for p in "${DIRS[@]}"; do
-  for f in $(find $HOME/.hal/*/$p -prune 2> /dev/null); do
+  for f in $(find $HAL_PARENT_DIR/.hal/*/$p -prune 2> /dev/null); do
     SUB_PATH=$(echo $f | rev | cut -d '/' -f 1,2 | rev)
     mkdir -p .hal/$SUB_PATH
-    cp -RT $HOME/.hal/$SUB_PATH .hal/$SUB_PATH
+    cp -RT $HAL_PARENT_DIR/.hal/$SUB_PATH .hal/$SUB_PATH
   done
 done
 
-cp $HOME/.hal/config .hal
+cp $HAL_PARENT_DIR/.hal/config .hal
 
 REWRITABLE_KEYS=(kubeconfigFile jsonPath jsonKey passwordFile path templatePath)
 for k in "${REWRITABLE_KEYS[@]}"; do
@@ -140,7 +146,7 @@ bold "Removing halyard/$HALYARD_POD:/home/spinnaker/.hal..."
 kubectl -n halyard exec $HALYARD_POD -- bash -c "rm -rf ~/.hal/*"
 
 # Copy new config into place.
-bold "Copying $HOME/.hal into halyard/$HALYARD_POD:/home/spinnaker/.hal..."
+bold "Copying $HAL_PARENT_DIR/.hal into halyard/$HALYARD_POD:/home/spinnaker/.hal..."
 
 kubectl -n halyard cp $TEMP_DIR/$CONFIG_CSR_REPO/.hal spin-halyard-0:/home/spinnaker
 
