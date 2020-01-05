@@ -2,6 +2,12 @@
 
 [ -z "$PARENT_DIR" ] && PARENT_DIR="$HOME"
 
+if [ "$CI" == true ]; then
+  HAL_PARENT_DIR=$PARENT_DIR
+else
+  HAL_PARENT_DIR=$HOME
+fi
+
 source $PARENT_DIR/spinnaker-for-gcp/scripts/manage/service_utils.sh
 
 [ -z "$PROPERTIES_FILE" ] && PROPERTIES_FILE="$PARENT_DIR/spinnaker-for-gcp/scripts/install/properties"
@@ -23,20 +29,20 @@ pushd $TEMP_DIR
 mkdir .hal
 
 # Remove local config so persistent config from Halyard Daemon pod can be copied into place.
-bold "Removing $PARENT_DIR/.hal..."
-rm -rf $PARENT_DIR/.hal
+bold "Removing $HAL_PARENT_DIR/.hal..."
+rm -rf $HAL_PARENT_DIR/.hal
 
 # Copy persistent config into place.
-bold "Copying halyard/$HALYARD_POD:/home/spinnaker/.hal into $PARENT_DIR/.hal..."
+bold "Copying halyard/$HALYARD_POD:/home/spinnaker/.hal into $HAL_PARENT_DIR/.hal..."
 
 kubectl cp halyard/$HALYARD_POD:/home/spinnaker/.hal .hal
 
 source $PARENT_DIR/spinnaker-for-gcp/scripts/manage/restore_config_utils.sh
 rewrite_hal_key_paths
 
-# We want just these subdirs from the Halyard Daemon pod to be copied into place in $PARENT_DIR/.hal.
+# We want just these subdirs from the Halyard Daemon pod to be copied into place in $HAL_PARENT_DIR/.hal.
 copy_hal_subdirs
-cp .hal/config $PARENT_DIR/.hal
+cp .hal/config $HAL_PARENT_DIR/.hal
 
 EXISTING_DEPLOYMENT_SECRET_NAME=$(kubectl get secret -n halyard \
   --field-selector metadata.name=="spinnaker-deployment" \

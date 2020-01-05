@@ -346,12 +346,13 @@ else
 fi
 
 if [ "$USE_CLOUD_SHELL_HAL_CONFIG" = true ]; then
+  # Not passing $CI since the guard makes it clear we are running from cloud shell.
   $PARENT_DIR/spinnaker-for-gcp/scripts/manage/push_and_apply.sh
 else
   # We want the local hal config to match what was deployed.
-  PARENT_DIR=$PARENT_DIR PROPERTIES_FILE=$PROPERTIES_FILE $PARENT_DIR/spinnaker-for-gcp/scripts/manage/pull_config.sh
+  CI=$CI PARENT_DIR=$PARENT_DIR PROPERTIES_FILE=$PROPERTIES_FILE $PARENT_DIR/spinnaker-for-gcp/scripts/manage/pull_config.sh
   # We want a full backup stored in the bucket and the full deployment config stored in a secret.
-  PARENT_DIR=$PARENT_DIR PROPERTIES_FILE=$PROPERTIES_FILE $PARENT_DIR/spinnaker-for-gcp/scripts/manage/push_config.sh
+  CI=$CI PARENT_DIR=$PARENT_DIR PROPERTIES_FILE=$PROPERTIES_FILE $PARENT_DIR/spinnaker-for-gcp/scripts/manage/push_config.sh
 fi
 
 deploy_ready() {
@@ -377,6 +378,7 @@ if [ "$CI" != true ]; then
   $PARENT_DIR/spinnaker-for-gcp/scripts/cli/install_spin.sh
 
   # We want a backup containing the newly-created ~/.spin/* files as well.
+  # Not passing $CI since the guard already ensures it is not true.
   $PARENT_DIR/spinnaker-for-gcp/scripts/manage/push_config.sh  
 fi
 

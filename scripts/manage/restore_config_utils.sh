@@ -2,6 +2,12 @@
 
 [ -z "$PARENT_DIR" ] && PARENT_DIR="$HOME"
 
+if [ "$CI" == true ]; then
+  HAL_PARENT_DIR=$PARENT_DIR
+else
+  HAL_PARENT_DIR=$HOME
+fi
+
 source $PARENT_DIR/spinnaker-for-gcp/scripts/manage/service_utils.sh
 
 rewrite_hal_key_paths() {
@@ -23,8 +29,8 @@ copy_hal_subdirs() {
   for p in "${DIRS[@]}"; do
     for f in $(find .hal/*/$p -prune 2> /dev/null); do
       SUB_PATH=$(echo $f | rev | cut -d '/' -f 1,2 | rev)
-      mkdir -p $PARENT_DIR/.hal/$SUB_PATH
-      cp -RT .hal/$SUB_PATH $PARENT_DIR/.hal/$SUB_PATH
+      mkdir -p $HAL_PARENT_DIR/.hal/$SUB_PATH
+      cp -RT .hal/$SUB_PATH $HAL_PARENT_DIR/.hal/$SUB_PATH
     done
   done  
 }
