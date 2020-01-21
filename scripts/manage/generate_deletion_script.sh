@@ -4,13 +4,13 @@ bold() {
   echo ". $(tput bold)" "$*" "$(tput sgr0)";
 }
 
-source ~/spinnaker-for-gcp/scripts/install/properties
+source ~/cloudshell_open/spinnaker-for-gcp/scripts/install/properties
 
 bold "Generating deletion script for $DEPLOYMENT_NAME in cluster $GKE_CLUSTER of project $PROJECT_ID..."
 
-~/spinnaker-for-gcp/scripts/manage/check_project_mismatch.sh
+~/cloudshell_open/spinnaker-for-gcp/scripts/manage/check_project_mismatch.sh
 
-DELETION_SCRIPT_FILENAME="$HOME/spinnaker-for-gcp/scripts/manage/delete-all_${PROJECT_ID}_${GKE_CLUSTER}_${DEPLOYMENT_NAME}.sh"
+DELETION_SCRIPT_FILENAME="$HOME/cloudshell_open/spinnaker-for-gcp/scripts/manage/delete-all_${PROJECT_ID}_${GKE_CLUSTER}_${DEPLOYMENT_NAME}.sh"
 
 SA_EMAIL=$(gcloud iam service-accounts --project $PROJECT_ID list \
   --filter="displayName:$SERVICE_ACCOUNT_NAME" \

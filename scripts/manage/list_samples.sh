@@ -9,7 +9,7 @@ bold "Here is a list of sample applications available to install. Selecting one 
 
 PS3='Please enter your choice: '
 
-tutorials=($(ls -d ~/spinnaker-for-gcp/samples/*/ | xargs -n 1 basename) "Quit")
+tutorials=($(ls -d ~/cloudshell_open/spinnaker-for-gcp/samples/*/ | xargs -n 1 basename) "Quit")
 
 select tutorial in "${tutorials[@]}"
 do
@@ -21,7 +21,7 @@ do
       bold "Please choose a valid entry (1-${#tutorials[@]})";;
     *)
       bold "Launching $tutorial tutorial..."
-      cloudshell launch-tutorial ~/spinnaker-for-gcp/samples/$tutorial/install.md
+      cloudshell launch-tutorial ~/cloudshell_open/spinnaker-for-gcp/samples/$tutorial/install.md
       break
       ;;
   esac

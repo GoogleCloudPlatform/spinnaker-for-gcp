@@ -1,4 +1,4 @@
-[ -z "$PARENT_DIR" ] && PARENT_DIR="$HOME"
+[ -z "$PARENT_DIR" ] && PARENT_DIR=$(dirname $(realpath $0) | rev | cut -d '/' -f 4- | rev)
 
 source $PARENT_DIR/spinnaker-for-gcp/scripts/manage/service_utils.sh
 

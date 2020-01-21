@@ -4,7 +4,7 @@ bold() {
   echo ". $(tput bold)" "$*" "$(tput sgr0)";
 }
 
-pushd ~/spinnaker-for-gcp/scripts/manage
+pushd ~/cloudshell_open/spinnaker-for-gcp/scripts/manage
 
 # We re-generate landing_page_expanded.md all the time; we should not stash those changes.
 git checkout -- landing_page_expanded.md
@@ -24,10 +24,10 @@ git checkout master
 git pull origin master
 
 # New properties have been added over time and we want to ensure these are declared in the properties file.
-~/spinnaker-for-gcp/scripts/manage/add_missing_properties.sh
+~/cloudshell_open/spinnaker-for-gcp/scripts/manage/add_missing_properties.sh
 
 # Update the GKE Application details view.
-~/spinnaker-for-gcp/scripts/manage/deploy_application_manifest.sh
+~/cloudshell_open/spinnaker-for-gcp/scripts/manage/deploy_application_manifest.sh
 
 # Update the generated markdown pages.
 ./update_landing_page.sh

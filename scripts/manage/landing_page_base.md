@@ -18,7 +18,7 @@ your Spinnaker installation.
 ### Ensure you are connected to the correct Kubernetes context
 
 ```bash
-PROJECT_ID={{project-id}} ~/spinnaker-for-gcp/scripts/manage/check_cluster_config.sh
+PROJECT_ID={{project-id}} ~/cloudshell_open/spinnaker-for-gcp/scripts/manage/check_cluster_config.sh
 ```
 
 ### Pull Spinnaker config
@@ -27,7 +27,7 @@ Paste and run this command to pull the configuration from your Spinnaker
 deployment into your Cloud Shell.
 
 ```bash
-~/spinnaker-for-gcp/scripts/manage/pull_config.sh
+~/cloudshell_open/spinnaker-for-gcp/scripts/manage/pull_config.sh
 ```
 
 ### Update this console
@@ -38,7 +38,7 @@ This command refreshes the contents of the right-hand pane, including details on
 to connect to Spinnaker.
 
 ```bash
-~/spinnaker-for-gcp/scripts/manage/update_console.sh
+~/cloudshell_open/spinnaker-for-gcp/scripts/manage/update_console.sh
 ```
 
 ### Configure Spinnaker via Halyard
@@ -70,7 +70,7 @@ If you change any of the configuration, paste and run this command to push
 and apply those changes to your Spinnaker deployment.
 
 ```bash
-~/spinnaker-for-gcp/scripts/manage/push_and_apply.sh
+~/cloudshell_open/spinnaker-for-gcp/scripts/manage/push_and_apply.sh
 ```
 
 ## Included command-line tools
@@ -83,13 +83,13 @@ daemon are installed in your Cloud Shell.
 If you want to use a specific version of Halyard, use:
 
 ```bash
-~/spinnaker-for-gcp/scripts/cli/install_hal.sh --version $HALYARD_VERSION
+~/cloudshell_open/spinnaker-for-gcp/scripts/cli/install_hal.sh --version $HALYARD_VERSION
 ```
 
 If you want to upgrade to the latest version of Halyard, use:
 
 ```bash
-~/spinnaker-for-gcp/scripts/cli/update_hal.sh
+~/cloudshell_open/spinnaker-for-gcp/scripts/cli/update_hal.sh
 ```
 
 ### Spinnaker CLI
@@ -100,7 +100,7 @@ The [Spinnaker CLI](https://www.spinnaker.io/guides/spin/app/)
 If you want to upgrade to the latest version, use:
 
 ```bash
-~/spinnaker-for-gcp/scripts/cli/install_spin.sh
+~/cloudshell_open/spinnaker-for-gcp/scripts/cli/install_spin.sh
 ```
 
 ## Scripts for Common Commands
@@ -109,7 +109,7 @@ Remember that any configuration changes you make locally (e.g. adding
 accounts) must be pushed and applied to your deployment to take effect:
 
 ```bash
-~/spinnaker-for-gcp/scripts/manage/push_and_apply.sh
+~/cloudshell_open/spinnaker-for-gcp/scripts/manage/push_and_apply.sh
 ```
 
 ### Add Spinnaker account for GKE
@@ -126,7 +126,7 @@ The public Spinnaker documentation contains details on [configuring GKE
 clusters](https://www.spinnaker.io/setup/install/providers/kubernetes-v2/gke/).
 
 ```bash
-~/spinnaker-for-gcp/scripts/manage/add_gke_account.sh
+~/cloudshell_open/spinnaker-for-gcp/scripts/manage/add_gke_account.sh
 ```
 
 ### Add Spinnaker account for GCE
@@ -137,7 +137,7 @@ instance's service account, in the GCP project within which you wish to manage
 GCE resources.
 
 ```bash
-~/spinnaker-for-gcp/scripts/manage/add_gce_account.sh
+~/cloudshell_open/spinnaker-for-gcp/scripts/manage/add_gce_account.sh
 ```
 
 ### Add Spinnaker account for GAE
@@ -148,7 +148,7 @@ to the Spinnaker instance's service account, in the GCP project within which you
 wish to manage GAE resources.
 
 ```bash
-~/spinnaker-for-gcp/scripts/manage/add_gae_account.sh
+~/cloudshell_open/spinnaker-for-gcp/scripts/manage/add_gae_account.sh
 ```
 
 ### Upgrade Spinnaker
@@ -156,13 +156,13 @@ wish to manage GAE resources.
 First, modify `SPINNAKER_VERSION` in your `properties` file to reflect the desired version of Spinnaker:
 
 ```bash
-cloudshell edit ~/spinnaker-for-gcp/scripts/install/properties
+cloudshell edit ~/cloudshell_open/spinnaker-for-gcp/scripts/install/properties
 ```
 
 Next, use Halyard to apply the changes:
 
 ```bash
-~/spinnaker-for-gcp/scripts/manage/update_spinnaker_version.sh
+~/cloudshell_open/spinnaker-for-gcp/scripts/manage/update_spinnaker_version.sh
 ```
 
 ### Upgrade Halyard daemon running in cluster
@@ -170,13 +170,13 @@ Next, use Halyard to apply the changes:
 First, modify `HALYARD_VERSION` in your `properties` file to reflect the desired version of Halyard:
 
 ```bash
-cloudshell edit ~/spinnaker-for-gcp/scripts/install/properties
+cloudshell edit ~/cloudshell_open/spinnaker-for-gcp/scripts/install/properties
 ```
 
 Next, apply this change to the Statefulset managing the Halyard daemon:
 
 ```bash
-~/spinnaker-for-gcp/scripts/manage/update_halyard_daemon.sh
+~/cloudshell_open/spinnaker-for-gcp/scripts/manage/update_halyard_daemon.sh
 ```
 
 ### Upgrade Management Environment
@@ -184,7 +184,7 @@ Next, apply this change to the Statefulset managing the Halyard daemon:
 Update the commands and documentation in your management environment to the latest available version.
 
 ```bash
-~/spinnaker-for-gcp/scripts/manage/update_management_environment.sh
+~/cloudshell_open/spinnaker-for-gcp/scripts/manage/update_management_environment.sh
 ```
 
 ### Sign up for Spinnaker for GCP updates and announcements
@@ -194,7 +194,7 @@ Join the [mailing list](https://groups.google.com/forum/#!forum/spinnaker-for-gc
 ### Connect to Redis
 
 ```bash
-~/spinnaker-for-gcp/scripts/manage/connect_to_redis.sh
+~/cloudshell_open/spinnaker-for-gcp/scripts/manage/connect_to_redis.sh
 ```
 
 ### Restore a backup to Cloud Shell
@@ -202,7 +202,7 @@ Join the [mailing list](https://groups.google.com/forum/#!forum/spinnaker-for-gc
 Restore a backup of the halyard configuration and deployment configuration from Cloud Source Repositories to your Cloud Shell. 
 
 ```bash
-~/spinnaker-for-gcp/scripts/manage/restore_backup_to_cloud_shell.sh -p $PROJECT_ID -r $CONFIG_CSR_REPO -h GIT_HASH
+~/cloudshell_open/spinnaker-for-gcp/scripts/manage/restore_backup_to_cloud_shell.sh -p $PROJECT_ID -r $CONFIG_CSR_REPO -h GIT_HASH
 ```
 
 All backups can be viewed in this [Cloud Source Repository](https://source.cloud.google.com/$PROJECT_ID/$CONFIG_CSR_REPO).
