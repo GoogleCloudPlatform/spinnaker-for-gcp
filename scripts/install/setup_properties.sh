@@ -193,7 +193,7 @@ export SECRET_NAME=\$DEPLOYMENT_NAME-oauth-client-secret
 
 # If you own a domain name and want to use that instead of this automatically-assigned one,
 # specify it here (you must be able to configure the dns settings).
-export DOMAIN_NAME=\$DEPLOYMENT_NAME.endpoints.$PROJECT_ID.cloud.goog
+export DOMAIN_NAME=\$DEPLOYMENT_NAME.endpoints.\$PROJECT_ID.cloud.goog
 
 # This email address will be granted permissions as an IAP-Secured Web App User.
 export IAP_USER=$(gcloud auth list --format="value(account)" --filter="status=ACTIVE")
