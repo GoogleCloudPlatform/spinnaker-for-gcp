@@ -4,11 +4,11 @@ bold() {
   echo ". $(tput bold)" "$*" "$(tput sgr0)";
 }
 
-pushd ~/cloudshell_open/spinnaker-for-gcp/scripts
+pushd ~/spinnaker-for-gcp/scripts
 
 source ./install/properties
 
-~/cloudshell_open/spinnaker-for-gcp/scripts/manage/check_project_mismatch.sh
+~/spinnaker-for-gcp/scripts/manage/check_project_mismatch.sh
 
 EXISTING_SECRET_NAME=$(kubectl get secret -n spinnaker \
   --field-selector metadata.name=="$SECRET_NAME" \
@@ -87,8 +87,8 @@ bold "Configuring Spinnaker security settings..."
 
 cat expose/configure_hal_security.sh | envsubst | bash
 
-~/cloudshell_open/spinnaker-for-gcp/scripts/manage/update_landing_page.sh
-~/cloudshell_open/spinnaker-for-gcp/scripts/manage/push_and_apply.sh
+~/spinnaker-for-gcp/scripts/manage/update_landing_page.sh
+~/spinnaker-for-gcp/scripts/manage/push_and_apply.sh
 
 bold "ACTION REQUIRED:"
 bold "  - Navigate to: https://console.developers.google.com/apis/credentials/oauthclient/$CLIENT_ID?project=$PROJECT_ID"

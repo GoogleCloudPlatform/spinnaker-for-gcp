@@ -4,7 +4,7 @@ err() {
   echo "$*" >&2;
 }
 
-[ -z "$PARENT_DIR" ] && PARENT_DIR=$(dirname $(realpath $0) | rev | cut -d '/' -f 4- | rev)
+[ -n "$PARENT_DIR" ] || PARENT_DIR="$HOME"
 
 source $PARENT_DIR/spinnaker-for-gcp/scripts/manage/service_utils.sh
 
