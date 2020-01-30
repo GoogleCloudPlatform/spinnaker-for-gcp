@@ -4,7 +4,7 @@ bold() {
   echo ". $(tput bold)" "$*" "$(tput sgr0)";
 }
 
-cd ~/spinnaker-for-gcp/
+cd ~/cloudshell_open/spinnaker-for-gcp/
 
 source scripts/install/properties
 
