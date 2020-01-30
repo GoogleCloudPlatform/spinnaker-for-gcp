@@ -10,7 +10,7 @@ grep -q '^alias spin=~/spin' ~/.bashrc || echo 'alias spin=~/spin' >> ~/.bashrc
 mkdir -p ~/.spin
 
 # If there is no properties file, generate a new ~/.spin/config relying on port-forwarding.
-if [ ! -f "$HOME/spinnaker-for-gcp/scripts/install/properties" ]; then
+if [ ! -f "$HOME/cloudshell_open/spinnaker-for-gcp/scripts/install/properties" ]; then
   cat >~/.spin/config <<EOL
 gate:
   endpoint: http://localhost:8080/gate
@@ -19,7 +19,7 @@ EOL
   exit 0
 fi
 
-source ~/spinnaker-for-gcp/scripts/install/properties
+source ~/cloudshell_open/spinnaker-for-gcp/scripts/install/properties
 
 # Query for static ip address as a signal that the Spinnaker installation is exposed via a secured endpoint.
 export IP_ADDR=$(gcloud compute addresses list --filter="name=$STATIC_IP_NAME" \

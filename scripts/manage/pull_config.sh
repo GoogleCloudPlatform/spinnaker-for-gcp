@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-[ -z "$PARENT_DIR" ] && PARENT_DIR="$HOME"
+[ -z "$PARENT_DIR" ] && PARENT_DIR=$(dirname $(realpath $0) | rev | cut -d '/' -f 4- | rev)
 
 if [ "$CI" == true ]; then
   HAL_PARENT_DIR=$PARENT_DIR
@@ -65,7 +65,6 @@ if [ $EXISTING_DEPLOYMENT_SECRET_NAME != 'null' ]; then
   extract_to_file_if_defined index.js $PARENT_DIR/spinnaker-for-gcp/scripts/install/spinnakerAuditLog/index.js
   extract_to_file_if_defined configure_iap_expanded.md $PARENT_DIR/spinnaker-for-gcp/scripts/expose/configure_iap_expanded.md
   extract_to_file_if_defined openapi_expanded.yml $PARENT_DIR/spinnaker-for-gcp/scripts/expose/openapi_expanded.yml
-  extract_to_file_if_defined landing_page_expanded.md $PARENT_DIR/spinnaker-for-gcp/scripts/manage/landing_page_expanded.md
   mkdir -p ~/.spin
   extract_to_file_if_defined config ~/.spin/config
   extract_to_file_if_defined key.json ~/.spin/key.json
@@ -75,3 +74,8 @@ fi
 
 popd
 rm -rf $TEMP_DIR
+
+if [ "$CI" != true ]; then
+  # Update the generated markdown pages.
+  ~/cloudshell_open/spinnaker-for-gcp/scripts/manage/update_landing_page.sh
+fi

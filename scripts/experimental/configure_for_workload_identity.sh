@@ -31,7 +31,7 @@ bold() {
   echo ". $(tput bold)" "$*" "$(tput sgr0)";
 }
 
-PROPERTIES_FILE="$HOME/spinnaker-for-gcp/scripts/install/properties"
+PROPERTIES_FILE="$HOME/cloudshell_open/spinnaker-for-gcp/scripts/install/properties"
 
 source "$PROPERTIES_FILE"
 
