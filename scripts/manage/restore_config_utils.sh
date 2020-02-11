@@ -11,7 +11,8 @@ fi
 source $PARENT_DIR/spinnaker-for-gcp/scripts/manage/service_utils.sh
 
 rewrite_hal_key_paths() {
-  REWRITABLE_KEYS=(kubeconfigFile jsonPath jsonKey passwordFile path templatePath tokenFile)
+  REWRITABLE_KEYS=(kubeconfigFile jsonPath jsonKey passwordFile path templatePath tokenFile \
+                   usernamePasswordFile sshPrivateKeyFilePath sshKnownHostsFilePath)
   for k in "${REWRITABLE_KEYS[@]}"; do
     grep $k .hal/config &> /dev/null
     FOUND_TOKEN=$?
