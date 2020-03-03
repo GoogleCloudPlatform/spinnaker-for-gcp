@@ -107,7 +107,7 @@ for each service to see a "Hello World" page!
 Run this command to delete all the resources created above:
 
 ```bash
-~/cloudshell_open/spinnaker-for-gcp/samples/helloworldwebapp/cleanup_app_and_pipelines.sh && cd ~/spinnaker-for-gcp
+~/cloudshell_open/spinnaker-for-gcp/samples/helloworldwebapp/cleanup_app_and_pipelines.sh && cd ~/cloudshell_open/spinnaker-for-gcp
 ```
 
 ### Return to Spinnaker console
