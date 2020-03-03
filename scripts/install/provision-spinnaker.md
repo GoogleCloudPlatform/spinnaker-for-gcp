@@ -9,12 +9,23 @@ Select the project in which you'll install Spinnaker, then click **Start**, belo
 
 ## Spinnaker Installation
 
-Now let's provision Spinnaker within {{project-id}}.
+Click the **Copy to Cloud Shell** button for each command below, then press **Enter**
+to run each commmand.
 
-Click the copy/paste button on the command below to copy that command to your shell,
-then press **Enter** to run it from the Shell.
+### Configure Git
 
-### Configure the environment.
+If you haven't already configured Git, use the commands below to do so now.
+Replace `[EMAIL_ADDRESS]` with your Git email address, and replace `[USERNAME]`
+with your Git username.
+
+```bash
+git config --global user.email "[EMAIL_ADDRESS]"
+git config --global user.name "[USERNAME]"
+```
+
+### Configure the environment
+
+Now let's provision Spinnaker within your project {{project-id}}.
 
 ```bash
 PROJECT_ID={{project-id}} ~/cloudshell_open/spinnaker-for-gcp/scripts/install/setup_properties.sh
