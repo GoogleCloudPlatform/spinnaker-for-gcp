@@ -106,8 +106,8 @@ cat > ~/cloudshell_open/spinnaker-for-gcp/scripts/install/properties <<EOL
 export PROJECT_ID=$PROJECT_ID
 export DEPLOYMENT_NAME=${DEPLOYMENT_NAME:-$NEW_DEPLOYMENT_NAME}
 
-export SPINNAKER_VERSION=1.17.0
-export HALYARD_VERSION=1.31.0
+export SPINNAKER_VERSION=1.19.3
+export HALYARD_VERSION=1.33.0
 
 export ZONE=$ZONE
 export REGION=$REGION
