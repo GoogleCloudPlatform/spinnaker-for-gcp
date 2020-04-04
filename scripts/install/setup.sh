@@ -16,6 +16,21 @@ PARENT_DIR=$PARENT_DIR $PARENT_DIR/spinnaker-for-gcp/scripts/manage/check_git_co
 
 source "$PROPERTIES_FILE"
 
+LOCATION_GKE="--zone $ZONE"
+LOCATION_REDIS="--zone $ZONE"
+while getopts ":r" opt; do
+  case ${opt} in
+    r )  echo "Deployment done to a regional cluster in $REGION"
+         LOCATION_GKE="--region $REGION"
+         LOCATION_REDIS=""
+      ;;
+    \? ) echo "Usage: cmd [-r]"
+         echo "    cmd -h                  Display this help message."
+         echo "    cmd -r                  Deploys to a regional cluster."
+	 exit 0;
+  esac
+done
+
 check_for_shared_vpc $CI
 
 PARENT_DIR=$PARENT_DIR PROPERTIES_FILE=$PROPERTIES_FILE $PARENT_DIR/spinnaker-for-gcp/scripts/manage/check_project_mismatch.sh
@@ -84,7 +99,7 @@ if [ -n "$CLUSTER_EXISTS" ]; then
   check_existing_cluster_location
 
   bold "Retrieving credentials for GKE cluster $GKE_CLUSTER..."
-  gcloud container clusters get-credentials $GKE_CLUSTER --zone $ZONE --project $PROJECT_ID
+  gcloud container clusters get-credentials $GKE_CLUSTER $LOCATION_GKE --project $PROJECT_ID
 
   bold "Checking for Spinnaker application in cluster $GKE_CLUSTER..."
   SPINNAKER_APPLICATION_LIST_JSON=$(kubectl get applications -n spinnaker -l app.kubernetes.io/name=spinnaker --output json)
@@ -184,7 +199,7 @@ if [ -z "$REDIS_INSTANCE_HOST" ]; then
   bold "Creating redis instance $REDIS_INSTANCE in project $NETWORK_PROJECT..."
 
   gcloud redis instances create $REDIS_INSTANCE --project $NETWORK_PROJECT \
-    --region=$REGION --zone=$ZONE --network=$NETWORK_REFERENCE \
+    --region=$REGION $LOCATION_REDIS --network=$NETWORK_REFERENCE \
     --redis-config=notify-keyspace-events=gxE
 
   export REDIS_INSTANCE_HOST=$(gcloud redis instances list \
@@ -213,7 +228,7 @@ if [ -z "$CLUSTER_EXISTS" ]; then
   # TODO: Move some of these config settings to properties file.
   # TODO: Should this be regional instead?
   eval gcloud beta container clusters create $GKE_CLUSTER --project $PROJECT_ID \
-    --zone $ZONE --username "admin" --network $NETWORK_REFERENCE --subnetwork $SUBNET_REFERENCE \
+    $LOCATION_GKE --username "admin" --network $NETWORK_REFERENCE --subnetwork $SUBNET_REFERENCE \
     --cluster-version $GKE_CLUSTER_VERSION --machine-type $GKE_MACHINE_TYPE --image-type "COS" \
     --disk-type $GKE_DISK_TYPE --disk-size $GKE_DISK_SIZE --service-account $SA_EMAIL \
     --num-nodes $GKE_NUM_NODES --enable-stackdriver-kubernetes --enable-autoupgrade \
@@ -223,7 +238,7 @@ if [ -z "$CLUSTER_EXISTS" ]; then
 
   # If the cluster already exists, we already retrieved credentials way up at the top of the script.
   bold "Retrieving credentials for GKE cluster $GKE_CLUSTER..."
-  gcloud container clusters get-credentials $GKE_CLUSTER --zone $ZONE --project $PROJECT_ID
+  gcloud container clusters get-credentials $GKE_CLUSTER $LOCATION_GKE --project $PROJECT_ID
 else
   bold "Using existing GKE cluster $GKE_CLUSTER..."
   check_existing_cluster_prereqs
