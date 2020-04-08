@@ -100,7 +100,7 @@ done
 cp $HAL_PARENT_DIR/.hal/config .hal
 
 REWRITABLE_KEYS=(kubeconfigFile jsonPath jsonKey passwordFile path templatePath tokenFile \
-                 usernamePasswordFile sshPrivateKeyFilePath sshKnownHostsFilePath trustStore)
+                 usernamePasswordFile sshPrivateKeyFilePath sshKnownHostsFilePath trustStore credentialPath)
 for k in "${REWRITABLE_KEYS[@]}"; do
   grep $k .hal/config &> /dev/null
   FOUND_TOKEN=$?
