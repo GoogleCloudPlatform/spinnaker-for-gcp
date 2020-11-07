@@ -74,7 +74,7 @@ spec:
         fsGroup: 1000
       containers:
       - name: halyard-daemon
-        image: gcr.io/spinnaker-marketplace/halyard:$HALYARD_VERSION
+        image: us-docker.pkg.dev/spinnaker-community/docker/halyard:$HALYARD_VERSION
         imagePullPolicy: Always
         command:
         - /bin/sh
@@ -506,7 +506,7 @@ spec:
       containers:
       - name: hal-deploy-apply
         # todo use a custom image
-        image: gcr.io/spinnaker-marketplace/halyard:$HALYARD_VERSION
+        image: us-docker.pkg.dev/spinnaker-community/docker/halyard:$HALYARD_VERSION
         command:
         - /bin/sh
         args:

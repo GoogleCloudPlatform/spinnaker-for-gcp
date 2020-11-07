@@ -13,4 +13,4 @@ if [ -z "$HALYARD_VERSION" ]; then
 	exit 1
 fi
 
-kubectl set image statefulset spin-halyard -n halyard halyard-daemon=gcr.io/spinnaker-marketplace/halyard:$HALYARD_VERSION
+kubectl set image statefulset spin-halyard -n halyard halyard-daemon=us-docker.pkg.dev/spinnaker-community/docker/halyard:$HALYARD_VERSION
