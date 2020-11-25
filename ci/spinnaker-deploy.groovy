@@ -25,8 +25,6 @@ pipeline {
         READONLY_CREDS_FILE = "${env.HOME}/.gcp/${params.gcp_project}.json"
         CREDS_FILE = "admin_sa.json"
         ADMIN_CREDS_PATH = "${WORKSPACE}/${CREDS_FILE}"
-        KUBECONFIG = "/tmp/kubeconfig-create_cluster-${currentBuild.number}"
-        BUILD_USER_ID = merge.getBuildUserEnvVar()
         PARENT_DIR = "${WORKSPACE}"
     }
     stages {
@@ -42,19 +40,20 @@ pipeline {
                         env.GOOGLE_APPLICATION_CREDENTIALS = READONLY_CREDS_FILE
                     }
                     currentBuild.displayName = params.cluster_name
-                    echo "Cluster Name: ${currentBuild.displayName}"
+                    echo "Cluster Name: ${currentBuild.displayName}-${currentBuild.number}"
                     echo "KUBECONFIG: ${KUBECONFIG}"
                     echo "GOOGLE creds: ${GOOGLE_APPLICATION_CREDENTIALS}"
                     deploy.gcpAuth(GOOGLE_APPLICATION_CREDENTIALS)
-                    echo "${currentBuild.number}"
-                    sh 'env'
+                    sh "env | sort -u"
                 }
             }
         }
         stage('Generate properties file') {
             steps {
                 script {
-                    sh "${PARENT_DIR}/spinnaker-for-gcp/scripts/install/setup.sh"
+                    sh "pwd"
+                    sh "scripts/install/setup_properties.sh"
+                    sh "cat properties"
                 }
             }
         }
