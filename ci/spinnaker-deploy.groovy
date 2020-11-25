@@ -29,7 +29,7 @@ pipeline {
         PROJECT_ID = "${params.gcp_project}"
         ZONE = "us-central1-b"
         PROPERTIES_FILE = "scripts/install/properties"
-        CI=true
+        CI = "true"
     }
     stages {
         stage('Initialize Environment') {
