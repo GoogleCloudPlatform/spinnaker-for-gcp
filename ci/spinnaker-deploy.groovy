@@ -41,7 +41,6 @@ pipeline {
                     }
                     currentBuild.displayName = params.cluster_name
                     echo "Cluster Name: ${currentBuild.displayName}-${currentBuild.number}"
-                    echo "KUBECONFIG: ${KUBECONFIG}"
                     echo "GOOGLE creds: ${GOOGLE_APPLICATION_CREDENTIALS}"
                     deploy.gcpAuth(GOOGLE_APPLICATION_CREDENTIALS)
                     sh "env | sort -u"
