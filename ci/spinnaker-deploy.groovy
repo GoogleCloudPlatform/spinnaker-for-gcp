@@ -26,6 +26,7 @@ pipeline {
         CREDS_FILE = "admin_sa.json"
         ADMIN_CREDS_PATH = "${WORKSPACE}/${CREDS_FILE}"
         PARENT_DIR = "${WORKSPACE}"
+        PROJECT_ID = "${params.gcp_project}"
     }
     stages {
         stage('Initialize Environment') {
