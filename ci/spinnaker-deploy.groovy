@@ -27,7 +27,7 @@ pipeline {
         ADMIN_CREDS_PATH = "${WORKSPACE}/${CREDS_FILE}"
         KUBECONFIG = "/tmp/kubeconfig-create_cluster-${currentBuild.number}"
         BUILD_USER_ID = merge.getBuildUserEnvVar()
-        PARENT_DIR=$WORKSPACE
+        PARENT_DIR = "${WORKSPACE}"
     }
     stages {
         stage('Initialize Environment') {
@@ -49,6 +49,7 @@ pipeline {
                     echo "KUBECONFIG: ${KUBECONFIG}"
                     echo "GOOGLE creds: ${GOOGLE_APPLICATION_CREDENTIALS}"
                     deploy.gcpAuth(GOOGLE_APPLICATION_CREDENTIALS)
+                    echo "${currentBuild.number}"
                     sh 'env'
                 }
             }
