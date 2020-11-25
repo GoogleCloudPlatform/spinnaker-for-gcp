@@ -133,7 +133,7 @@ if [ "$SHARED_VPC_HOST_PROJECT" ]; then
 EOL
 fi
 
-cat >> ~/cloudshell_open/spinnaker-for-gcp/scripts/install/properties <<EOL
+cat >> scripts/install/properties <<EOL
 export NETWORK_PROJECT=\$PROJECT_ID
 export NETWORK_REFERENCE=projects/\$NETWORK_PROJECT/global/networks/\$NETWORK
 export SUBNET_REFERENCE=projects/\$NETWORK_PROJECT/regions/\$REGION/subnetworks/\$SUBNET
@@ -146,7 +146,7 @@ export SERVICES_SECONDARY_RANGE_NAME=
 EOL
 fi
 
-cat >> ~/cloudshell_open/spinnaker-for-gcp/scripts/install/properties <<EOL
+cat >> scripts/install/properties <<EOL
 
 # If cluster does not exist, it will be created.
 export GKE_CLUSTER=${GKE_CLUSTER:-\$DEPLOYMENT_NAME}
