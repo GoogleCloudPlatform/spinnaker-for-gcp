@@ -31,9 +31,6 @@ pipeline {
     }
     stages {
         stage('Initialize Environment') {
-            options {
-                timeout(time: ops_timeout, unit: 'HOURS')
-            }
             steps {
                 script {
                     if (params.write_sa == true) {
@@ -44,7 +41,7 @@ pipeline {
                     } else {
                         env.GOOGLE_APPLICATION_CREDENTIALS = READONLY_CREDS_FILE
                     }
-                    currentBuild.displayName = env_params.cluster_name
+                    currentBuild.displayName = params.cluster_name
                     echo "Cluster Name: ${currentBuild.displayName}"
                     echo "KUBECONFIG: ${KUBECONFIG}"
                     echo "GOOGLE creds: ${GOOGLE_APPLICATION_CREDENTIALS}"
