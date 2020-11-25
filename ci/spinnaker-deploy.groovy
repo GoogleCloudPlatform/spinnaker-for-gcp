@@ -33,7 +33,6 @@ pipeline {
                 script {
                     if (params.write_sa == true) {
                         env.GOOGLE_APPLICATION_CREDENTIALS = ADMIN_CREDS_PATH
-                        notifyZebraOpsTeam(ops_timeout)
                         deploy.getUserWriteSA()
                         deploy.askUserToDeleteKey(CREDS_FILE)
                     } else {
