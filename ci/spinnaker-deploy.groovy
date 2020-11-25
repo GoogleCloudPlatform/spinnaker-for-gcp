@@ -52,7 +52,7 @@ pipeline {
                 script {
                     sh "pwd"
                     sh "scripts/install/setup_properties.sh"
-                    sh "cat properties"
+                    sh "cat scripts/install/properties"
                 }
             }
         }
