@@ -85,11 +85,11 @@ fi
 
 EXISTING_DEPLOYMENT_COUNT=$(echo "$EXISTING_REDIS_NAMES" | sed '/^$/d' | wc -l)
 NEW_DEPLOYMENT_SUFFIX=$(($EXISTING_DEPLOYMENT_COUNT + 1))
-NEW_DEPLOYMENT_NAME="spinnaker-$NEW_DEPLOYMENT_SUFFIX"
+NEW_DEPLOYMENT_NAME=$BUILD_DISPLAY_NAME
 
-while [[ "$(echo "$EXISTING_REDIS_NAMES" | grep ^$NEW_DEPLOYMENT_NAME$ | wc -l)" != "0" ]]; do
-  NEW_DEPLOYMENT_NAME="spinnaker-$((++NEW_DEPLOYMENT_SUFFIX))"
-done
+#while [[ "$(echo "$EXISTING_REDIS_NAMES" | grep ^$NEW_DEPLOYMENT_NAME$ | wc -l)" != "0" ]]; do
+#  NEW_DEPLOYMENT_NAME="spinnaker-$((++NEW_DEPLOYMENT_SUFFIX))"
+#done
 
 cat > ./scripts/install/properties <<EOL
 #!/usr/bin/env bash
@@ -196,7 +196,7 @@ export SECRET_NAME=\$DEPLOYMENT_NAME-oauth-client-secret
 export DOMAIN_NAME=\$DEPLOYMENT_NAME.endpoints.\$PROJECT_ID.cloud.goog
 
 # This email address will be granted permissions as an IAP-Secured Web App User.
-export IAP_USER=$(gcloud auth list --format="value(account)" --filter="status=ACTIVE")
+export IAP_USER="jeremy.berg@zebra.com"
 EOL
 
 if [ "$SHARED_VPC_HOST_PROJECT" ]; then
