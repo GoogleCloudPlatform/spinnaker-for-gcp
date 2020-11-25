@@ -71,11 +71,11 @@ pipeline {
                 }
             }
         }
-    }
-    failure {
-        script {
+        failure {
+            script {
 //                    deploy.sendEmailNotification('build_user', "JOB FAILED <br>NODE_LABELS: ${NODE_LABELS}<br>GIT_COMMIT: ${GIT_COMMIT}<br>Cluster name: ${env_params.cluster_name}")
-            echo "Failed build"
+                echo "Failed build"
+            }
         }
     }
 }
