@@ -12,7 +12,7 @@ bold() {
   echo ". $(tput bold)" "$*" "$(tput sgr0)";
 }
 
-~/cloudshell_open/spinnaker-for-gcp/scripts/manage/check_duplicate_dirs.sh || exit 1
+./scripts/manage/check_duplicate_dirs.sh || exit 1
 
 if [ -z "$PROJECT_ID" ]; then
   PROJECT_ID=$(gcloud info --format='value(config.project)')
@@ -23,7 +23,7 @@ if [ -z "$PROJECT_ID" ]; then
   exit 1
 fi
 
-PROPERTIES_FILE="$HOME/cloudshell_open/spinnaker-for-gcp/scripts/install/properties"
+PROPERTIES_FILE="./scripts/install/properties"
 if [ -f "$PROPERTIES_FILE" ]; then
   bold "The properties file already exists at $PROPERTIES_FILE. Please move it out of the way if you want to generate a new properties file."
   exit 1
@@ -56,7 +56,7 @@ SUBNET="default"
 ZONE=${ZONE:-us-east1-c}
 REGION=$(echo $ZONE | cut -d - -f 1,2)
 
-source ~/cloudshell_open/spinnaker-for-gcp/scripts/manage/service_utils.sh
+source ./scripts/manage/service_utils.sh
 
 query_redis_instance_names() {
   if [ $(has_service_enabled $1 redis.googleapis.com) ]; then
@@ -91,7 +91,7 @@ while [[ "$(echo "$EXISTING_REDIS_NAMES" | grep ^$NEW_DEPLOYMENT_NAME$ | wc -l)"
   NEW_DEPLOYMENT_NAME="spinnaker-$((++NEW_DEPLOYMENT_SUFFIX))"
 done
 
-cat > ~/cloudshell_open/spinnaker-for-gcp/scripts/install/properties <<EOL
+cat > ./scripts/install/properties <<EOL
 #!/usr/bin/env bash
 
 # This file is generated just once per Spinnaker installation, prior to running setup.sh.
