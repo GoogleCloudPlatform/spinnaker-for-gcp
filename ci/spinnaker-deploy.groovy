@@ -29,7 +29,7 @@ pipeline {
         PROJECT_ID = "${params.gcp_project}"
         ZONE = "us-central1-b"
         PROPERTIES_FILE = "scripts/install/properties"
-        CI = "true"
+        CI = "true" // CI=true was the same as CI = "true"
     }
     stages {
         stage('Initialize Environment') {
@@ -56,6 +56,13 @@ pipeline {
                     sh "pwd"
                     sh "scripts/install/setup_properties.sh"
                     sh "cat scripts/install/properties"
+                }
+            }
+        }
+        stage('deploy spinnaker') {
+            steps {
+                script {
+                    sh "scripts/install/setup.sh"
                 }
             }
         }
