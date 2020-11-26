@@ -46,6 +46,7 @@ pipeline {
                     echo "Cluster Name: ${currentBuild.displayName}"
                     echo "GOOGLE creds: ${GOOGLE_APPLICATION_CREDENTIALS}"
                     deploy.gcpAuth(GOOGLE_APPLICATION_CREDENTIALS)
+                    sh "gcloud config set project ${params.gcp-project}"
                     sh "env | sort -u"
                 }
             }
