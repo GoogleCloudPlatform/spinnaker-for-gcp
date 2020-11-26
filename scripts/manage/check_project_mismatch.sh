@@ -7,10 +7,8 @@ source $PARENT_DIR/scripts/manage/service_utils.sh
 [ -z "$PROPERTIES_FILE" ] && PROPERTIES_FILE="$PARENT_DIR/scripts/install/properties"
 
 source "$PROPERTIES_FILE"
-echo "funny $GCLOUD_PROJECT_ID This is fun"
 gcloud info --format='value(config.project)'
 GCLOUD_PROJECT_ID=$(gcloud info --format='value(config.project)')
-echo $GCLOUD_PROJECT_ID
 
 GCLOUD_PROJECT_ID=${GCLOUD_PROJECT_ID:-'not set'}
 echo $GCLOUD_PROJECT_ID
