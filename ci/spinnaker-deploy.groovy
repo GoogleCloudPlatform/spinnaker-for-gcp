@@ -30,6 +30,7 @@ pipeline {
         ZONE = "us-central1-b"
         PROPERTIES_FILE = "scripts/install/properties"
         CI = "true" // CI=true was the same as CI = "true"
+        DEPLOYMENT_NAME = "${params.cluster_name-38}" // remove to create a new cluster
     }
     stages {
         stage('Initialize Environment') {
