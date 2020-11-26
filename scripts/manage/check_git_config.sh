@@ -1,9 +1,12 @@
+#!/usr/bin/env bash
 [ -z "$PARENT_DIR" ] && PARENT_DIR=$(dirname $(realpath $0) | rev | cut -d '/' -f 4- | rev)
 
-source $PARENT_DIR/spinnaker-for-gcp/scripts/manage/service_utils.sh
+source $PARENT_DIR/scripts/manage/service_utils.sh
 
 GIT_USERNAME=$(git config --global --get user.name)
 GIT_EMAIL=$(git config --global --get user.email)
+echo $GIT_USERNAME
+echo $GIT_EMAIL
 
 if [ -z "$GIT_USERNAME" ]; then
   bold "Your Git account username is not set. Run 'git config --global user.name \"Your Name\"' and try again."
