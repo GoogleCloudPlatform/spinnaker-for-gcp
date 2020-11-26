@@ -10,7 +10,7 @@ fi
 
 source $PARENT_DIR/spinnaker-for-gcp/scripts/manage/service_utils.sh
 
-[ -z "$PROPERTIES_FILE" ] && PROPERTIES_FILE="$PARENT_DIR/spinnaker-for-gcp/scripts/install/properties"
+[ -z "$PROPERTIES_FILE" ] && PROPERTIES_FILE="$PARENT_DIR/scripts/install/properties"
 
 $PARENT_DIR/spinnaker-for-gcp/scripts/manage/check_duplicate_dirs.sh || exit 1
 

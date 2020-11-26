@@ -4,7 +4,7 @@
 
 source $PARENT_DIR/spinnaker-for-gcp/scripts/manage/service_utils.sh
 
-[ -z "$PROPERTIES_FILE" ] && PROPERTIES_FILE="$PARENT_DIR/spinnaker-for-gcp/scripts/install/properties"
+[ -z "$PROPERTIES_FILE" ] && PROPERTIES_FILE="$PARENT_DIR/scripts/install/properties"
 
 if [ ! -f "$PROPERTIES_FILE" ]; then
   bold "No properties file was found. Not updating GKE Application details view."
