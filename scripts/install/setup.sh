@@ -15,7 +15,7 @@ check_for_required_binaries
 
 PARENT_DIR=$PARENT_DIR $PARENT_DIR/scripts/manage/check_git_config.sh || exit 1
 
-[ -z "$PROPERTIES_FILE" ] && PROPERTIES_FILE="$PARENT_DIR/spinnaker-for-gcp/scripts/install/properties"
+[ -z "$PROPERTIES_FILE" ] && PROPERTIES_FILE="$PARENT_DIR/scripts/install/properties"
 
 source "$PROPERTIES_FILE"
 
@@ -79,7 +79,7 @@ if [ "$PROJECT_ID" != "$NETWORK_PROJECT" ]; then
   fi
 fi
 
-source $PARENT_DIR/spinnaker-for-gcp/scripts/manage/cluster_utils.sh
+source $PARENT_DIR/scripts/manage/cluster_utils.sh
 
 CLUSTER_EXISTS=$(check_for_existing_cluster)
 
@@ -303,7 +303,7 @@ fi
 
 bold "Provisioning Spinnaker resources..."
 
-envsubst < $PARENT_DIR/spinnaker-for-gcp/scripts/install/quick-install.yml | kubectl apply -f -
+envsubst < $PARENT_DIR/scripts/install/quick-install.yml | kubectl apply -f -
 
 job_ready() {
   printf "Waiting on job $1 to complete"
@@ -319,9 +319,9 @@ job_ready hal-deploy-apply
 
 # Sourced to import $IP_ADDR. 
 # Used at the end of setup to check if installation is exposed via a secured endpoint.
-source $PARENT_DIR/spinnaker-for-gcp/scripts/manage/update_landing_page.sh
+source $PARENT_DIR/scripts/manage/update_landing_page.sh
 
-PARENT_DIR=$PARENT_DIR PROPERTIES_FILE=$PROPERTIES_FILE $PARENT_DIR/spinnaker-for-gcp/scripts/manage/deploy_application_manifest.sh
+PARENT_DIR=$PARENT_DIR PROPERTIES_FILE=$PROPERTIES_FILE $PARENT_DIR/scripts/manage/deploy_application_manifest.sh
 
 # Delete any existing deployment config secret.
 # It will be recreated with up-to-date contents during push_config.sh.
@@ -340,9 +340,9 @@ EXISTING_CLOUD_FUNCTION=$(gcloud functions list --project $PROJECT_ID \
 if [ -z "$EXISTING_CLOUD_FUNCTION" ]; then
   bold "Deploying audit log cloud function $CLOUD_FUNCTION_NAME..."
 
-  cat $PARENT_DIR/spinnaker-for-gcp/scripts/install/spinnakerAuditLog/config_json.template | envsubst > $PARENT_DIR/spinnaker-for-gcp/scripts/install/spinnakerAuditLog/config.json
-  cat $PARENT_DIR/spinnaker-for-gcp/scripts/install/spinnakerAuditLog/index_js.template | envsubst > $PARENT_DIR/spinnaker-for-gcp/scripts/install/spinnakerAuditLog/index.js
-  gcloud functions deploy $CLOUD_FUNCTION_NAME --source $PARENT_DIR/spinnaker-for-gcp/scripts/install/spinnakerAuditLog \
+  cat $PARENT_DIR/scripts/install/spinnakerAuditLog/config_json.template | envsubst > $PARENT_DIR/scripts/install/spinnakerAuditLog/config.json
+  cat $PARENT_DIR/scripts/install/spinnakerAuditLog/index_js.template | envsubst > $PARENT_DIR/scripts/install/spinnakerAuditLog/index.js
+  gcloud functions deploy $CLOUD_FUNCTION_NAME --source $PARENT_DIR/scripts/install/spinnakerAuditLog \
     --trigger-http --memory 2048MB --runtime nodejs8 --allow-unauthenticated --project $PROJECT_ID --region $REGION
   gcloud alpha functions add-iam-policy-binding $CLOUD_FUNCTION_NAME --project $PROJECT_ID --region $REGION --member allUsers --role roles/cloudfunctions.invoker
 else
@@ -351,12 +351,12 @@ fi
 
 if [ "$USE_CLOUD_SHELL_HAL_CONFIG" = true ]; then
   # Not passing $CI since the guard makes it clear we are running from cloud shell.
-  $PARENT_DIR/spinnaker-for-gcp/scripts/manage/push_and_apply.sh
+  $PARENT_DIR/scripts/manage/push_and_apply.sh
 else
   # We want the local hal config to match what was deployed.
-  CI=$CI PARENT_DIR=$PARENT_DIR PROPERTIES_FILE=$PROPERTIES_FILE $PARENT_DIR/spinnaker-for-gcp/scripts/manage/pull_config.sh
+  CI=$CI PARENT_DIR=$PARENT_DIR PROPERTIES_FILE=$PROPERTIES_FILE $PARENT_DIR/scripts/manage/pull_config.sh
   # We want a full backup stored in the bucket and the full deployment config stored in a secret.
-  CI=$CI PARENT_DIR=$PARENT_DIR PROPERTIES_FILE=$PROPERTIES_FILE $PARENT_DIR/spinnaker-for-gcp/scripts/manage/push_config.sh
+  CI=$CI PARENT_DIR=$PARENT_DIR PROPERTIES_FILE=$PROPERTIES_FILE $PARENT_DIR/scripts/manage/push_config.sh
 fi
 
 deploy_ready() {
@@ -378,17 +378,17 @@ deploy_ready spin-kayenta "canary analysis engine"
 deploy_ready spin-deck "UI server"
 
 if [ "$CI" != true ]; then
-  $PARENT_DIR/spinnaker-for-gcp/scripts/cli/install_hal.sh --version $HALYARD_VERSION
-  $PARENT_DIR/spinnaker-for-gcp/scripts/cli/install_spin.sh
+  $PARENT_DIR/scripts/cli/install_hal.sh --version $HALYARD_VERSION
+  $PARENT_DIR/scripts/cli/install_spin.sh
 
   # We want a backup containing the newly-created ~/.spin/* files as well.
   # Not passing $CI since the guard already ensures it is not true.
-  $PARENT_DIR/spinnaker-for-gcp/scripts/manage/push_config.sh  
+  $PARENT_DIR/scripts/manage/push_config.sh
 fi
 
 # If restoring a secured endpoint, leave the user on the documentation for iap configuration.
 if [ "$USE_CLOUD_SHELL_HAL_CONFIG" = true -a -n "$IP_ADDR" -a "$CI" != true ]; then
-  $PARENT_DIR/spinnaker-for-gcp/scripts/expose/launch_configure_iap.sh
+  $PARENT_DIR/scripts/expose/launch_configure_iap.sh
 fi
 
 echo
