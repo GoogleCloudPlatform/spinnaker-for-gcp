@@ -21,7 +21,7 @@ source "$PROPERTIES_FILE"
 
 check_for_shared_vpc $CI
 
-PARENT_DIR=$PARENT_DIR PROPERTIES_FILE=$PROPERTIES_FILE $PARENT_DIR/spinnaker-for-gcp/scripts/manage/check_project_mismatch.sh
+PARENT_DIR=$PARENT_DIR PROPERTIES_FILE=$PROPERTIES_FILE $PARENT_DIR/scripts/manage/check_project_mismatch.sh
 
 OPERATOR_SA_EMAIL=$(gcloud config list account --format "value(core.account)" --project $PROJECT_ID)
 SETUP_EXISTING_ROLES=$(gcloud projects get-iam-policy --filter bindings.members:$OPERATOR_SA_EMAIL $PROJECT_ID \
