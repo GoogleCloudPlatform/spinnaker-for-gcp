@@ -9,11 +9,11 @@ echo "here $PWD"
 echo $PARENT_DIR
 ls $PARENT_DIR
 echo "HERE"
-source $PARENT_DIR/spinnaker-for-gcp/scripts/manage/service_utils.sh
+source $PARENT_DIR/scripts/manage/service_utils.sh
 
 check_for_required_binaries
 
-PARENT_DIR=$PARENT_DIR $PARENT_DIR/spinnaker-for-gcp/scripts/manage/check_git_config.sh || exit 1
+PARENT_DIR=$PARENT_DIR $PARENT_DIR/scripts/manage/check_git_config.sh || exit 1
 
 [ -z "$PROPERTIES_FILE" ] && PROPERTIES_FILE="$PARENT_DIR/spinnaker-for-gcp/scripts/install/properties"
 
