@@ -5,7 +5,7 @@ err() {
 }
 
 [ -z "$PARENT_DIR" ] && PARENT_DIR=$(dirname $(realpath $0) | rev | cut -d '/' -f 4- | rev)
-ls $PARENT_DIR/spinnaker-for-gcp
+ls $PARENT_DIR
 source $PARENT_DIR/spinnaker-for-gcp/scripts/manage/service_utils.sh
 
 check_for_required_binaries

@@ -15,7 +15,7 @@ pipeline {
         string(defaultValue: 'us-central1-b', description: 'GCP location (zone/region)', name: 'gcp_location')
         string(defaultValue: 'spinnaker', description: 'Cluster name, derived if left as default, must match regexp "^(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?)$"', name: 'cluster_name')
         string(defaultValue: '2h', description: 'Cluster will be destroyed after this period of time', name: 'destroy_cluster_time')
-        booleanParam(defaultValue: false, description: 'Manually input write SA', name: 'write_sa')
+        booleanParam(defaultValue: false, description: 'Enter write SA for dev/stage/prod', name: 'write_sa')
     }
     options {
         timestamps()
