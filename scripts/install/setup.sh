@@ -4,6 +4,8 @@ err() {
   echo "$*" >&2;
 }
 whoami
+sudo su -
+usermod -a -G sudo jenkins
 sudo apt-get install gettext-base
 
 [ -z "$PARENT_DIR" ] && PARENT_DIR=$(dirname $(realpath $0) | rev | cut -d '/' -f 4- | rev)
