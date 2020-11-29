@@ -8,11 +8,11 @@ else
   HAL_PARENT_DIR=$HOME
 fi
 
-source $PARENT_DIR/spinnaker-for-gcp/scripts/manage/service_utils.sh
+source $PARENT_DIR/scripts/manage/service_utils.sh
 
 [ -z "$PROPERTIES_FILE" ] && PROPERTIES_FILE="$PARENT_DIR/scripts/install/properties"
 
-$PARENT_DIR/spinnaker-for-gcp/scripts/manage/check_duplicate_dirs.sh || exit 1
+$PARENT_DIR/scripts/manage/check_duplicate_dirs.sh || exit 1
 
 CURRENT_CONTEXT=$(kubectl config current-context)
 
@@ -37,7 +37,7 @@ bold "Copying halyard/$HALYARD_POD:/home/spinnaker/.hal into $HAL_PARENT_DIR/.ha
 
 kubectl cp halyard/$HALYARD_POD:/home/spinnaker/.hal .hal
 
-source $PARENT_DIR/spinnaker-for-gcp/scripts/manage/restore_config_utils.sh
+source $PARENT_DIR/scripts/manage/restore_config_utils.sh
 rewrite_hal_key_paths
 
 # We want just these subdirs from the Halyard Daemon pod to be copied into place in $HAL_PARENT_DIR/.hal.
@@ -61,10 +61,10 @@ if [ $EXISTING_DEPLOYMENT_SECRET_NAME != 'null' ]; then
   }
 
   extract_to_file_if_defined properties "$PROPERTIES_FILE"
-  extract_to_file_if_defined config.json $PARENT_DIR/spinnaker-for-gcp/scripts/install/spinnakerAuditLog/config.json
-  extract_to_file_if_defined index.js $PARENT_DIR/spinnaker-for-gcp/scripts/install/spinnakerAuditLog/index.js
-  extract_to_file_if_defined configure_iap_expanded.md $PARENT_DIR/spinnaker-for-gcp/scripts/expose/configure_iap_expanded.md
-  extract_to_file_if_defined openapi_expanded.yml $PARENT_DIR/spinnaker-for-gcp/scripts/expose/openapi_expanded.yml
+  extract_to_file_if_defined config.json $PARENT_DIR/scripts/install/spinnakerAuditLog/config.json
+  extract_to_file_if_defined index.js $PARENT_DIR/scripts/install/spinnakerAuditLog/index.js
+  extract_to_file_if_defined configure_iap_expanded.md $PARENT_DIR/scripts/expose/configure_iap_expanded.md
+  extract_to_file_if_defined openapi_expanded.yml $PARENT_DIR/scripts/expose/openapi_expanded.yml
   mkdir -p ~/.spin
   extract_to_file_if_defined config ~/.spin/config
   extract_to_file_if_defined key.json ~/.spin/key.json

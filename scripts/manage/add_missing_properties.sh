@@ -6,7 +6,7 @@ bold() {
 
 [ -z "$PARENT_DIR" ] && PARENT_DIR=$(dirname $(realpath $0) | rev | cut -d '/' -f 4- | rev)
 
-PROPERTIES_FILE=$PARENT_DIR/spinnaker-for-gcp/scripts/install/properties
+PROPERTIES_FILE=$PARENT_DIR/scripts/install/properties
 
 add_property_if_missing() {
   if [ -z "$(grep "export $1=" $PROPERTIES_FILE)" ]; then

@@ -8,12 +8,12 @@ else
   HAL_PARENT_DIR=$HOME
 fi
 
-source $PARENT_DIR/spinnaker-for-gcp/scripts/manage/service_utils.sh
+source $PARENT_DIR/scripts/manage/service_utils.sh
 
 [ -z "$PROPERTIES_FILE" ] && PROPERTIES_FILE="$PARENT_DIR/scripts/install/properties"
 
-$PARENT_DIR/spinnaker-for-gcp/scripts/manage/check_duplicate_dirs.sh || exit 1
-$PARENT_DIR/spinnaker-for-gcp/scripts/manage/check_git_config.sh || exit 1
+$PARENT_DIR/scripts/manage/check_duplicate_dirs.sh || exit 1
+$PARENT_DIR/scripts/manage/check_git_config.sh || exit 1
 
 source "$PROPERTIES_FILE"
 
@@ -48,19 +48,19 @@ if [ $CURRENT_CONTEXT_CLUSTER != $GKE_CLUSTER ]; then
   exit 1
 fi
 
-source $PARENT_DIR/spinnaker-for-gcp/scripts/manage/cluster_utils.sh
+source $PARENT_DIR/scripts/manage/cluster_utils.sh
 
 CLUSTER_EXISTS=$(check_for_existing_cluster)
 
 if [ -z "$CLUSTER_EXISTS" ]; then
   bold "Cluster $GKE_CLUSTER cannot be found. It may not exist."
   bold "To recreate your installation with this config, run:"
-  bold "USE_CLOUD_SHELL_HAL_CONFIG=true $PARENT_DIR/spinnaker-for-gcp/scripts/install/setup.sh"
+  bold "USE_CLOUD_SHELL_HAL_CONFIG=true $PARENT_DIR/scripts/install/setup.sh"
   exit 1
 fi
 
 if [ -z "$CONFIG_CSR_REPO" ]; then
-  bold "CONFIG_CSR_REPO was not set. Please run the $PARENT_DIR/spinnaker-for-gcp/scripts/manage/update_management_environment.sh" \
+  bold "CONFIG_CSR_REPO was not set. Please run the $PARENT_DIR/scripts/manage/update_management_environment.sh" \
        "command to ensure you have all the necessary properties declared."
   exit 1
 fi
@@ -131,13 +131,13 @@ copy_if_exists() {
 }
 
 copy_if_exists "$PROPERTIES_FILE" deployment_config_files
-copy_if_exists $PARENT_DIR/spinnaker-for-gcp/scripts/install/spinnakerAuditLog/config.json deployment_config_files
-copy_if_exists $PARENT_DIR/spinnaker-for-gcp/scripts/install/spinnakerAuditLog/index.js deployment_config_files
+copy_if_exists $PARENT_DIR/scripts/install/spinnakerAuditLog/config.json deployment_config_files
+copy_if_exists $PARENT_DIR/scripts/install/spinnakerAuditLog/index.js deployment_config_files
 
 # These files are generated when Spinnaker is exposed via IAP.
 # If the operator is managing more than one installation we don't want to inadvertently backup files from the wrong installation.
-copy_if_exists $PARENT_DIR/spinnaker-for-gcp/scripts/expose/configure_iap_expanded.md deployment_config_files "$PROJECT_ID\."
-copy_if_exists $PARENT_DIR/spinnaker-for-gcp/scripts/expose/openapi_expanded.yml deployment_config_files "$PROJECT_ID\."
+copy_if_exists $PARENT_DIR/scripts/expose/configure_iap_expanded.md deployment_config_files "$PROJECT_ID\."
+copy_if_exists $PARENT_DIR/scripts/expose/openapi_expanded.yml deployment_config_files "$PROJECT_ID\."
 copy_if_exists ~/.spin/config deployment_config_files "$PROJECT_ID\."
 copy_if_exists ~/.spin/config deployment_config_files "localhost\:"
 copy_if_exists ~/.spin/key.json deployment_config_files "$PROJECT_ID\."

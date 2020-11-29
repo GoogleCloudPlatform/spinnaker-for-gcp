@@ -8,7 +8,7 @@ else
   HAL_PARENT_DIR=$HOME
 fi
 
-source $PARENT_DIR/spinnaker-for-gcp/scripts/manage/service_utils.sh
+source $PARENT_DIR/scripts/manage/service_utils.sh
 
 # Please note, rewritable key paths are in both push_config.sh and restore_config_utils.sh
 rewrite_hal_key_paths() {

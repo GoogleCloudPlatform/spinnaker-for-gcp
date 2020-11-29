@@ -2,7 +2,7 @@
 
 [ -z "$PARENT_DIR" ] && PARENT_DIR=$(dirname $(realpath $0) | rev | cut -d '/' -f 4- | rev)
 
-source $PARENT_DIR/spinnaker-for-gcp/scripts/manage/service_utils.sh
+source $PARENT_DIR/scripts/manage/service_utils.sh
 
 check_for_existing_cluster() {
   bold "Checking for existing cluster $GKE_CLUSTER..." >&2
