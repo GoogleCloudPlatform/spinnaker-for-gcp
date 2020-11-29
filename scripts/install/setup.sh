@@ -4,6 +4,8 @@ err() {
   echo "$*" >&2;
 }
 
+apt-get install gettext-base
+
 [ -z "$PARENT_DIR" ] && PARENT_DIR=$(dirname $(realpath $0) | rev | cut -d '/' -f 4- | rev)
 
 echo $PARENT_DIR
@@ -304,7 +306,9 @@ fi
 
 bold "Provisioning Spinnaker resources..."
 
+# envsubst must not be supported on our jenkins agent
 envsubst < $PARENT_DIR/scripts/install/quick-install.yml | kubectl apply -f -
+#kubectl apply -f /home/jenkins/agent/workspace/deployspinnakerp/scripts/install/quick-install.yml
 
 job_ready() {
   printf "Waiting on job $1 to complete"
