@@ -3,8 +3,8 @@
 err() {
   echo "$*" >&2;
 }
-
-apt-get install gettext-base
+whoami
+sudo apt-get install gettext-base
 
 [ -z "$PARENT_DIR" ] && PARENT_DIR=$(dirname $(realpath $0) | rev | cut -d '/' -f 4- | rev)
 
