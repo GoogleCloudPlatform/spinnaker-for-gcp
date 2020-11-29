@@ -77,7 +77,7 @@ while [ -z "$GSA_EMAIL" ]; do
 done
 echo
 
-bold "Assigning required roles to $GSA_DISPLAY_NAME..."
+bold "Assigning required roles in configure_for_workload_identity.sh to $GSA_DISPLAY_NAME..."
 
 K8S_REQUIRED_ROLES=(cloudbuild.builds.editor container.admin logging.logWriter monitoring.admin pubsub.admin storage.admin)
 EXISTING_ROLES=$(gcloud projects get-iam-policy $PROJECT_ID \

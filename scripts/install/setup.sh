@@ -162,7 +162,7 @@ else
   bold "Using existing service account $SERVICE_ACCOUNT_NAME..."
 fi
 
-bold "Assigning required roles to $SERVICE_ACCOUNT_NAME..."
+bold "Assigning required roles in setup.sh to $SERVICE_ACCOUNT_NAME..."
 
 K8S_REQUIRED_ROLES=(cloudbuild.builds.editor container.admin logging.logWriter monitoring.admin pubsub.admin storage.admin)
 EXISTING_ROLES=$(gcloud projects get-iam-policy --filter bindings.members:$SA_EMAIL $PROJECT_ID \

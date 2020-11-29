@@ -31,7 +31,7 @@ MANAGED_PROJECT_ID=$(echo $TARGET_K8S_CONTEXT | cut -d _ -f 2)
 read -e -p "Please enter the id of the project within which the referenced cluster lives: " -i $MANAGED_PROJECT_ID MANAGED_PROJECT_ID
 read -e -p "Please enter a name for the new Spinnaker account: " -i "$(echo $TARGET_K8S_CONTEXT | cut -d _ -f 4)-acct" GKE_ACCOUNT_NAME
 
-bold "Assigning required roles to $SERVICE_ACCOUNT_NAME..."
+bold "Assigning required roles in add_gke_account.sh to $SERVICE_ACCOUNT_NAME..."
 
 SA_EMAIL=$(gcloud iam service-accounts --project $PROJECT_ID list \
   --filter="displayName:$SERVICE_ACCOUNT_NAME" \
