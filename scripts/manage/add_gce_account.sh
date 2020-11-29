@@ -31,7 +31,8 @@ for r in "${GCE_REQUIRED_ROLES[@]}"; do
     gcloud projects add-iam-policy-binding $MANAGED_PROJECT_ID \
       --member serviceAccount:$SA_EMAIL \
       --role roles/$r \
-      --format=none
+      --format=none \
+      --condition=None
 
     if [ "$?" != "0" ]; then
       bold "$USER does not have permission to assign role $r on project $MANAGED_PROJECT_ID." \

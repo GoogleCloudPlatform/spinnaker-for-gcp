@@ -5,10 +5,10 @@ err() {
 }
 
 [ -z "$PARENT_DIR" ] && PARENT_DIR=$(dirname $(realpath $0) | rev | cut -d '/' -f 4- | rev)
-echo "here $PWD"
+
 echo $PARENT_DIR
 ls $PARENT_DIR
-echo "HERE"
+
 source $PARENT_DIR/scripts/manage/service_utils.sh
 
 check_for_required_binaries
@@ -174,7 +174,8 @@ for r in "${K8S_REQUIRED_ROLES[@]}"; do
     gcloud projects add-iam-policy-binding $PROJECT_ID \
       --member serviceAccount:$SA_EMAIL \
       --role roles/$r \
-      --format=none
+      --format=none \
+      --condition=None
   fi
 done
 

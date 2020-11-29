@@ -91,7 +91,8 @@ for r in "${K8S_REQUIRED_ROLES[@]}"; do
     gcloud projects add-iam-policy-binding $PROJECT_ID \
       --member="serviceAccount:$GSA_EMAIL" \
       --role="roles/$r" \
-      --format="none"
+      --format="none" \
+      --condition=None
   fi
 done
 
