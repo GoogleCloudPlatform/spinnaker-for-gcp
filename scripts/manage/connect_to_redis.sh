@@ -4,9 +4,9 @@ bold() {
   echo ". $(tput bold)" "$*" "$(tput sgr0)";
 }
 
-source ~/cloudshell_open/spinnaker-for-gcp/scripts/install/properties
+source scripts/install/properties
 
-~/cloudshell_open/spinnaker-for-gcp/scripts/manage/check_project_mismatch.sh
+scripts/manage/check_project_mismatch.sh
 
 bold "Resolving redis host..."
 

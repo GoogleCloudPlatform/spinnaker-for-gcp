@@ -4,7 +4,7 @@ bold() {
   echo ". $(tput bold)" "$*" "$(tput sgr0)";
 }
 
-source ~/cloudshell_open/spinnaker-for-gcp/scripts/install/properties
+source scripts/install/properties
 
 CURRENT_K8S_CONTEXT=$(kubectl config current-context)
 AVAILABLE_K8S_CONTEXTS=$(kubectl config get-contexts -o name)
@@ -77,4 +77,4 @@ cp ~/.kube/config ~/.hal/default/credentials/$KUBECONFIG_FILENAME
 
 bold "Remember that your configuration changes have only been made locally."
 bold "They must be pushed and applied to your deployment to take effect:"
-bold "  ~/cloudshell_open/spinnaker-for-gcp/scripts/manage/push_and_apply.sh"
+bold "  scripts/manage/push_and_apply.sh"

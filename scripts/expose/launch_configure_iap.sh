@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-pushd ~/cloudshell_open/spinnaker-for-gcp/scripts
+pushd scripts
 
 source ./install/properties
 

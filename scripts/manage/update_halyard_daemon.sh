@@ -4,7 +4,7 @@ bold() {
   echo ". $(tput bold)" "$*" "$(tput sgr0)";
 }
 
-source ~/cloudshell_open/spinnaker-for-gcp/scripts/install/properties
+source scripts/install/properties
 
 bold "Updating halyard daemon..."
 

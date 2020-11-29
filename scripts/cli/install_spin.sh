@@ -19,7 +19,7 @@ EOL
   exit 0
 fi
 
-source ~/cloudshell_open/spinnaker-for-gcp/scripts/install/properties
+source scripts/install/properties
 
 # Query for static ip address as a signal that the Spinnaker installation is exposed via a secured endpoint.
 export IP_ADDR=$(gcloud compute addresses list --filter="name=$STATIC_IP_NAME" \

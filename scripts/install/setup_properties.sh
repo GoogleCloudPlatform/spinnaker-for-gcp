@@ -121,7 +121,7 @@ export SUBNET=$SUBNET
 EOL
 
 if [ "$SHARED_VPC_HOST_PROJECT" ]; then
-  cat >> ~/cloudshell_open/spinnaker-for-gcp/scripts/install/properties <<EOL
+  cat >> scripts/install/properties <<EOL
 # If you want to use a shared network/subnet from the Shared VPC host project, you'll need to perform
 # these steps prior to running the setup.sh script:
 #   1) Specify the name of the shared network in \$NETWORK up above.
@@ -141,7 +141,7 @@ export SUBNET_REFERENCE=projects/\$NETWORK_PROJECT/regions/\$REGION/subnetworks/
 EOL
 
 if [ "$SHARED_VPC_HOST_PROJECT" ]; then
-  cat >> ~/cloudshell_open/spinnaker-for-gcp/scripts/install/properties <<EOL
+  cat >> scripts/install/properties <<EOL
 export CLUSTER_SECONDARY_RANGE_NAME=
 export SERVICES_SECONDARY_RANGE_NAME=
 EOL
@@ -204,5 +204,5 @@ if [ "$SHARED_VPC_HOST_PROJECT" ]; then
   bold "If you want to use a shared network/subnet from the Shared VPC host project ($SHARED_VPC_HOST_PROJECT)," \
     "there are additional instructions you must follow in the properties file. You must perform those steps" \
     "prior to running the setup.sh script:"
-  bold "  cloudshell edit ~/cloudshell_open/spinnaker-for-gcp/scripts/install/properties"
+  bold "  cloudshell edit scripts/install/properties"
 fi

@@ -4,11 +4,11 @@ bold() {
   echo ". $(tput bold)" "$*" "$(tput sgr0)";
 }
 
-pushd ~/cloudshell_open/spinnaker-for-gcp/scripts
+pushd scripts
 
 source ./install/properties
 
-~/cloudshell_open/spinnaker-for-gcp/scripts/manage/check_project_mismatch.sh
+scripts/manage/check_project_mismatch.sh
 
 DOMAIN_NAME_LENGTH=$(echo -n $DOMAIN_NAME | wc -m)
 

@@ -77,5 +77,5 @@ rm -rf $TEMP_DIR
 
 if [ "$CI" != true ]; then
   # Update the generated markdown pages.
-  ~/cloudshell_open/spinnaker-for-gcp/scripts/manage/update_landing_page.sh
+  scripts/manage/update_landing_page.sh
 fi
