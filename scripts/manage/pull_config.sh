@@ -24,6 +24,7 @@ fi
 HALYARD_POD=spin-halyard-0
 
 TEMP_DIR=$(mktemp -d -t halyard.XXXXX)
+echo "TEMP_DIR = $TEMP_DIR"
 pushd $TEMP_DIR
 
 mkdir .hal

@@ -347,7 +347,7 @@ if [ -z "$EXISTING_CLOUD_FUNCTION" ]; then
   cat $PARENT_DIR/scripts/install/spinnakerAuditLog/index_js.template | envsubst > $PARENT_DIR/scripts/install/spinnakerAuditLog/index.js
   gcloud functions deploy $CLOUD_FUNCTION_NAME --source $PARENT_DIR/scripts/install/spinnakerAuditLog \
     --trigger-http --memory 2048MB --runtime nodejs8 --allow-unauthenticated --project $PROJECT_ID --region $REGION
-  gcloud alpha functions add-iam-policy-binding $CLOUD_FUNCTION_NAME --project $PROJECT_ID --region $REGION --member allUsers --role roles/cloudfunctions.invoker
+  gcloud functions add-iam-policy-binding $CLOUD_FUNCTION_NAME --project $PROJECT_ID --region $REGION --member allUsers --role roles/cloudfunctions.invoker
 else
   bold "Using existing audit log cloud function $CLOUD_FUNCTION_NAME..."
 fi

@@ -169,6 +169,7 @@ export SERVICE_ACCOUNT_NAME="${SERVICE_ACCOUNT_NAME:-"\$DEPLOYMENT_NAME-acc-$(da
 export REDIS_INSTANCE=\$DEPLOYMENT_NAME
 
 # If bucket does not exist, it will be created.
+### jberg - this creates a new bucket each time setup.sh is called which backs up the config
 export BUCKET_NAME="\$DEPLOYMENT_NAME-$(cat /dev/urandom | tr -dc 'a-z0-9' | fold -w 20 | head -n 1)-$(date +"%s")"
 export BUCKET_URI="gs://\$BUCKET_NAME"
 

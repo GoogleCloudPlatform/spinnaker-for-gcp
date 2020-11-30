@@ -30,6 +30,7 @@ pipeline {
         ZONE = "us-central1-b"
         PROPERTIES_FILE = "scripts/install/properties"
         CI = "true" // CI=true was the same as CI = "true"
+        TMPDIR = "${WORKSPACE}"
     }
     stages {
         stage('Initialize Environment') {

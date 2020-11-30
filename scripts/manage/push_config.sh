@@ -68,6 +68,7 @@ fi
 HALYARD_POD=spin-halyard-0
 
 TEMP_DIR=$(mktemp -d -t halyard.XXXXX)
+echo "TEMP_DIR = $TEMP_DIR"
 pushd $TEMP_DIR
 
 EXISTING_CSR_REPO=$(gcloud source repos list --format="value(name)" --filter="name=projects/$PROJECT_ID/repos/$CONFIG_CSR_REPO" --project=$PROJECT_ID)
