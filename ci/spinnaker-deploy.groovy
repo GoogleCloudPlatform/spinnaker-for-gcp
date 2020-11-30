@@ -6,7 +6,7 @@ def build_if_changes_outside_these_patterns = ['**README.md', 'doc/**', 'postman
 pipeline {
     agent {
         kubernetes {
-            label 'cicd-agent'
+            label 'cicd-slim'
             defaultContainer 'agent'
         }
     }
