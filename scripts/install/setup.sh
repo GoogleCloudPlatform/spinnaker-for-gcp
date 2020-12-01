@@ -307,8 +307,6 @@ bold "Provisioning Spinnaker resources..."
 envsubst < $PARENT_DIR/scripts/install/quick-install.yml | kubectl apply -f -
 
 bold "completed kubectl apply...waiting for kubectl to complete"
-sleep 1800
-bold "Done sleeping"
 
 job_ready() {
   printf "Waiting on job $1 to complete"
