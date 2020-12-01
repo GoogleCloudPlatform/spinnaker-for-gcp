@@ -304,9 +304,9 @@ fi
 
 bold "Provisioning Spinnaker resources..."
 
-# envsubst must not be supported on our jenkins agent
-envsubst < $PARENT_DIR/scripts/install/quick-install.yml | kubectl apply -f -
-#kubectl apply -f /home/jenkins/agent/workspace/deployspinnakerp/scripts/install/quick-install.yml
+envsubst < $PARENT_DIR/scripts/install/quick-install.yml | kubectl apply -f - &
+
+bold "completed kubectl apply"
 
 job_ready() {
   printf "Waiting on job $1 to complete"
