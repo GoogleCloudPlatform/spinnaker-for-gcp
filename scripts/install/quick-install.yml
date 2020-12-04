@@ -90,6 +90,10 @@ spec:
             - -q
             - --spider
             - http://localhost:8064/health
+        resources:
+          requests:
+            cpu: 10m
+            memory: 256Mi
         ports:
         - containerPort: 8064
         volumeMounts:
