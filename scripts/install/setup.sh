@@ -310,11 +310,11 @@ bold "completed kubectl apply...waiting for kubectl to complete"
 
 job_ready() {
   printf "Waiting on job $1 to complete"
-  SUCCESS_NOW = "$(kubectl get job $1 -n halyard -o jsonpath="{.status.succeeded}")"
+  SUCCESS_NOW="$(kubectl get job $1 -n halyard -o jsonpath="{.status.succeeded}")"
   while [[ "${SUCCESS_NOW}" != "1" ]]; do
     printf "${SUCCESS_NOW}"
     sleep 5
-    SUCCESS_NOW = "$(kubectl get job $1 -n halyard -o jsonpath="{.status.succeeded}")"
+    SUCCESS_NOW="$(kubectl get job $1 -n halyard -o jsonpath="{.status.succeeded}")"
   done
   echo ""
 }

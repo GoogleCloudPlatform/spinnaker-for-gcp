@@ -58,10 +58,18 @@ pipeline {
                 }
             }
         }
+        stage('generate spinnaker deletion script') {
+            steps {
+                script {
+                    sh "scripts/manage/generate_deletion_script.sh"
+                    echo "delete-all_${PROJECT_ID}_${GKE_CLUSTER}_${DEPLOYMENT_NAME}.sh"
+                }
+            }
+        }
         stage('deploy spinnaker') {
             steps {
                 script {
-                    sh "scripts/install/setup.sh"
+                    sh "scripts/manage/delete-all_${PROJECT_ID}_${GKE_CLUSTER}_${DEPLOYMENT_NAME}.sh"
                 }
             }
         }
