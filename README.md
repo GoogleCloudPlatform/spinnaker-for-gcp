@@ -148,7 +148,7 @@ by clicking the **Go to Spinnaker for Google Cloud Platform** button.
   Cloud Shell opens, along with a file tree showing the files in the Spinnaker
   repository, and instructions.
 
-<!-- image goes here, initial_mgmt_console.png. Alt text is "The management console" -->
+![The management console](resources/initial_mgmt_console.png)
 
   > **Important:** If you've launched the management console at least once before,
   > you might be prompted, in the shell, to resume with the clone you created
@@ -198,7 +198,7 @@ and press **Enter**.
 
 1. Click the highlighted preview button, and select **Preview on port 8080**.
 
-<!-- image goes here, preview_on_8080.png. Alt text is "Click to preview on port 8080" -->
+![Click to preview on port 8080](resources/preview_on_8080.png)
 
   > **Note:**There is a "Connect to Spinnaker" link displayed. If you click it,
   > it highlights the preview button, which you then click to select the port.
@@ -278,7 +278,7 @@ pipelines
 
       The instructions pane changes to start the management process.
 
-      <!-- image goes here, start_management_pane.png. Alt text is "Start managing Spinnaker from within the console" -->
+      ![Start managing Spinnaker from within the console](resources/start_management_pane.png)
 
    **If the console is not already open:**
 
@@ -292,8 +292,7 @@ pipelines
    1. Click that link to open the management console, which now starts with the
    management/admin functionality.
 
-      <!-- image goes here, open_tool_from_gke_application.png. Alt text is "Start managing Spinnaker from the GKE Applications
-page" -->
+      ![Start managing Spinnaker from the GKE Applications page](resources/open_tool_from_gke_application.png)
 
    1. Select your GCP project, and click Start.
 
@@ -457,7 +456,7 @@ build" page, and run the command under "Return to Spinnaker console."
 Spinnaker and its microservices are installed on GKE using the following
 architecture:
 
-<!-- image goes here, spinnaker-k8s-app-architecture.png. Alt text is "architecture of Spinnaker on GCP" -->
+![Architecture of Spinnaker on GCP](resources/spinnaker-k8s-app-architecture.png)
 
 ### Install Spinnaker on an existing cluster
 
