@@ -40,7 +40,7 @@ pipeline {
                     } else {
                         env.GOOGLE_APPLICATION_CREDENTIALS = READONLY_CREDS_FILE
                     }
-                    currentBuild.displayName = "${params.cluster_name}-${currentBuild.number}"
+                    currentBuild.displayName = "${params.cluster_name}-bld-${currentBuild.number}"
                     echo "Build Name: ${currentBuild.displayName}"
                     echo "GOOGLE creds: ${GOOGLE_APPLICATION_CREDENTIALS}"
                     deploy.gcpAuth(GOOGLE_APPLICATION_CREDENTIALS)
