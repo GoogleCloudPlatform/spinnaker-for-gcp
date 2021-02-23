@@ -3,7 +3,7 @@
 pipeline {
     agent {
         kubernetes {
-            label 'cicd-slim'
+            inheritFrom 'cicd-slim'
             defaultContainer 'agent'
         }
     }
@@ -41,7 +41,7 @@ pipeline {
                         env.GOOGLE_APPLICATION_CREDENTIALS = READONLY_CREDS_FILE
                     }
                     currentBuild.displayName = "${params.cluster_name}-${currentBuild.number}"
-                    echo "Cluster Name: ${currentBuild.displayName}"
+                    echo "Build Name: ${currentBuild.displayName}"
                     echo "GOOGLE creds: ${GOOGLE_APPLICATION_CREDENTIALS}"
                     deploy.gcpAuth(GOOGLE_APPLICATION_CREDENTIALS)
                     sh "gcloud config set project ${params.gcp_project}"
