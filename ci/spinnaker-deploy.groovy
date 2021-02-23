@@ -40,6 +40,7 @@ pipeline {
                     } else {
                         env.GOOGLE_APPLICATION_CREDENTIALS = READONLY_CREDS_FILE
                     }
+                    printServiceAccountUsed(env.GOOGLE_APPLICATION_CREDENTIALS)
                     currentBuild.displayName = "${params.cluster_name}-bld-${currentBuild.number}"
                     echo "Build Name: ${currentBuild.displayName}"
                     echo "GOOGLE creds: ${GOOGLE_APPLICATION_CREDENTIALS}"
@@ -53,7 +54,6 @@ pipeline {
             steps {
                 script {
                     sh "pwd"
-                    sh "ls -la ${env.HOME}/.gcp/"
                     sh "scripts/install/setup_properties.sh"
                     sh "cat scripts/install/properties"
                 }
@@ -84,4 +84,9 @@ pipeline {
             }
         }
     }
+}
+
+def printServiceAccountUsed(credentials_path) {
+    echo "For reference, this is the SA used for this run: "
+    sh "grep private_key_id ${credentials_path}"
 }
