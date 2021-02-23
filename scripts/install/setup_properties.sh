@@ -163,7 +163,9 @@ export GKE_NUM_NODES=3
 export TIMEZONE=$(cat /etc/timezone)
 
 # If service account does not exist, it will be created.
-export SERVICE_ACCOUNT_NAME="${SERVICE_ACCOUNT_NAME:-"\$DEPLOYMENT_NAME-acc-$(date +"%s")"}"
+export SERVICE_ACCOUNT_NAME="${SERVICE_ACCOUNT_NAME:-"\$DEPLOYMENT_NAME-access-sa"}"
+# This just makes a new one if we run it on a different date.  We only need one with the deployment.
+#export SERVICE_ACCOUNT_NAME="${SERVICE_ACCOUNT_NAME:-"\$DEPLOYMENT_NAME-acc-$(date +"%s")"}"
 
 # If Cloud Memorystore Redis instance does not exist, it will be created.
 export REDIS_INSTANCE=\$DEPLOYMENT_NAME

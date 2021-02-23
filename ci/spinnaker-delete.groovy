@@ -8,7 +8,7 @@ pipeline {
         }
     }
     parameters {
-        choice(choices: ['spg-zpc-sb', 'spg-zpc-d', 'spg-zpc-s', 'spg-zpc-p'], description: 'GCP project', name: 'gcp_project')
+        choice(choices: ['spg-zpc-tools', 'spg-zpc-sb', 'spg-zpc-d', 'spg-zpc-s', 'spg-zpc-p'], description: 'GCP project', name: 'gcp_project')
         string(defaultValue: 'us-central1-b', description: 'GCP location (zone/region)', name: 'gcp_location')
         string(defaultValue: 'spinnaker', description: 'Cluster name, derived if left as default, must match regexp "^(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?)$"', name: 'cluster_name')
         string(defaultValue: '2h', description: 'Cluster will be destroyed after this period of time', name: 'destroy_cluster_time')
