@@ -53,6 +53,7 @@ pipeline {
             steps {
                 script {
                     sh "pwd"
+                    sh "ls -la ${env.HOME}/.gcp/"
                     sh "scripts/install/setup_properties.sh"
                     sh "cat scripts/install/properties"
                 }
