@@ -316,7 +316,7 @@ job_ready() {
     sleep 5
     SUCCESS_NOW="$(kubectl get job $1 -n halyard -o jsonpath="{.status.succeeded}")"
   done
-  echo ""
+  echo "job_ready fn exited"
 }
 
 job_ready hal-deploy-apply

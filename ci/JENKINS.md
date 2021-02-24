@@ -101,3 +101,36 @@ In the above example, the Git `user.name` and `user.email` must be configured be
 If you change the properties file, apply the change by re-running the job. 
 
 Additional instructions for how to access or manage the deployed Spinnaker application are available [here](https://cloud.google.com/docs/ci-cd/spinnaker/spinnaker-for-gcp#access_spinnaker).
+
+# NOTES
+got done tonight with a successful spinnaker deploy but I ran it again for idempotency and it got hung on:
+- 21:36:33  configmap/halconfig configured
+- 21:36:33  job.batch/hal-deploy-apply created
+- 21:36:34  .  completed kubectl apply...waiting for kubectl to complete 
+
+After working through what was happening I found that the 
+- completed kubectl apply...waiting for kubectl to complete
+
+Trying to get to the halyard node logs to find out what's going on.  The first time through the kubectl apply completed but the second time through it hung or failed badly here
+envsubst < $PARENT_DIR/scripts/install/quick-install.yml | kubectl apply -f -
+
+``` text
+jeremy_berg@cloudshell:~ (spg-zpc-tools)$ kubectl get all -n halyard
+NAME                 READY   STATUS    RESTARTS   AGE
+pod/spin-halyard-0   1/1     Running   0          63m
+NAME                   TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)    AGE
+service/spin-halyard   ClusterIP   10.56.5.67   <none>        8064/TCP   63m
+NAME                            READY   AGE
+statefulset.apps/spin-halyard   1/1     63m
+NAME                         COMPLETIONS   DURATION   AGE
+job.batch/hal-deploy-apply   0/1           49m        49m
+jeremy_berg@cloudshell:~ (spg-zpc-tools)$ kubectl logs pod/spin-halyard-0
+Error from server (NotFound): pods "spin-halyard-0" not found
+jeremy_berg@cloudshell:~ (spg-zpc-tools)$
+```
+Looks like it could be something in the CLOUD_FUNCTION_NAME but doubtful, something happened with the hal deploy apply.  Need to look at logs on the hal node
+
+Should fail the same way which means I should run it again with all the variables printed out, think interpolation may be a problem
+
+Failure found, how did this pass the first time but fail the second
+com.netflix.spinnaker.halyard.core.error.v1.HalException: You must pick a version of Spinnaker to deploy.
