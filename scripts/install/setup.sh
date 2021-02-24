@@ -300,28 +300,28 @@ if [ $EXISTING_HAL_DEPLOY_APPLY_JOB_NAME != 'null' ]; then
   bold "Deleting earlier job $EXISTING_HAL_DEPLOY_APPLY_JOB_NAME..."
 
   kubectl delete job hal-deploy-apply -n halyard
+else
+  bold "Provisioning Spinnaker resources..."
+
+  envsubst < $PARENT_DIR/scripts/install/quick-install.yml | kubectl apply -f -
+
+  bold "completed kubectl apply...waiting for kubectl to complete"
+
+  job_ready() {
+    printf "Waiting on job $1 to complete"
+    SUCCESS_NOW="$(kubectl get job $1 -n halyard -o jsonpath="{.status.succeeded}")"
+    while [[ "${SUCCESS_NOW}" != "1" ]]; do
+      printf "${SUCCESS_NOW}"
+      sleep 5
+      SUCCESS_NOW="$(kubectl get job $1 -n halyard -o jsonpath="{.status.succeeded}")"
+    done
+    echo "job_ready fn exited"
+  }
+
+  job_ready hal-deploy-apply
 fi
 
-bold "Provisioning Spinnaker resources..."
-
-envsubst < $PARENT_DIR/scripts/install/quick-install.yml | kubectl apply -f -
-
-bold "completed kubectl apply...waiting for kubectl to complete"
-
-job_ready() {
-  printf "Waiting on job $1 to complete"
-  SUCCESS_NOW="$(kubectl get job $1 -n halyard -o jsonpath="{.status.succeeded}")"
-  while [[ "${SUCCESS_NOW}" != "1" ]]; do
-    printf "${SUCCESS_NOW}"
-    sleep 5
-    SUCCESS_NOW="$(kubectl get job $1 -n halyard -o jsonpath="{.status.succeeded}")"
-  done
-  echo "job_ready fn exited"
-}
-
-job_ready hal-deploy-apply
-
-# Sourced to import $IP_ADDR. 
+# Sourced to import $IP_ADDR.
 # Used at the end of setup to check if installation is exposed via a secured endpoint.
 source $PARENT_DIR/scripts/manage/update_landing_page.sh
 
