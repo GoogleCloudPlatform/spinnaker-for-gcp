@@ -307,6 +307,7 @@ else
 
   bold "completed kubectl apply...waiting for kubectl to complete"
 
+# worked out on the phone with Austin and Ben on 12/1/20
   job_ready() {
     printf "Waiting on job $1 to complete"
     SUCCESS_NOW="$(kubectl get job $1 -n halyard -o jsonpath="{.status.succeeded}")"
@@ -320,6 +321,16 @@ else
 
   job_ready hal-deploy-apply
 fi
+# original function
+#job_ready() {
+#  printf "Waiting on job $1 to complete"
+#  while [[ "$(kubectl get job $1 -n halyard -o \
+#            jsonpath='{.status.succeeded}')" != "1" ]]; do
+#    printf "."
+#    sleep 5
+#  done
+#  echo ""
+#}
 
 # Sourced to import $IP_ADDR.
 # Used at the end of setup to check if installation is exposed via a secured endpoint.
