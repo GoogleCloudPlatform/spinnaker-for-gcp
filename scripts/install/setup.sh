@@ -355,8 +355,10 @@ fi
 
 if [ "$USE_CLOUD_SHELL_HAL_CONFIG" = true ]; then
   # Not passing $CI since the guard makes it clear we are running from cloud shell.
+  bold "if: $CI Using hal config: $USE_CLOUD_SHELL_HAL_CONFIG"
   $PARENT_DIR/scripts/manage/push_and_apply.sh
 else
+  bold "else: $CI Using hal config: $USE_CLOUD_SHELL_HAL_CONFIG"
   # We want the local hal config to match what was deployed.
   CI=$CI PARENT_DIR=$PARENT_DIR PROPERTIES_FILE=$PROPERTIES_FILE $PARENT_DIR/scripts/manage/pull_config.sh
   # We want a full backup stored in the bucket and the full deployment config stored in a secret.
