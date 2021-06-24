@@ -20,6 +20,7 @@ if [ $EXISTING_SECRET_NAME == 'null' ]; then
   read -p 'Enter your OAuth credentials Client ID: ' CLIENT_ID
   read -p 'Enter your OAuth credentials Client secret: ' CLIENT_SECRET
 
+  if [[ ($CONFIGURE_SPIN_CLI=="YES")||(-z "$CONFIGURE_SPIN_CLI") ]]; then
   cat >~/.spin/config <<EOL
 gate:
   endpoint: https://$DOMAIN_NAME/gate
@@ -35,10 +36,10 @@ EOL
     --filter="displayName:$SERVICE_ACCOUNT_NAME" \
     --format='value(email)')
 
-  gcloud iam service-accounts keys create ~/.spin/key.json \
-    --iam-account $SA_EMAIL \
-    --project $PROJECT_ID
-
+    gcloud iam service-accounts keys create ~/.spin/key.json \
+      --iam-account $SA_EMAIL \
+      --project $PROJECT_ID
+  fi
   kubectl create secret generic $SECRET_NAME -n spinnaker --from-literal=client_id=$CLIENT_ID \
     --from-literal=client_secret=$CLIENT_SECRET
 else

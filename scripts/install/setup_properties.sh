@@ -190,6 +190,8 @@ export PUBSUB_NOTIFICATION_TOPIC=\$DEPLOYMENT_NAME-notifications-topic
 export STATIC_IP_NAME=\$DEPLOYMENT_NAME-external-ip
 export MANAGED_CERT=\$DEPLOYMENT_NAME-managed-cert
 export SECRET_NAME=\$DEPLOYMENT_NAME-oauth-client-secret
+# Configure spin cli for access through IAP
+export CONFIGURE_SPIN_CLI=YES
 
 # If you own a domain name and want to use that instead of this automatically-assigned one,
 # specify it here (you must be able to configure the dns settings).
