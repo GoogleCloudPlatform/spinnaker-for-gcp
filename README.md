@@ -523,7 +523,7 @@ To manage one of those installations:
 1. Pull the configuration stored in that cluster.
 
    ```bash
-   ~/spinnaker-for-gcp/scripts/manage/pull_config.sh.
+   ~/spinnaker-for-gcp/scripts/manage/pull_config.sh
    ```
 
 The config now in `~/spinnaker-for-gcp/scripts/install/properties` is the one
