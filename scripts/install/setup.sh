@@ -210,11 +210,19 @@ fi
 if [ -z "$CLUSTER_EXISTS" ]; then
   bold "Creating GKE cluster $GKE_CLUSTER..."
 
+  # $GKE_RELEASE_CHANNEL is new as of 2021-08-13, so fall back to
+  # $GKE_CLUSTER_VERSION if it doesn't exist.
+  if [ -z "$GKE_RELEASE_CHANNEL" ]; then
+    CLUSTER_VERSION_SPEC="--cluster-version $GKE_CLUSTER_VERSION"
+  else
+    CLUSTER_VERSION_SPEC="--release-channel $GKE_RELEASE_CHANNEL"
+  fi
+
   # TODO: Move some of these config settings to properties file.
   # TODO: Should this be regional instead?
   eval gcloud beta container clusters create $GKE_CLUSTER --project $PROJECT_ID \
     --zone $ZONE --network $NETWORK_REFERENCE --subnetwork $SUBNET_REFERENCE \
-    --cluster-version $GKE_CLUSTER_VERSION --machine-type $GKE_MACHINE_TYPE \
+    $CLUSTER_VERSION_SPEC --machine-type $GKE_MACHINE_TYPE \
     --disk-type $GKE_DISK_TYPE --disk-size $GKE_DISK_SIZE --service-account $SA_EMAIL \
     --num-nodes $GKE_NUM_NODES --enable-stackdriver-kubernetes --enable-autoupgrade \
     --enable-autorepair --enable-ip-alias --addons HorizontalPodAutoscaling,HttpLoadBalancing \
