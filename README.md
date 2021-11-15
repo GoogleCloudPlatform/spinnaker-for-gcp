@@ -531,5 +531,3 @@ for that Spinnaker instance. Perform the usual management tasks available to
 you, including running `hal` commands. Spinnaker applies those commands to the
 Spinnaker instance in the chosen context.
 
-
-
