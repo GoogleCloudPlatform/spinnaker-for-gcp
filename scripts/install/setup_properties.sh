@@ -168,15 +168,15 @@ export SERVICE_ACCOUNT_NAME="${SERVICE_ACCOUNT_NAME:-"\$DEPLOYMENT_NAME-acc-$(da
 export REDIS_INSTANCE=\$DEPLOYMENT_NAME
 
 # If bucket does not exist, it will be created.
-export BUCKET_NAME="\$DEPLOYMENT_NAME-$(cat /dev/urandom | tr -dc 'a-z0-9' | fold -w 20 | head -n 1)-$(date +"%s")"
+export BUCKET_NAME="\$DEPLOYMENT_NAME-$(random_identifier 20)-$(date +"%s")"
 export BUCKET_URI="gs://\$BUCKET_NAME"
 
 # If CSR repo does not exist, it will be created.
 export CONFIG_CSR_REPO=\$DEPLOYMENT_NAME-config
 
 # Used to authenticate calls to the audit log Cloud Function.
-export AUDIT_LOG_UNAME="$(cat /dev/urandom | tr -dc 'a-z0-9' | fold -w 20 | head -n 1)-$(date +"%s")"
-export AUDIT_LOG_PW="$(cat /dev/urandom | tr -dc 'a-z0-9' | fold -w 20 | head -n 1)-$(date +"%s")"
+export AUDIT_LOG_UNAME="$(random_identifier 20)-$(date +"%s")"
+export AUDIT_LOG_PW="$(random_identifier 20)-$(date +"%s")"
 
 export CLOUD_FUNCTION_NAME="\${DEPLOYMENT_NAME//-}AuditLog"
 

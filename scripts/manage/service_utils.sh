@@ -50,3 +50,17 @@ check_for_shared_vpc() {
     exit 1
   fi
 }
+
+# Generate random alpha-numeric characters in the set [0-9a-z].
+#
+# $1: Number of characters to generate.
+random_identifier() {
+  local size=$((${1}))
+  if [[ $((size)) -le 0 ]]; then
+    echo "Invalid identifier size (${size})." >&2
+    return 1
+  fi
+  cat /dev/urandom 2>/dev/null | \
+    tr -dc 'a-z0-9' 2>/dev/null | \
+    head -c $((size))
+}
