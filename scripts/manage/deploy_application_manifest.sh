@@ -31,22 +31,28 @@ cat $PARENT_DIR/spinnaker-for-gcp/templates/spinnaker_application_manifest_top.y
   | envsubst | kubectl apply -f -
 
 bold "Labeling resources as components of application $DEPLOYMENT_NAME..."
-kubectl label service --overwrite -n spinnaker spin-clouddriver app.kubernetes.io/name=$DEPLOYMENT_NAME -o name
-kubectl label service --overwrite -n spinnaker spin-deck app.kubernetes.io/name=$DEPLOYMENT_NAME -o name
-kubectl label service --overwrite -n spinnaker spin-echo app.kubernetes.io/name=$DEPLOYMENT_NAME -o name
-kubectl label service --overwrite -n spinnaker spin-front50 app.kubernetes.io/name=$DEPLOYMENT_NAME -o name
-kubectl label service --overwrite -n spinnaker spin-gate app.kubernetes.io/name=$DEPLOYMENT_NAME -o name
-kubectl label service --overwrite -n spinnaker spin-igor app.kubernetes.io/name=$DEPLOYMENT_NAME -o name
-kubectl label service --overwrite -n spinnaker spin-kayenta app.kubernetes.io/name=$DEPLOYMENT_NAME -o name
-kubectl label service --overwrite -n spinnaker spin-orca app.kubernetes.io/name=$DEPLOYMENT_NAME -o name
-kubectl label service --overwrite -n spinnaker spin-rosco app.kubernetes.io/name=$DEPLOYMENT_NAME -o name
+# List of expected Spinnaker components for a default deployment.
+declare -r DEFAULT_COMPONENTS="\
+spin-clouddriver
+spin-deck
+spin-echo
+spin-front50
+spin-gate
+spin-igor
+spin-kayenta
+spin-orca
+spin-rosco"
 
-kubectl label deployment --overwrite -n spinnaker spin-clouddriver app.kubernetes.io/name=$DEPLOYMENT_NAME -o name
-kubectl label deployment --overwrite -n spinnaker spin-deck app.kubernetes.io/name=$DEPLOYMENT_NAME -o name
-kubectl label deployment --overwrite -n spinnaker spin-echo app.kubernetes.io/name=$DEPLOYMENT_NAME -o name
-kubectl label deployment --overwrite -n spinnaker spin-front50 app.kubernetes.io/name=$DEPLOYMENT_NAME -o name
-kubectl label deployment --overwrite -n spinnaker spin-gate app.kubernetes.io/name=$DEPLOYMENT_NAME -o name
-kubectl label deployment --overwrite -n spinnaker spin-igor app.kubernetes.io/name=$DEPLOYMENT_NAME -o name
-kubectl label deployment --overwrite -n spinnaker spin-kayenta app.kubernetes.io/name=$DEPLOYMENT_NAME -o name
-kubectl label deployment --overwrite -n spinnaker spin-orca app.kubernetes.io/name=$DEPLOYMENT_NAME -o name
-kubectl label deployment --overwrite -n spinnaker spin-rosco app.kubernetes.io/name=$DEPLOYMENT_NAME -o name
+for object_type in services deployments; do
+  default_objects=$(echo "${DEFAULT_COMPONENTS}" | sed "s@^@${object_type}/&@")
+  for name in $(
+     (
+       echo "${default_objects}";
+       # Fold-in optional components if they've been added to the cluster.
+       kubectl get "${object_type}" -n spinnaker -o name | \
+         sed 's@^deployment[^/]*/@deployments/@;s@^service[^/]*/@services/@'
+     ) | sort -u ); do
+    kubectl label --overwrite -n spinnaker "${name}" \
+      app.kubernetes.io/name=$DEPLOYMENT_NAME -o name
+  done
+done
