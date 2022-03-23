@@ -24,6 +24,8 @@ else
   APP_MANIFEST_MIDDLE=spinnaker_application_manifest_middle_secured.yaml
 fi
 
+select_spinnaker_kubernetes_context || exit $?
+
 kubectl apply -f "https://raw.githubusercontent.com/GoogleCloudPlatform/marketplace-k8s-app-tools/master/crd/app-crd.yaml"
 cat $PARENT_DIR/spinnaker-for-gcp/templates/spinnaker_application_manifest_top.yaml \
   $PARENT_DIR/spinnaker-for-gcp/templates/$APP_MANIFEST_MIDDLE \

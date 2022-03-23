@@ -8,6 +8,9 @@ source ~/cloudshell_open/spinnaker-for-gcp/scripts/install/properties
 
 ~/cloudshell_open/spinnaker-for-gcp/scripts/manage/check_project_mismatch.sh
 
+source ~/cloudshell_open/spinnaker-for-gcp/scripts/manage/service_utils.sh
+select_spinnaker_kubernetes_context || exit $?
+
 bold "Locating Deck pod..."
 
 DECK_POD=$(kubectl -n spinnaker get pods -l cluster=spin-deck,app=spin \
