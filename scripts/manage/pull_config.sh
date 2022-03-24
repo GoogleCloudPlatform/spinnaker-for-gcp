@@ -14,12 +14,7 @@ source $PARENT_DIR/spinnaker-for-gcp/scripts/manage/service_utils.sh
 
 $PARENT_DIR/spinnaker-for-gcp/scripts/manage/check_duplicate_dirs.sh || exit 1
 
-CURRENT_CONTEXT=$(kubectl config current-context)
-
-if [ "$?" != "0" ]; then
-  bold "No current Kubernetes context is configured."
-  exit 1
-fi
+select_spinnaker_kubernetes_context || exit $?
 
 HALYARD_POD=spin-halyard-0
 

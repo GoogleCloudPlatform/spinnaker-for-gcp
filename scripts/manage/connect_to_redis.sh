@@ -17,6 +17,9 @@ export REDIS_INSTANCE_HOST=$(gcloud redis instances list \
 
 bold "Locating redis-cli deployment..."
 
+source ~/cloudshell_open/spinnaker-for-gcp/scripts/manage/service_utils.sh
+select_spinnaker_kubernetes_context || exit $?
+
 REDIS_CLI_DEPLOYMENT=$(kubectl get deployments -n spinnaker --field-selector metadata.name=redisbox \
   --output name)
 
