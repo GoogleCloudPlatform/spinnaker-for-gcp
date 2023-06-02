@@ -1,4 +1,4 @@
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: deck-ingress
@@ -7,6 +7,13 @@ metadata:
     ingress.gcp.kubernetes.io/pre-shared-cert: $MANAGED_CERT
     kubernetes.io/ingress.global-static-ip-name: $STATIC_IP_NAME
 spec:
-  backend:
-    serviceName: spin-deck
-    servicePort: 9000
+  rules:
+  - http:
+      paths:
+      - path: /*
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: spin-deck
+            port:
+              number: 9000

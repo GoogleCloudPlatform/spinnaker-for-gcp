@@ -15,38 +15,8 @@ source $PARENT_DIR/spinnaker-for-gcp/scripts/manage/service_utils.sh
 $PARENT_DIR/spinnaker-for-gcp/scripts/manage/check_duplicate_dirs.sh || exit 1
 $PARENT_DIR/spinnaker-for-gcp/scripts/manage/check_git_config.sh || exit 1
 
-source "$PROPERTIES_FILE"
-
 # TODO(duftler): Add check to ensure that we are not overriding with older or empty config.
-
-CURRENT_CONTEXT=$(kubectl config current-context)
-
-if [ "$?" != "0" ]; then
-  bold "No current Kubernetes context is configured."
-  exit 1
-fi
-
-CURRENT_CONTEXT_PROJECT=$(echo $CURRENT_CONTEXT | cut -d '_' -f 2)
-CURRENT_CONTEXT_ZONE=$(echo $CURRENT_CONTEXT | cut -d '_' -f 3)
-CURRENT_CONTEXT_CLUSTER=$(echo $CURRENT_CONTEXT | cut -d '_' -f 4)
-
-if [ $CURRENT_CONTEXT_PROJECT != $PROJECT_ID ]; then
-  bold "Your Spinnaker config references project $PROJECT_ID, but you are connected to a cluster in project $CURRENT_CONTEXT_PROJECT."
-  bold "Use 'kubectl config use-context' to connect to the correct cluster before pushing the config."
-  exit 1
-fi
-
-if [ $CURRENT_CONTEXT_ZONE != $ZONE ]; then
-  bold "Your Spinnaker config references zone $ZONE, but you are connected to a cluster in zone $CURRENT_CONTEXT_ZONE."
-  bold "Use 'kubectl config use-context' to connect to the correct cluster before pushing the config."
-  exit 1
-fi
-
-if [ $CURRENT_CONTEXT_CLUSTER != $GKE_CLUSTER ]; then
-  bold "Your Spinnaker config references cluster $GKE_CLUSTER, but you are connected to cluster $CURRENT_CONTEXT_CLUSTER."
-  bold "Use 'kubectl config use-context' to connect to the correct cluster before pushing the config."
-  exit 1
-fi
+select_spinnaker_kubernetes_context || exit $?
 
 source $PARENT_DIR/spinnaker-for-gcp/scripts/manage/cluster_utils.sh
 

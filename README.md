@@ -168,7 +168,7 @@ If the instruction pane disappears at any time, you can restore it using the
 following command, from Cloud Shell:
 
 ```bash
-cloudshell launch-tutorial ~/spinnaker-for-gcp/scripts/install/provision-spinnaker.md
+cloudshell launch-tutorial ~/cloudshell_open/spinnaker-for-gcp/scripts/install/provision-spinnaker.md
 ```
 
 ### Access Spinnaker
